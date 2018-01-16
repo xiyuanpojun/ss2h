@@ -1,7 +1,3 @@
-.idea
+/target/
+/.idea/
 *.iml
-.idea/
-ss2h.iml
-target/
-.gitignore
-src/test/
