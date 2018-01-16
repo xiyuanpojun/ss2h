@@ -1,13 +1,7 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Example user template template
-### Example user template
-
-# IntelliJ project files
 .idea
 *.iml
 .idea/
 ss2h.iml
 target/
 .gitignore
-src/main/webapp/support/img/
 src/test/
