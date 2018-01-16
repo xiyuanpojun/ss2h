@@ -8,3 +8,6 @@
 .idea/
 ss2h.iml
 target/
+.gitignore
+src/main/webapp/support/img/
+src/test/
