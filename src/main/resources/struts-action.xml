@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<!--独立配置-->
+<struts>
+    <!--用户管理-->
+    <package name="user" namespace="/user" extends="json-default">
+        <global-allowed-methods>login,add,findAll,findOne,delete,update,logon,checkLogin</global-allowed-methods>
+        <!--登陆，添加，分页查询，查找一个，删除，更新，退出,登陆状态。<ajax>-->
+        <action name="user_*" class="cn.softlq.ss2h.controller.UserController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <!--显示用户界面，如果未登录转到登陆页，如果登陆了就并把用户功能列表获取。-->
+        <action name="userManage" class="cn.softlq.ss2h.controller.UserController" method="showUserPage">
+            <result name="success">/WEB-INF/jsp/home/user/userManageFrame.jsp</result>
+            <result name="error" type="redirect">/index.jsp</result>
+        </action>
+        <!--显示用户列表界面，并获取用户可见省份。-->
+        <action name="user_list_page" class="cn.softlq.ss2h.controller.UserController" method="showUserList">
+            <result name="success">/WEB-INF/jsp/home/user/userList.jsp</result>
+        </action>
+    </package>
+
+    <!--专项配置操作-->
+    <package name="config" namespace="/config" extends="json-default">
+        <global-allowed-methods>add,findAll,delete,update,findTabCol</global-allowed-methods>
+        <!--添加，分页查询，查找一个，删除，更新,查找表字段。<ajax>-->
+        <action name="config_*" class="cn.softlq.ss2h.controller.ConfigController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <!--显示专项配置列表页面，并获取用户可见专项。-->
+        <action name="config_list_page" class="cn.softlq.ss2h.controller.ConfigController" method="showConfigList">
+            <result name="success">/WEB-INF/jsp/home/user/configuration.jsp</result>
+        </action>
+    </package>
+</struts>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<!--公共配置-->
+<struts>
+    <!-- 开启使用开发模式，详细错误提示 -->
+    <constant name="struts.devMode" value="true"/>
+    <!-- 将对象交给spring管理 -->
+    <constant name="struts.objectFactory" value="spring"/>
+    <!-- 指定资源编码类型 -->
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <!-- 指定每次请求到达，重新加载资源文件 -->
+    <constant name="struts.i18n.reload" value="true"/>
+    <!-- 指定每次配置文件更改后，自动重新加载 -->
+    <constant name="struts.configuration.xml.reload" value="true"/>
+    <!--最大上传大小 100M-->
+    <constant name="struts.multipart.maxSize" value="1073741824"/>
+    <!--通用配置-->
+    <package name="default" namespace="/" extends="json-default">
+        <!--未配置action-->
+        <default-action-ref name="error-404"/>
+        <!--全局异常页面-->
+        <global-results>
+            <result name="error-500">/WEB-INF/jsp/error.jsp</result>
+        </global-results>
+        <!--全局异常-->
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error-500"/>
+        </global-exception-mappings>
+        <!--未配置action页面-->
+        <action name="error-404">
+            <result>/WEB-INF/jsp/error.jsp</result>
+        </action>
+        <action name="index">
+            <result>/index.jsp</result>
+        </action>
+    </package>
+    <include file="struts-action.xml"/>
+</struts>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.softlq.ss2h.po.TUserEntity" table="T_USER" schema="GUOWANG_DATA">
+        <id name="userid" column="USERID"/>
+        <property name="upwd" column="UPWD"/>
+        <property name="urole" column="UROLE"/>
+        <property name="orgid" column="ORGID"/>
+        <property name="uname" column="UNAME"/>
+    </class>
+</hibernate-mapping>
