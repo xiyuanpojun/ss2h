@@ -3,8 +3,10 @@ package cn.softlq.ss2h.dao.impl;
 import cn.softlq.ss2h.dao.ISurveyDao;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             jo.put("ORGNAME",  ORGNAME);
             json.add(jo);
         }
+        session.close();
         return "{\"dataList\":"+json.toJSONString()+"}";
     }
 
@@ -52,6 +55,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             jo.put("tab",  (String) objects[1]);
             json.add(jo);
         }
+        session.close();
         return "{\"dataList\":"+json.toJSONString()+"}";
     }
 
@@ -70,6 +74,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             jo.put("PNAME",  (String) objects[1]);
             json.add(jo);
         }
+        session.close();
         return "{\"dataList\":"+json.toJSONString()+"}";
     }
 
@@ -88,6 +93,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             jo.put("COL_NAME",  (String) objects[1]);
             json.add(jo);
         }
+        session.close();
         return "{\"dataList\":"+json.toJSONString()+"}";
     }
     public String getSurveyData(String tab,String orgid,String tick) throws SQLException{
@@ -100,21 +106,24 @@ public class SurveyDaoImpl implements ISurveyDao {
         List colObj=query.list();
         StringBuilder col=new StringBuilder();
         for (Object o : colObj) {
-            Object[] objects = (Object[]) o;
-            col.append((String) objects[0]);
+            col.append((String) o);
             col.append(",");
         }
-        sql= "SELECT T.* FROM ("
+        sql= "SELECT ROWVAL,"+col.toString()+"RANDOM_VAL FROM ("
                 +"SELECT A.ROWID ROWVAL,"+col.toString()+"ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.random) RANDOM_VAL FROM "+tab+" A,T_ORG B "
-                +"WHERE PROV LIKE '%'||B.ORGNAME||'%'"+tick+" AND B.ORGID=?"
+                +"WHERE PROV LIKE '%'||B.ORGNAME||'%'"+tick+" AND B.ORGID=? "
                 +"AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                 +") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
-        query =session.createSQLQuery(sql)
+        SQLQuery sq =session.createSQLQuery(sql)
                 .setParameter(0,orgid)
                 .setParameter(1,tab)
-                .setParameter(2,tab);
+                .setParameter(2,tab)
+                .addScalar("ROWVAL",StandardBasicTypes.STRING);
+        for (Object o : colObj) {
+            sq.addScalar((String) o,StandardBasicTypes.STRING);
+        }
         int total=100;
-        for (Object o : query.list()) {
+        for (Object o : sq.list()) {
             JSONObject jo = new JSONObject();
             Object[] objects = (Object[]) o;
             jo.put("ROWVAL", (String) objects[0]);
@@ -123,6 +132,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             }
             json.add(jo);
         }
+        session.close();
         return "{\"code\":0,\"msg\":\"\",\"count\":"+total+",\"data\":"+json.toJSONString()+"}";
     }
 
@@ -136,18 +146,23 @@ public class SurveyDaoImpl implements ISurveyDao {
         List colObj=query.list();
         StringBuilder col=new StringBuilder();
         for (Object o : colObj) {
-            Object[] objects = (Object[]) o;
-            col.append((String) objects[0]);
+            col.append((String) o);
             col.append(",");
         }
-        sql= "SELECT * FROM(SELECT A.ROWID ROWVAL,CASE WHEN F.DISTRI IS NULL OR F.DISTRI='2' THEN '未分配' ELSE F.DIS_RM END SF_DIS,count(1) over() total,"+col+"ROWNUM rowxh FROM "+tab+" A,T_SURVEY_INVITE F "
+        sql= "SELECT ROWVAL,SF_DIS,TOTAL,"+col+"ROWXH FROM(SELECT A.ROWID ROWVAL,CASE WHEN F.DISTRI IS NULL OR F.DISTRI='2' THEN '未分配' ELSE F.DIS_RM END SF_DIS,count(1) over() total,"+col+"ROWNUM rowxh FROM "+tab+" A,T_SURVEY_INVITE F "
                 +"WHERE F.TAB=? AND F.USERID=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1 "+tick
                 +") T WHERE T.ROWXH>"+start+" AND T.ROWXH <="+end;
-        query =session.createSQLQuery(sql)
+        SQLQuery sq =session.createSQLQuery(sql)
                 .setParameter(0,tab)
-                .setParameter(1,userid);
+                .setParameter(1,userid)
+                .addScalar("ROWVAL",StandardBasicTypes.STRING)
+                .addScalar("SF_DIS",StandardBasicTypes.STRING)
+                .addScalar("TOTAL",StandardBasicTypes.INTEGER);
+        for (Object o : colObj) {
+            sq.addScalar((String) o,StandardBasicTypes.STRING);
+        }
         int total=0;
-        for (Object o : query.list()) {
+        for (Object o : sq.list()) {
             JSONObject jo = new JSONObject();
             Object[] objects = (Object[]) o;
             jo.put("ROWVAL", (String) objects[0]);
@@ -160,6 +175,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             }
             json.add(jo);
         }
+        session.close();
         return "{\"code\":0,\"msg\":\"\",\"count\":"+total+",\"data\":"+json.toJSONString()+"}";
     }
 
@@ -167,6 +183,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         String[] rw=rowv.split(",");
         String sql="INSERT INTO T_SURVEY_INVITE(TAB, ROWVAL, USERID, IN_FLAG, FAULT_CODE) VALUES(?,?,?,?,?)";
         Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
         Query query =session.createSQLQuery(sql);
         for(int i=0;i<rw.length;i++){
             if("".equals(rw[i])){
@@ -179,12 +196,15 @@ public class SurveyDaoImpl implements ISurveyDao {
             query.setParameter(4, faultRes);
             query.executeUpdate();
         }
+        transaction.commit();
+        session.close();
     }
 
     public void saveDist(String tab,String rowv,String distRes,String diaocy) throws SQLException {
         String[] rw=rowv.split(",");
         String sql="UPDATE T_SURVEY_INVITE SET DISTRI=?,DIS_RM=? WHERE TAB=? AND ROWVAL=?";
         Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
         Query query =session.createSQLQuery(sql);
         for(int i=0;i<rw.length;i++){
             if("".equals(rw[i])){
@@ -196,5 +216,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             query.setParameter(3, rw[i]);
             query.executeUpdate();
         }
+        transaction.commit();
+        session.close();
     }
 }
