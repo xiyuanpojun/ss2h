@@ -14,6 +14,11 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 
 public class SurveyController extends ActionSupport {
+
+    public SurveyController(){
+        response.setCharacterEncoding("utf-8");
+    }
+
     @Autowired
     private HttpSession session;
     private HttpServletRequest request = ServletActionContext.getRequest();
@@ -123,8 +128,8 @@ public class SurveyController extends ActionSupport {
 
     public String subInvit() throws IOException, SQLException {
         PrintWriter pw = response.getWriter();
-        Object userid = request.getSession().getAttribute("userid");
-        surveyDao.saveInvit(tab, rowv, invRes, faultRes, userid.toString());
+        Object userId = request.getSession().getAttribute("userId");
+        surveyDao.saveInvit(tab, rowv, invRes, faultRes, userId.toString());
         pw.write("ok");
         pw.close();
         return null;
@@ -132,7 +137,7 @@ public class SurveyController extends ActionSupport {
 
     public String getInvitData() throws IOException, SQLException {
         PrintWriter pw = response.getWriter();
-        Object userid = request.getSession().getAttribute("userid");
+        Object userId = request.getSession().getAttribute("userId");
         int start = Integer.parseInt(page);
         int end = Integer.parseInt(limit);
         StringBuilder sql = new StringBuilder();
@@ -142,7 +147,7 @@ public class SurveyController extends ActionSupport {
         if (!"".equals(custType) && null != custType) {
             sql.append(" AND EXISTS (SELECT 1 FROM T_P_CODE P WHERE P.PID='" + custType + "' AND A.YDLB LIKE '%'||P.PNAME||'%') ");
         }
-        pw.write(surveyDao.getSurveyInvData(tab, sql.toString(), userid.toString(), end * (start - 1), end * start));
+        pw.write(surveyDao.getSurveyInvData(tab, sql.toString(), userId.toString(), end * (start - 1), end * start));
         pw.close();
         return null;
     }
