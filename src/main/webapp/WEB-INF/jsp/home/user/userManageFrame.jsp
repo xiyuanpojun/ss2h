@@ -11,12 +11,12 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">XXX 管理中心</div>
+        <div class="layui-logo"><img alt="hill" src="${ctx}/support/img/hill2.png" width="60" height="41.2" style="margin-top: 6px"></div>
         <ul class="layui-nav layui-layout-left"></ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
-                <a href="#">
-                    欢迎你&nbsp;${userId}
+                <a href="javascript:;">
+                    <img src="${ctx}/support/img/user.png" class="layui-nav-img">${userId}
                 </a>
             </li>
             <li class="layui-nav-item"><a alt="${userId}" id="logon" href="#">退出系统</a>
@@ -33,6 +33,7 @@
         </div>
     </div>
     <div class="layui-body">
+        <%--src="${ctx}/user/user_list_page"--%>
         <iframe class="show_page" id="show_page" name="show_page" frameborder="0"></iframe>
     </div>
     <div class="layui-footer">
