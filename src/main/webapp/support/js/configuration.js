@@ -46,6 +46,12 @@ $(function () {
                 var error = parseInt(data.error);
                 if (error === 0) {
                     $("#btn").next().click();
+                    $("#checkOption").html("");
+                    //重新渲染
+                    layui.use('form', function () {
+                        var form = layui.form;
+                        form.render();
+                    });
                 }
                 layer.msg(data.message);
             },
@@ -106,6 +112,7 @@ $(function () {
             fruits = fruits.replace("typeId,showNum", "");
             if ("" === fruits) {
                 layer.alert("请选择显示字段");
+                return false;
             }
             var msg = {
                 'configItemView.surveyType': $("#atypeId").find("option:selected").text(),

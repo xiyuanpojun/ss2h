@@ -44,6 +44,7 @@ function logon() {
         success: function (data) {
             var error = parseInt(data.error);
             if (error === 0) {
+                $("#logon").attr("alt", "");
                 layer.open({
                     time: 3000,
                     content: data.message + "，即将关闭该页面。"
@@ -84,5 +85,10 @@ layui.use(['element', 'layer'], function () {
     });
 });
 window.onbeforeunload = function () {
-    $("[id='logon']").trigger('click');
+    if ($("#logon").attr("alt") === "") {
+        return;
+    } else {
+        logon();
+        return "aaa";
+    }
 };

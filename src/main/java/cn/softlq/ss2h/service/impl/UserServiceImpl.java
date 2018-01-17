@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.Time;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,16 +35,24 @@ public class UserServiceImpl implements IUserService {
                 TUserEntity result = userDao.userFindOne(userEntity.getUserid());
                 if (result != null) {
                     if (result.getUpwd().equals(userEntity.getUpwd())) {
-                        //登陆成功
-                        map.put("url", "/user/userManage");
-                        //跟踪用户信息
-                        session.setAttribute("userId", result.getUserid());
-                        session.setAttribute("urole", result.getUrole());
-                        //记录用户登陆信息
                         TUserLoginEntity userLoginEntity = new TUserLoginEntity();
-                        userLoginEntity.setUserid(result.getUserid());
-                        userLoginEntity.setLogTime(new Time(System.currentTimeMillis()));
-                        userDao.userLoginInfoExec(userLoginEntity, false);
+                        userLoginEntity.setUserid(userEntity.getUserid());
+                        //获取上次登陆状态
+                        if (userDao.userLoginInfoCheck(userLoginEntity)) {
+                            //登陆成功
+                            map.put("url", "/user/userManage");
+                            //跟踪用户信息
+                            session.setAttribute("userId", result.getUserid());
+                            session.setAttribute("urole", result.getUrole());
+                            //记录用户登陆信息
+                            userLoginEntity.setUserid(result.getUserid());
+                            userDao.userLoginInfoExec(userLoginEntity, false);
+                        } else {
+                            //已经登陆
+                            error = 5;
+                            map.put("message", "已经在其他地方登陆");
+                        }
+
                     } else {
                         //密码错误
                         error = 4;
@@ -85,7 +92,6 @@ public class UserServiceImpl implements IUserService {
                 //记录用户登陆信息
                 TUserLoginEntity userLoginEntity = new TUserLoginEntity();
                 userLoginEntity.setUserid(result.getUserid());
-                userLoginEntity.setLogTime(new Time(System.currentTimeMillis()));
                 userDao.userLoginInfoExec(userLoginEntity, true);
             } else {
                 //未登录
