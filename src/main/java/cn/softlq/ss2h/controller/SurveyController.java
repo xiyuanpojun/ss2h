@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-public class SurveyController  extends ActionSupport{
+public class SurveyController extends ActionSupport {
     @Autowired
     private HttpSession session;
-    private HttpServletRequest request =ServletActionContext.getRequest();
-    private HttpServletResponse response= ServletActionContext.getResponse();
+    private HttpServletRequest request = ServletActionContext.getRequest();
+    private HttpServletResponse response = ServletActionContext.getResponse();
     @Autowired
     private ISurveyDao surveyDao;
 
@@ -107,128 +107,85 @@ public class SurveyController  extends ActionSupport{
 
     public String getCity() throws IOException, SQLException {
         PrintWriter pw = response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if (null != userid) {
-            String orgid = (String) request.getSession().getAttribute("uorg");
-            pw.write(surveyDao.getCityList(orgid));
-        }else{
-            pw.write("sessionOut");
-        }
+        String orgid = (String) request.getSession().getAttribute("uorg");
+        pw.write(surveyDao.getCityList(orgid));
         pw.close();
         return null;
     }
 
-    public String subDist() throws IOException, SQLException{
-        PrintWriter pw=response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if(null!=userid){
-            surveyDao.saveDist(tab,rowv,distRes,diaocy);
-            pw.write("ok");
-        }else{
-            pw.write("sessionOut");
-        }
+    public String subDist() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        surveyDao.saveDist(tab, rowv, distRes, diaocy);
+        pw.write("ok");
         pw.close();
         return null;
     }
 
-    public String subInvit() throws IOException, SQLException{
-        PrintWriter pw=response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if(null!=userid){
-            surveyDao.saveInvit(tab,rowv,invRes,faultRes,userid.toString());
-            pw.write("ok");
-        }else{
-            pw.write("sessionOut");
-        }
+    public String subInvit() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        Object userid = request.getSession().getAttribute("userid");
+        surveyDao.saveInvit(tab, rowv, invRes, faultRes, userid.toString());
+        pw.write("ok");
         pw.close();
         return null;
     }
 
-    public String getInvitData() throws IOException, SQLException{
-        PrintWriter pw=response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if(null!=userid){
-            int start=Integer.parseInt(page);
-            int end=Integer.parseInt(limit);
-            StringBuilder sql=new StringBuilder();
-            if(!"".equals(city)&&null!=city){
-                sql.append(" AND EXISTS (SELECT 1 FROM T_ORG O WHERE O.ORGID='"+city+"' AND A.CITY LIKE '%'||O.ORGNAME||'%') ");
-            }
-            if(!"".equals(custType)&&null!=custType){
-                sql.append(" AND EXISTS (SELECT 1 FROM T_P_CODE P WHERE P.PID='"+custType+"' AND A.YDLB LIKE '%'||P.PNAME||'%') ");
-            }
-            pw.write(surveyDao.getSurveyInvData(tab,sql.toString(), userid.toString(),end*(start-1),end*start));
-        }else{
-            pw.write("sessionOut");
+    public String getInvitData() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        Object userid = request.getSession().getAttribute("userid");
+        int start = Integer.parseInt(page);
+        int end = Integer.parseInt(limit);
+        StringBuilder sql = new StringBuilder();
+        if (!"".equals(city) && null != city) {
+            sql.append(" AND EXISTS (SELECT 1 FROM T_ORG O WHERE O.ORGID='" + city + "' AND A.CITY LIKE '%'||O.ORGNAME||'%') ");
         }
+        if (!"".equals(custType) && null != custType) {
+            sql.append(" AND EXISTS (SELECT 1 FROM T_P_CODE P WHERE P.PID='" + custType + "' AND A.YDLB LIKE '%'||P.PNAME||'%') ");
+        }
+        pw.write(surveyDao.getSurveyInvData(tab, sql.toString(), userid.toString(), end * (start - 1), end * start));
         pw.close();
         return null;
     }
 
-    public String getData() throws IOException, SQLException{
-        PrintWriter pw=response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if(null!=userid){
-            String orgid = (String) request.getSession().getAttribute("uorg");
-            StringBuilder sql=new StringBuilder();
-            if(!"".equals(city)&&null!=city){
-                sql.append(" AND EXISTS (SELECT 1 FROM T_ORG O WHERE O.ORGID='"+city+"' AND A.CITY LIKE '%'||O.ORGNAME||'%') ");
-            }
-            if(!"".equals(custType)&&null!=custType){
-                sql.append(" AND EXISTS (SELECT 1 FROM T_P_CODE P WHERE P.PID='"+custType+"' AND A.YDLB LIKE '%'||P.PNAME||'%') ");
-            }
-            pw.write(surveyDao.getSurveyData(tab,orgid,sql.toString()));
-        }else{
-            pw.write("sessionOut");
+    public String getData() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        String orgid = (String) request.getSession().getAttribute("uorg");
+        StringBuilder sql = new StringBuilder();
+        if (!"".equals(city) && null != city) {
+            sql.append(" AND EXISTS (SELECT 1 FROM T_ORG O WHERE O.ORGID='" + city + "' AND A.CITY LIKE '%'||O.ORGNAME||'%') ");
         }
+        if (!"".equals(custType) && null != custType) {
+            sql.append(" AND EXISTS (SELECT 1 FROM T_P_CODE P WHERE P.PID='" + custType + "' AND A.YDLB LIKE '%'||P.PNAME||'%') ");
+        }
+        pw.write(surveyDao.getSurveyData(tab, orgid, sql.toString()));
         pw.close();
         return null;
     }
 
-    public String getCol() throws IOException, SQLException{
-        PrintWriter pw=response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if(null!=userid){
-            pw.write(surveyDao.getSurveyCol(tab));
-        }else{
-            pw.write("sessionOut");
-        }
+    public String getCol() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        pw.write(surveyDao.getSurveyCol(tab));
         pw.close();
         return null;
     }
 
-    public String getStype() throws IOException, SQLException{
-        PrintWriter pw=response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if(null!=userid){
-            pw.write(surveyDao.getSurveyType());
-        }else{
-            pw.write("sessionOut");
-        }
+    public String getStype() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        pw.write(surveyDao.getSurveyType());
         pw.close();
         return null;
     }
 
-    public String getCustType() throws IOException, SQLException{
-        PrintWriter pw=response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if(null!=userid){
-            pw.write(surveyDao.getCustType("客户类型"));
-        }else{
-            pw.write("sessionOut");
-        }
+    public String getCustType() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        pw.write(surveyDao.getCustType("客户类型"));
         pw.close();
         return null;
     }
 
-    public String getFault() throws IOException, SQLException{
-        PrintWriter pw=response.getWriter();
-        Object userid=request.getSession().getAttribute("userid");
-        if(null!=userid){
-            pw.write(surveyDao.getCustType("预约失败原因"));
-        }else{
-            pw.write("sessionOut");
-        }
+    public String getFault() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        pw.write(surveyDao.getCustType("预约失败原因"));
         pw.close();
         return null;
     }
