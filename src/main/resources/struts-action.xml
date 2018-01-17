@@ -41,7 +41,8 @@
 
     <!--预约样本-->
     <package name="survey" namespace="/survey" extends="json-default">
-        <global-allowed-methods>getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData</global-allowed-methods>
+        <global-allowed-methods>getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData
+        </global-allowed-methods>
         <action name="survey_*" class="cn.softlq.ss2h.controller.SurveyController" method="{1}">
 
         </action>
