@@ -18,3 +18,14 @@
 
 <%--jquery-3.1.1--%>
 <script src="${ctx}/support/js/jquery-3.1.1.js"></script>
+<script>
+    function checkLogon(data) {
+        if (typeof (data.isLogon) !== "undefined") {
+            if (self !== top) {
+                window.parent.location.href = ctx + '/index.jsp';
+            } else {
+                window.location.href = ctx + '/index.jsp';
+            }
+        }
+    }
+</script>

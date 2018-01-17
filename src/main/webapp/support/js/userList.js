@@ -13,6 +13,7 @@ $(function () {
                 $("#btn").attr('disabled', "true");
             },
             success: function (data) {
+                checkLogon(data);
                 var error = parseInt(data.error);
                 if (error === 0) {
                     $("#btn").next().click();
@@ -37,6 +38,7 @@ $(function () {
             data: data,
             dataType: "json",
             success: function (data) {
+                checkLogon(data);
                 var error = parseInt(data.error);
                 if (error === 0) {
                     layer.close(updateLayer);
@@ -131,6 +133,7 @@ $(function () {
                             },
                             dataType: "json",
                             success: function (data) {
+                                checkLogon(data);
                                 var error = parseInt(data.error);
                                 if (error === 0) {
                                     obj.del();
@@ -155,6 +158,7 @@ $(function () {
                         },
                         dataType: "json",
                         success: function (data) {
+                            checkLogon(data);
                             if (data.error === 0) {
                                 //设置值
                                 var uname = data.user.uname;

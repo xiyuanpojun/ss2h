@@ -11,7 +11,8 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo"><img alt="hill" src="${ctx}/support/img/hill2.png" width="60" height="41.2" style="margin-top: 6px"></div>
+        <div class="layui-logo"><img alt="hill" src="${ctx}/support/img/hill2.png" width="60" height="41.2"
+                                     style="margin-top: 6px"></div>
         <ul class="layui-nav layui-layout-left"></ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
@@ -27,7 +28,8 @@
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree" id="urls">
                 <c:forEach items="#{func}" var="item">
-                    <li class="layui-nav-item"><a href="${ctx}${item.fUrl}" target="show_page">${item.fName}</a></li>
+                    <li class="layui-nav-item"><a href="#" alt="${ctx}${item.fUrl}">${item.fName}</a>
+                    </li>
                 </c:forEach>
             </ul>
         </div>

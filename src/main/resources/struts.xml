@@ -18,12 +18,27 @@
     <constant name="struts.multipart.maxSize" value="1073741824"/>
     <!--通用配置-->
     <package name="default" namespace="/" extends="json-default">
+        <!--&lt;!&ndash;自定义拦截器开始&ndash;&gt;-->
+        <!--<interceptors>-->
+            <!--<interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>-->
+            <!--<interceptor-stack name="myStack">-->
+                <!--<interceptor-ref name="myDefault"/>-->
+                <!--<interceptor-ref name="defaultStack"/>-->
+            <!--</interceptor-stack>-->
+        <!--</interceptors>-->
+        <!--<default-interceptor-ref name="myStack"/>-->
+        <!--自定义拦截器结束-->
         <!--未配置action-->
         <default-action-ref name="error-404"/>
         <!--全局异常页面-->
         <global-results>
             <result name="error-500">/WEB-INF/jsp/error.jsp</result>
+            <!--<result name="isLogon" type="redirectAction">-->
+                <!--<param name="namespace">/</param>-->
+                <!--<param name="actionName">isLogon</param>-->
+            <!--</result>-->
         </global-results>
+
         <!--全局异常-->
         <global-exception-mappings>
             <exception-mapping exception="java.lang.Exception" result="error-500"/>
@@ -34,6 +49,11 @@
         </action>
         <action name="index">
             <result>/index.jsp</result>
+        </action>
+        <action name="isLogon" class="cn.softlq.ss2h.common.LoginController">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
         </action>
     </package>
     <include file="struts-action.xml"/>

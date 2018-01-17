@@ -12,6 +12,7 @@ $(function () {
             },
             dataType: "json",
             success: function (data) {
+                checkLogon(data);
                 var error = parseInt(data.error);
                 if (error === 0) {
                     $("#checkOption").html("");
@@ -43,6 +44,7 @@ $(function () {
                 $("#btn").attr('disabled', "true");
             },
             success: function (data) {
+                checkLogon(data);
                 var error = parseInt(data.error);
                 if (error === 0) {
                     $("#btn").next().click();
@@ -73,6 +75,7 @@ $(function () {
             data: data,
             dataType: "json",
             success: function (data) {
+                checkLogon(data);
                 var error = parseInt(data.error);
                 if (error === 0) {
                     layer.close(updateLayer);
@@ -192,6 +195,7 @@ $(function () {
                             },
                             dataType: "json",
                             success: function (data) {
+                                checkLogon(data);
                                 var error = parseInt(data.error);
                                 if (error === 0) {
                                     obj.del();
