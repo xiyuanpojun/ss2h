@@ -16,7 +16,10 @@
         <property name="minPoolSize" value="20"/>
         <property name="maxPoolSize" value="50"/>
         <property name="initialPoolSize" value="30"/>
+
         <property name="maxIdleTime" value="60"/>
+        <property name="idleConnectionTestPeriod" value="120"/>
+
         <property name="acquireIncrement" value="3"/>
     </bean>
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">

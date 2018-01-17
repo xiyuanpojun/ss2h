@@ -111,7 +111,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean checkLogin() {
+    public synchronized boolean checkLogin() {
         return null != session.getAttribute("userId");
     }
 
