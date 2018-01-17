@@ -107,6 +107,10 @@ layui.use(['table','form','laydate'], function(){
                 $.getJSON(ctx + "/survey/survey_getCol",{tab:sury_type}, function (data) {
                     var col="[{type:'checkbox'}";
                     //var col="[{field:'ROWVAL', title:'操作',templet: '#checkboxTpl'}";
+                    if(data.dataList.length==0){
+                        layer.msg('该专项还未配置可显示数据列');
+                        return;
+                    }
                     $.each(data.dataList, function (i, item) {
                         col+=",{field:'"+item.COL+"',title:'"+item.COL_NAME+"'}";
                     });
