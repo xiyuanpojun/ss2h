@@ -1,6 +1,9 @@
 package cn.softlq.ss2h.controller;
 
 import cn.softlq.ss2h.dao.ISurveyDao;
+import com.opensymphony.xwork2.ActionSupport;
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ServletResponseAware;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,17 +13,99 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
-public class SurveyController {
+public class SurveyController  extends ActionSupport{
     @Autowired
     private HttpSession session;
-    @Autowired
-    private HttpServletRequest request;
-    @Autowired
-    private HttpServletResponse response;
+    private HttpServletRequest request =ServletActionContext.getRequest();
+    private HttpServletResponse response= ServletActionContext.getResponse();
     @Autowired
     private ISurveyDao surveyDao;
+
+    private String tab;
+    private String rowv;
+    private String distRes;
+    private String diaocy;
+    private String invRes;
+    private String faultRes;
+
+    private String page;
+    private String limit;
+    private String city;
+    private String custType;
+
+    public String getTab() {
+        return tab;
+    }
+
+    public void setTab(String tab) {
+        this.tab = tab;
+    }
+
+    public String getRowv() {
+        return rowv;
+    }
+
+    public void setRowv(String rowv) {
+        this.rowv = rowv;
+    }
+
+    public String getDistRes() {
+        return distRes;
+    }
+
+    public void setDistRes(String distRes) {
+        this.distRes = distRes;
+    }
+
+    public String getDiaocy() {
+        return diaocy;
+    }
+
+    public void setDiaocy(String diaocy) {
+        this.diaocy = diaocy;
+    }
+
+    public String getInvRes() {
+        return invRes;
+    }
+
+    public void setInvRes(String invRes) {
+        this.invRes = invRes;
+    }
+
+    public String getFaultRes() {
+        return faultRes;
+    }
+
+    public void setFaultRes(String faultRes) {
+        this.faultRes = faultRes;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public String getLimit() {
+        return limit;
+    }
+
+    public void setLimit(String limit) {
+        this.limit = limit;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setCustType(String custType) {
+        this.custType = custType;
+    }
+
     public String getCity() throws IOException, SQLException {
-        String arg = request.getParameter("arg");
         PrintWriter pw = response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if (null != userid) {
@@ -30,56 +115,41 @@ public class SurveyController {
             pw.write("sessionOut");
         }
         pw.close();
-        return "none";
+        return null;
     }
 
     public String subDist() throws IOException, SQLException{
-        String arg=request.getParameter("arg");
         PrintWriter pw=response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if(null!=userid){
-            String tab=request.getParameter("tab");
-            String rowv=request.getParameter("rowv");
-            String distRes=request.getParameter("distRes");
-            String diaocy=request.getParameter("diaocy");
             surveyDao.saveDist(tab,rowv,distRes,diaocy);
             pw.write("ok");
         }else{
             pw.write("sessionOut");
         }
         pw.close();
-        return"none";
+        return null;
     }
 
     public String subInvit() throws IOException, SQLException{
-        String arg=request.getParameter("arg");
         PrintWriter pw=response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if(null!=userid){
-            String tab=request.getParameter("tab");
-            String rowv=request.getParameter("rowv");
-            String invRes=request.getParameter("invRes");
-            String faultRes=request.getParameter("faultRes");
             surveyDao.saveInvit(tab,rowv,invRes,faultRes,userid.toString());
             pw.write("ok");
         }else{
             pw.write("sessionOut");
         }
         pw.close();
-        return"none";
+        return null;
     }
 
     public String getInvitData() throws IOException, SQLException{
-        String arg=request.getParameter("arg");
         PrintWriter pw=response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if(null!=userid){
-            String page=request.getParameter("page");
-            String limit=request.getParameter("limit");
             int start=Integer.parseInt(page);
             int end=Integer.parseInt(limit);
-            String city=request.getParameter("city");
-            String custType=request.getParameter("custType");
             StringBuilder sql=new StringBuilder();
             if(!"".equals(city)&&null!=city){
                 sql.append(" AND EXISTS (SELECT 1 FROM T_ORG O WHERE O.ORGID='"+city+"' AND A.CITY LIKE '%'||O.ORGNAME||'%') ");
@@ -87,22 +157,19 @@ public class SurveyController {
             if(!"".equals(custType)&&null!=custType){
                 sql.append(" AND EXISTS (SELECT 1 FROM T_P_CODE P WHERE P.PID='"+custType+"' AND A.YDLB LIKE '%'||P.PNAME||'%') ");
             }
-            pw.write(surveyDao.getSurveyInvData(request.getParameter("tab"),sql.toString(), userid.toString(),end*(start-1),end*start));
+            pw.write(surveyDao.getSurveyInvData(tab,sql.toString(), userid.toString(),end*(start-1),end*start));
         }else{
             pw.write("sessionOut");
         }
         pw.close();
-        return"none";
+        return null;
     }
 
     public String getData() throws IOException, SQLException{
-        String arg=request.getParameter("arg");
         PrintWriter pw=response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if(null!=userid){
             String orgid = (String) request.getSession().getAttribute("uorg");
-            String city=request.getParameter("city");
-            String custType=request.getParameter("custType");
             StringBuilder sql=new StringBuilder();
             if(!"".equals(city)&&null!=city){
                 sql.append(" AND EXISTS (SELECT 1 FROM T_ORG O WHERE O.ORGID='"+city+"' AND A.CITY LIKE '%'||O.ORGNAME||'%') ");
@@ -110,29 +177,27 @@ public class SurveyController {
             if(!"".equals(custType)&&null!=custType){
                 sql.append(" AND EXISTS (SELECT 1 FROM T_P_CODE P WHERE P.PID='"+custType+"' AND A.YDLB LIKE '%'||P.PNAME||'%') ");
             }
-            pw.write(surveyDao.getSurveyData(request.getParameter("tab"),orgid,sql.toString()));
+            pw.write(surveyDao.getSurveyData(tab,orgid,sql.toString()));
         }else{
             pw.write("sessionOut");
         }
         pw.close();
-        return"none";
+        return null;
     }
 
     public String getCol() throws IOException, SQLException{
-        String arg=request.getParameter("arg");
         PrintWriter pw=response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if(null!=userid){
-            pw.write(surveyDao.getSurveyCol(request.getParameter("tab")));
+            pw.write(surveyDao.getSurveyCol(tab));
         }else{
             pw.write("sessionOut");
         }
         pw.close();
-        return"none";
+        return null;
     }
 
     public String getStype() throws IOException, SQLException{
-        String arg=request.getParameter("arg");
         PrintWriter pw=response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if(null!=userid){
@@ -141,11 +206,10 @@ public class SurveyController {
             pw.write("sessionOut");
         }
         pw.close();
-        return"none";
+        return null;
     }
 
     public String getCustType() throws IOException, SQLException{
-        String arg=request.getParameter("arg");
         PrintWriter pw=response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if(null!=userid){
@@ -154,11 +218,10 @@ public class SurveyController {
             pw.write("sessionOut");
         }
         pw.close();
-        return"none";
+        return null;
     }
 
     public String getFault() throws IOException, SQLException{
-        String arg=request.getParameter("arg");
         PrintWriter pw=response.getWriter();
         Object userid=request.getSession().getAttribute("userid");
         if(null!=userid){
@@ -167,6 +230,6 @@ public class SurveyController {
             pw.write("sessionOut");
         }
         pw.close();
-        return"none";
+        return null;
     }
 }

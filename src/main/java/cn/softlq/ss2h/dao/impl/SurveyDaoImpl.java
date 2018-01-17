@@ -8,10 +8,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
+@Service
 public class SurveyDaoImpl implements ISurveyDao {
     @Autowired
     private SessionFactory sessionFactory;
