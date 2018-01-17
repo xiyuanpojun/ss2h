@@ -33,7 +33,6 @@
         </div>
     </div>
     <div class="layui-body">
-        <%--src="${ctx}/user/user_list_page"--%>
         <iframe class="show_page" id="show_page" name="show_page" frameborder="0"></iframe>
     </div>
     <div class="layui-footer">

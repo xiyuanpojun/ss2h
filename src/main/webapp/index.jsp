@@ -21,7 +21,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">密码</label>
                 <div class="layui-input-block">
-                    <input name="userEntity.upwd" class="layui-input" type="text" placeholder="请输入密码" autocomplete="off"
+                    <input name="userEntity.upwd" class="layui-input" type="password" placeholder="请输入密码" autocomplete="off"
                            lay-verify="required">
                 </div>
             </div>

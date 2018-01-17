@@ -89,6 +89,6 @@ window.onbeforeunload = function () {
         return;
     } else {
         logon();
-        return "aaa";
+        return;
     }
 };

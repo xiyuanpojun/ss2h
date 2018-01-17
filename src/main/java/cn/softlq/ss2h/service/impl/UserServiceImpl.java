@@ -43,6 +43,7 @@ public class UserServiceImpl implements IUserService {
                             map.put("url", "/user/userManage");
                             //跟踪用户信息
                             session.setAttribute("userId", result.getUserid());
+                            session.setAttribute("uorg", result.getOrgid());
                             session.setAttribute("urole", result.getUrole());
                             //记录用户登陆信息
                             userLoginEntity.setUserid(result.getUserid());
@@ -88,6 +89,7 @@ public class UserServiceImpl implements IUserService {
                 //清除用户信息
                 session.setAttribute("userId", null);
                 session.setAttribute("urole", null);
+                session.setAttribute("uorg", null);
                 map.put("message", "成功退出");
                 //记录用户登陆信息
                 TUserLoginEntity userLoginEntity = new TUserLoginEntity();
