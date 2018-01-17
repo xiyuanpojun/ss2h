@@ -36,6 +36,7 @@ layui.use(['table','form','laydate'], function(){
     });
     //预约结果提交
     form.on('submit(invitSub)', function(data){
+        checkLogin();
         var checkStatus = table.checkStatus('surveyList')
             ,tabData = checkStatus.data;
         if(typeof(tabData)=='undefined'||tabData.length==0){
@@ -93,6 +94,7 @@ layui.use(['table','form','laydate'], function(){
     });
     //每次点搜索，得看表格是否还有未提交数据
     form.on('submit(searchForm)', function(data){
+        checkLogin();
         var pgs=table.cache.surveyList;
         if(typeof(pgs)!='undefined'&&pgs.length>1){
             layer.msg('还有未提交预约结果数据！');

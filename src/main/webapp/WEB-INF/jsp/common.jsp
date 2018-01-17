@@ -28,4 +28,16 @@
             }
         }
     }
+
+    function checkLogin() {
+        $.ajax({
+            url: ctx + "/user/user_checkLogin",
+            type: "POST",
+            data: {},
+            dataType: "json",
+            success: function (data) {
+                checkLogon(data);
+            }
+        });
+    }
 </script>

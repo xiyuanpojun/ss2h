@@ -73,6 +73,22 @@
 
     <!--预约样本-->
     <package name="survey" namespace="/survey" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="namespace">/</param>
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
         <global-allowed-methods>getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData
         </global-allowed-methods>
         <action name="survey_*" class="cn.softlq.ss2h.controller.SurveyController" method="{1}">

@@ -59,6 +59,7 @@ layui.use(['table','form','laydate'], function(){
     });
     //预约结果提交
     form.on('submit(distSub)', function(data){
+        checkLogin();
         var checkStatus = table.checkStatus('surveyList')
             ,tabData = checkStatus.data;
         if(typeof(tabData)=='undefined'||tabData.length==0){
@@ -105,6 +106,7 @@ layui.use(['table','form','laydate'], function(){
         return false;
     });
     form.on('submit(searchForm)', function(data){
+        checkLogin();
         var stype=data.field.stype;
         var city=data.field.city;
         var custType=data.field.custType;
