@@ -14,12 +14,13 @@ import javax.servlet.http.HttpSessionListener;
 public class SessionCounter implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-
+        SessionContext.AddSession(httpSessionEvent.getSession());
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
         HttpSession session = httpSessionEvent.getSession();
+        SessionContext.DelSession(session);
         TUserLoginEntity userLoginEntity = new TUserLoginEntity();
         userLoginEntity.setSessionId(session.getId());
         //通过抽象的私有方法得到Spring容器中Bean的实例。

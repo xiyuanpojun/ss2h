@@ -1,5 +1,6 @@
 package cn.softlq.ss2h.dao.impl;
 
+import cn.softlq.ss2h.common.SessionContext;
 import cn.softlq.ss2h.dao.IUserDao;
 import cn.softlq.ss2h.po.TFuncEntity;
 import cn.softlq.ss2h.po.TOrgEntity;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -83,7 +85,17 @@ public class UserDaoImpl implements IUserDao {
             if (dt2.getTime() - dt1.getTime() > 1000 * 60 * 30) {
                 //修改时间
                 //记录用户登陆信息
-//                userLoginInfoExec(userLoginEntity, true);
+
+                sqlQuery = session.createSQLQuery("SELECT SESSION_ID FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL")
+                        .setParameter(0, userLoginEntity.getUserid())
+                        .addScalar("SESSION_ID", StandardBasicTypes.STRING);
+                String sessionID = Arrays.toString(sqlQuery.list().toArray());
+                sessionID = sessionID.replace("[", "");
+                sessionID = sessionID.replace("]", "");
+                HttpSession httpSession = SessionContext.getSession(sessionID);
+
+                httpSession.invalidate();
+
                 transaction.commit();
                 session.close();
                 return 1;
