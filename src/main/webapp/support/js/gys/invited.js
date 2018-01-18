@@ -39,6 +39,10 @@ layui.use(['table','form','laydate'], function(){
         $.getJSON(ctx + "/survey/survey_getCol",{tab:sury_type}, function (data) {
             //第一个实例
             var col="[{type:'checkbox'},{field:'SF_DIS',title:'分配情况'}";
+            if(data.dataList.length==0){
+                layer.msg('该专项还未配置可显示数据列');
+                return;
+            }
             $.each(data.dataList, function (i, item) {
                 col+=",{field:'"+item.COL+"',title:'"+item.COL_NAME+"'}";
             });
@@ -114,6 +118,10 @@ layui.use(['table','form','laydate'], function(){
             sury_type=stype;
             $.getJSON(ctx + "/survey/survey_getCol",{tab:sury_type}, function (data) {
                 var col="[{type:'checkbox'},{field:'SF_DIS',title:'分配情况'}";
+                if(data.dataList.length==0){
+                    layer.msg('该专项还未配置可显示数据列');
+                    return;
+                }
                 $.each(data.dataList, function (i, item) {
                     col+=",{field:'"+item.COL+"',title:'"+item.COL_NAME+"'}";
                 });
