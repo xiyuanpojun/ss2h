@@ -49,6 +49,10 @@
     </error-page>
     <!--session时间-->
     <session-config>
-        <session-timeout>1</session-timeout>
+        <session-timeout>30</session-timeout>
     </session-config>
+    <!--session监听器-->
+    <listener>
+        <listener-class>cn.softlq.ss2h.common.SessionCounter</listener-class>
+    </listener>
 </web-app>

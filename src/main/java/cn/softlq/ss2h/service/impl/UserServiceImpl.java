@@ -37,8 +37,10 @@ public class UserServiceImpl implements IUserService {
                     if (result.getUpwd().equals(userEntity.getUpwd())) {
                         TUserLoginEntity userLoginEntity = new TUserLoginEntity();
                         userLoginEntity.setUserid(userEntity.getUserid());
+                        userLoginEntity.setSessionId(session.getId());
                         //获取上次登陆状态
-                        if (userDao.userLoginInfoCheck(userLoginEntity)) {
+                        Integer flag = userDao.userLoginInfoCheck(userLoginEntity);
+                        if (flag == 0 || flag == 1) {
                             //登陆成功
                             map.put("url", "/user/userManage");
                             //跟踪用户信息
@@ -51,7 +53,7 @@ public class UserServiceImpl implements IUserService {
                         } else {
                             //已经登陆
                             error = 5;
-                            map.put("message", "已经在其他地方登陆");
+                            map.put("message", "已经在其他地方登陆，请30分钟后再试。");
                         }
 
                     } else {
@@ -87,9 +89,10 @@ public class UserServiceImpl implements IUserService {
             TUserEntity result = userDao.userFindOne(userEntity.getUserid());
             if (checkLogin() && result != null) {
                 //清除用户信息
-                session.setAttribute("userId", null);
-                session.setAttribute("urole", null);
-                session.setAttribute("uorg", null);
+                session.invalidate();
+//                session.setAttribute("userId", null);
+//                session.setAttribute("urole", null);
+//                session.setAttribute("uorg", null);
                 map.put("message", "成功退出");
                 //记录用户登陆信息
                 TUserLoginEntity userLoginEntity = new TUserLoginEntity();

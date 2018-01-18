@@ -15,7 +15,7 @@ public interface IUserDao {
     void userLoginInfoExec(TUserLoginEntity userLoginEntity, boolean isend) throws Exception;
 
     //检测用户是否已经登陆
-    Boolean userLoginInfoCheck(TUserLoginEntity userLoginEntity) throws Exception;
+    Integer userLoginInfoCheck(TUserLoginEntity userLoginEntity) throws Exception;
 
     //添加用户
     void userAdd(TUserEntity userEntity) throws Exception;

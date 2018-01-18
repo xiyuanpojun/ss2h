@@ -15,8 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -37,14 +41,15 @@ public class UserDaoImpl implements IUserDao {
         Transaction transaction = session.beginTransaction();
         if (isend) {
             //退出
-            String sql = "UPDATE T_USER_LOGIN SET OUT_TIME = SYSDATE WHERE OUT_TIME IS NULL AND USERID = ?";
+            String sql = "UPDATE T_USER_LOGIN SET OUT_TIME = SYSDATE WHERE OUT_TIME IS NULL AND SESSION_ID = ?";
             NativeQuery sqlQuery = session.createSQLQuery(sql)
-                    .setParameter(0, userLoginEntity.getUserid());
+                    .setParameter(0, userLoginEntity.getSessionId());
             sqlQuery.executeUpdate();
         } else {
             //登陆
-            Query query = session.createSQLQuery("INSERT INTO T_USER_LOGIN(USERID, LOG_TIME) VALUES (?,SYSDATE)")
-                    .setParameter(0, userLoginEntity.getUserid());
+            Query query = session.createSQLQuery("INSERT INTO T_USER_LOGIN(USERID, LOG_TIME,SESSION_ID) VALUES (?,SYSDATE,?)")
+                    .setParameter(0, userLoginEntity.getUserid())
+                    .setParameter(1, userLoginEntity.getSessionId());
             query.executeUpdate();
         }
         transaction.commit();
@@ -52,18 +57,42 @@ public class UserDaoImpl implements IUserDao {
     }
 
     @Override
-    public Boolean userLoginInfoCheck(TUserLoginEntity userLoginEntity) throws Exception {
+    public Integer userLoginInfoCheck(TUserLoginEntity userLoginEntity) throws Exception {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         String sql = "SELECT LOG_TIME FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL";
         NativeQuery sqlQuery = session.createSQLQuery(sql)
                 .setParameter(0, userLoginEntity.getUserid())
-                .addScalar("LOG_TIME", StandardBasicTypes.DATE);
+                .addScalar("LOG_TIME", StandardBasicTypes.TIMESTAMP);
         //没有查到数据说明是未登录状态，反之就已经登陆。
-        Boolean flag = "[]".equals(Arrays.toString(sqlQuery.list().toArray()));
-        transaction.commit();
-        session.close();
-        return flag;
+        //true代表正常。
+        String date = Arrays.toString(sqlQuery.list().toArray());
+        Boolean flag = "[]".equals(date);
+        //正常
+        if (flag) {
+            transaction.commit();
+            session.close();
+            return 0;
+        } else {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+            date = date.replace("[", "");
+            date = date.replace("]", "");
+            Date dt1 = df.parse(date);
+            Date dt2 = df.parse(new Timestamp(System.currentTimeMillis()).toString());
+            //登陆超过三十分钟还没有退出。
+            if (dt2.getTime() - dt1.getTime() > 1000 * 60 * 30) {
+                //修改时间
+                //记录用户登陆信息
+//                userLoginInfoExec(userLoginEntity, true);
+                transaction.commit();
+                session.close();
+                return 1;
+            } else {
+                transaction.commit();
+                session.close();
+                return 2;
+            }
+        }
     }
 
     @Override

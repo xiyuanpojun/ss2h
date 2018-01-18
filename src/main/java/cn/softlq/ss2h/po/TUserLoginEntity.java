@@ -7,6 +7,7 @@ public class TUserLoginEntity {
     private String userid;
     private Time logTime;
     private Time outTime;
+    private String sessionId;
 
     public String getUserid() {
         return userid;
@@ -32,6 +33,14 @@ public class TUserLoginEntity {
         this.outTime = outTime;
     }
 
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,6 +63,7 @@ public class TUserLoginEntity {
                 "userid='" + userid + '\'' +
                 ", logTime=" + logTime +
                 ", outTime=" + outTime +
+                ", sessionId='" + sessionId + '\'' +
                 '}';
     }
 }
