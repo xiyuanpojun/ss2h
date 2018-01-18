@@ -12,12 +12,19 @@ $(function (){
 	    	  type:"POST",
 	    	  data:data.field,
 	    	  data_type:"json",
+	    	  beforeSend: function (xhr) {
+	                $("#btn").attr('disabled', "true");
+	            },
 	    	  success:function(data){
 	    		  layer.alert(data.message);
 	    	  },
 	    	  error:function(){
 	    		  layer.alert("连接服务器失败");
+	    	  },
+	    	  complete:function(){
+	    	   $("#btn").removeAttr("disabled"); 
 	    	  }
+	    	  
 	      });
 	      return false;
 	  });
