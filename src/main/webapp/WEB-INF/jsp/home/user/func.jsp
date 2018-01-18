@@ -6,10 +6,8 @@
     <script src="${ctx}/support/js/checkFrame.js"></script>
     <script src="${ctx}/support/js/func.js"></script>
     
-    
 </head>
 <body>
-///////////////////
 <div class="base">
     <div class="nva">
         <div class="layui-tab">
