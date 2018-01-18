@@ -16,7 +16,7 @@ $(function (){
 	                $("#btn").attr('disabled', "true");
 	            },
 	    	  success:function(data){
-	    		  layer.alert(data.message);
+	    		  layer.msg(data.message);
 	    		  $('#funcform')[0].reset();
 	    	  },
 	    	  error:function(){
@@ -58,7 +58,7 @@ $(function (){
                     layer.close(updateLayer);
                     init();
                 }
-                layer.alert(data.message);
+                layer.msg(data.message);
             },
             error: function () {
                 layer.alert("连接服务器失败");
@@ -104,9 +104,10 @@ $(function (){
                                 var error = parseInt(data.error);
                                 if (error === 0) {
                                     obj.del();
+                                    layer.msg(data.message);
+                                    init();
                                 }
-                                layer.msg(data.message);
-                                init();
+                              
                             },
                             error: function () {
                                 layer.alert("连接服务器失败");
