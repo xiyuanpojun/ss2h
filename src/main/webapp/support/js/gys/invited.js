@@ -96,7 +96,7 @@ layui.use(['table','form','laydate'], function(){
                             layer.msg(data);
                         }else{
                             table.reload('surveyList');
-                            $('#funcform')[0].reset();
+                            $('#subDistForm')[0].reset();
                             layer.closeAll('loading');
                         }
                     },

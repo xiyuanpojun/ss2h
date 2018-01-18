@@ -58,7 +58,7 @@
                             <label class="layui-form-label">功能地址</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="funcentity.fUrl" required lay-verify="required"
-                                       placeholder="请输入功能地址" autocomplete="off" value="111111" class="layui-input">
+                                       placeholder="请输入功能地址" autocomplete="off" value="" class="layui-input">
                             </div>
                       
                         </div>

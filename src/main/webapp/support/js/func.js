@@ -105,7 +105,8 @@ $(function (){
                                 if (error === 0) {
                                     obj.del();
                                 }
-                                layer.alert(data.message);
+                                layer.msg(data.message);
+                                init();
                             },
                             error: function () {
                                 layer.alert("连接服务器失败");
