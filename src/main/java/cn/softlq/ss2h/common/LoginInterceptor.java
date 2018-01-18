@@ -26,6 +26,7 @@ public class LoginInterceptor extends AbstractInterceptor {
         for (String ignore : ignores) {
             if (ignore.equals(uri)) {
                 isIgnore = true;
+                break;
             }
         }
 //        if (uri.equals(logonUri)) {
