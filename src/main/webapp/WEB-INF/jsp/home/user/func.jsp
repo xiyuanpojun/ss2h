@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="layui-tab-item">
-                    <form class="layui-form">
+                    <form class="layui-form" id="funcform">
                         <div class="layui-form-item">
                             <label class="layui-form-label">功能id</label>
                             <div class="layui-input-block">
@@ -60,13 +60,13 @@
                                 <input type="text" name="funcentity.fUrl" required lay-verify="required"
                                        placeholder="请输入功能地址" autocomplete="off" value="111111" class="layui-input">
                             </div>
-                            <div class="layui-form-mid layui-word-aux">默认{111111}</div>
+                      
                         </div>
                       
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" id="btn" lay-submit lay-filter="btn">确定新增</button>
-                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                <button type="reset"  class="layui-btn layui-btn-primary">重置</button>
                             </div>
                         </div>
                     </form>
