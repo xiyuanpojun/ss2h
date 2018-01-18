@@ -6,24 +6,23 @@
 <struts>
     <!--用户管理-->
     <package name="user" namespace="/user" extends="json-default">
-        <!--自定义拦截器开始-->
-   <interceptors> 
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
-            <interceptor-stack name="myStack">
-                <interceptor-ref name="myDefault"/>
-                <interceptor-ref name="defaultStack"/>
-            </interceptor-stack>
-        </interceptors>
-        <default-interceptor-ref name="myStack"/>
-        <global-results>
-            <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
-                <param name="actionName">isLogon</param>
-            </result>
-        </global-results>
+       <!--自定义拦截器开始-->
+		   <interceptors> 
+		            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+		            <interceptor-stack name="myStack">
+		                <interceptor-ref name="myDefault"/>
+		                <interceptor-ref name="defaultStack"/>
+		            </interceptor-stack>
+		        </interceptors>
+		        <default-interceptor-ref name="myStack"/>
+		        <global-results>
+		            <result name="isLogon" type="redirectAction">
+		                <param name="namespace">/</param>
+		                <param name="actionName">isLogon</param>
+		            </result>
+		        </global-results>
         
         <!--自定义拦截器结束-->
-        
         <global-allowed-methods>login,add,findAll,findOne,delete,update,logon,checkLogin</global-allowed-methods>
         <!--登陆，添加，分页查询，查找一个，删除，更新，退出,登陆状态。<ajax>-->
         <action name="user_*" class="cn.softlq.ss2h.controller.UserController" method="{1}">
@@ -44,21 +43,22 @@
 
     <!--专项配置操作-->
     <package name="config" namespace="/config" extends="json-default">
-        <!--自定义拦截器开始-->
-        <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
-            <interceptor-stack name="myStack">
-                <interceptor-ref name="myDefault"/>
-                <interceptor-ref name="defaultStack"/>
-            </interceptor-stack>
-        </interceptors>
-        <default-interceptor-ref name="myStack"/>
-        <global-results>
-            <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
-                <param name="actionName">isLogon</param>
-            </result>
-        </global-results>
+      <!--自定义拦截器开始-->
+		   <interceptors> 
+		            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+		            <interceptor-stack name="myStack">
+		                <interceptor-ref name="myDefault"/>
+		                <interceptor-ref name="defaultStack"/>
+		            </interceptor-stack>
+		        </interceptors>
+		        <default-interceptor-ref name="myStack"/>
+		        <global-results>
+		            <result name="isLogon" type="redirectAction">
+		                <param name="namespace">/</param>
+		                <param name="actionName">isLogon</param>
+		            </result>
+		        </global-results>
+        
         <!--自定义拦截器结束-->
         <global-allowed-methods>add,findAll,delete,update,findTabCol</global-allowed-methods>
         <!--添加，分页查询，查找一个，删除，更新,查找表字段。<ajax>-->
@@ -76,20 +76,21 @@
     <!--预约样本-->
     <package name="survey" namespace="/survey" extends="json-default">
         <!--自定义拦截器开始-->
-        <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
-            <interceptor-stack name="myStack">
-                <interceptor-ref name="myDefault"/>
-                <interceptor-ref name="defaultStack"/>
-            </interceptor-stack>
-        </interceptors>
-        <default-interceptor-ref name="myStack"/>
-        <global-results>
-            <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
-                <param name="actionName">isLogon</param>
-            </result>
-        </global-results>
+		   <interceptors> 
+		            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+		            <interceptor-stack name="myStack">
+		                <interceptor-ref name="myDefault"/>
+		                <interceptor-ref name="defaultStack"/>
+		            </interceptor-stack>
+		        </interceptors>
+		        <default-interceptor-ref name="myStack"/>
+		        <global-results>
+		            <result name="isLogon" type="redirectAction">
+		                <param name="namespace">/</param>
+		                <param name="actionName">isLogon</param>
+		            </result>
+		        </global-results>
+        
         <!--自定义拦截器结束-->
         <global-allowed-methods>getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData
         </global-allowed-methods>
@@ -106,21 +107,22 @@
     </package>
     <!-- 功能管理 -->
     <package name="func" namespace="/func" extends="json-default">
-    <!--自定义拦截器开始-->
-        <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
-            <interceptor-stack name="myStack">
-                <interceptor-ref name="myDefault"/>
-                <interceptor-ref name="defaultStack"/>
-            </interceptor-stack>
-        </interceptors>
-        <default-interceptor-ref name="myStack"/>
-        <global-results>
-            <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
-                <param name="actionName">isLogon</param>
-            </result>
-        </global-results>
+        <!--自定义拦截器开始-->
+		   <interceptors> 
+		            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+		            <interceptor-stack name="myStack">
+		                <interceptor-ref name="myDefault"/>
+		                <interceptor-ref name="defaultStack"/>
+		            </interceptor-stack>
+		        </interceptors>
+		        <default-interceptor-ref name="myStack"/>
+		        <global-results>
+		            <result name="isLogon" type="redirectAction">
+		                <param name="namespace">/</param>
+		                <param name="actionName">isLogon</param>
+		            </result>
+		        </global-results>
+        
         <!--自定义拦截器结束-->
     <global-allowed-methods>findFuncAll,findOne,update,delete,add</global-allowed-methods>
     <!-- 功能 列表查询，添加，查询，编辑 ,删除-->
@@ -136,21 +138,22 @@
     </package>
     <!-- 角色功能管理 -->
     <package name="rolfc" namespace="/rolfc" extends="json-default">
-    <!--自定义拦截器开始-->
-        <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
-            <interceptor-stack name="myStack">
-                <interceptor-ref name="myDefault"/>
-                <interceptor-ref name="defaultStack"/>
-            </interceptor-stack>
-        </interceptors>
-        <default-interceptor-ref name="myStack"/>
-        <global-results>
-            <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
-                <param name="actionName">isLogon</param>
-            </result>
-        </global-results>
+          <!--自定义拦截器开始-->
+		   <interceptors> 
+		            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+		            <interceptor-stack name="myStack">
+		                <interceptor-ref name="myDefault"/>
+		                <interceptor-ref name="defaultStack"/>
+		            </interceptor-stack>
+		        </interceptors>
+		        <default-interceptor-ref name="myStack"/>
+		        <global-results>
+		            <result name="isLogon" type="redirectAction">
+		                <param name="namespace">/</param>
+		                <param name="actionName">isLogon</param>
+		            </result>
+		        </global-results>
+        
         <!--自定义拦截器结束-->
      <global-allowed-methods>findAll,findOne,update,delete,add,findnofuncbyrole</global-allowed-methods>
     <action name="rolfc_*" class="cn.softlq.ss2h.controller.RoleFuncController" method="{1}">

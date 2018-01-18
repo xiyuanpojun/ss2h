@@ -106,14 +106,14 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 	}
 
 	@Override
-	public Long findMaxOrderNUM(String role) {
+	public int findMaxOrderNUM(String role) {
 				Session session = sessionFactory.openSession();
-				String  hql="select new cn.softlq.ss2h.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?";
+				String  hql="select max(rf.orderNum) from TRoleFuncEntity rf,TRoleEntity r where rf.roleid = r.roleid and rf.roleid = ?";
 				  Query query = session.createQuery(hql);
 			     query.setParameter(0, role);
-			    List<RoleFuncItemView> list = query.list();
+			    int maxnum= (int) query.list().get(0);
 			   session.close();
-			 return (long) list.size();
+			 return  maxnum;
 	}
 
 

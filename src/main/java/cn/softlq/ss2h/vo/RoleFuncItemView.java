@@ -3,10 +3,10 @@ package cn.softlq.ss2h.vo;
 public class RoleFuncItemView {
  private String role_id;
  private String role_name;
- private Long order;
+ private int order;
  private String func_id;
  private String func_name;
- public RoleFuncItemView(String role_id,String role_name,Long order,String func_id,String func_name) {
+ public RoleFuncItemView(String role_id,String role_name,int order,String func_id,String func_name) {
  this.role_id=role_id;
  this.role_name=role_name;
  this.order=order;
@@ -38,10 +38,10 @@ public String getRole_name() {
 public void setRole_name(String role_name) {
 	this.role_name = role_name;
 }
-public Long getOrder() {
+public int getOrder() {
 	return order;
 }
-public void setOrder(Long order) {
+public void setOrder(int order) {
 	this.order = order;
 }
 }

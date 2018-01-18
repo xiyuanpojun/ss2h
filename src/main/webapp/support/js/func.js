@@ -92,7 +92,7 @@ $(function (){
                 if (obj.event === 'detail') {
                     layer.msg('ID：' + data.fId + ' 的查看操作');
                 } else if (obj.event === 'del') {
-                    layer.confirm('真的删除吗', function (index) {
+                    
                         $.ajax({
                             url: ctx + "/func/func_delete",
                             type: "POST",
@@ -116,7 +116,7 @@ $(function (){
                                 layer.close(index);
                             }
                         });
-                    });
+                
                 } else if (obj.event === 'edit') {
                     //获取信息
                     $.ajax({
@@ -159,7 +159,10 @@ $(function (){
             });
         });
     }
-
+  //点击功能列表
+    $("#funclistmenu").click(function(){
+  	   init();
+    });
     //打开页面时加载一次数据
     init();
     

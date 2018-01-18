@@ -12,7 +12,7 @@
     <div class="nva">
         <div class="layui-tab">
             <ul class="layui-tab-title">
-                <li class="layui-this">功能列表</li>
+                <li class="layui-this" id="funclistmenu">功能列表</li>
                 <c:if test="${urole=='1'}">
                     <li>添加功能</li>
                 </c:if>

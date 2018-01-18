@@ -118,7 +118,6 @@ $(function () {
                 if (obj.event === 'detail') {
                     layer.msg('ID：' + data.id + ' 的查看操作');
                 } else if (obj.event === 'del') {
-                    layer.confirm('真的删除吗', function (index) {
                         $.ajax({
                             url: ctx + "/rolfc/rolfc_delete",
                             type: "POST",
@@ -147,12 +146,14 @@ $(function () {
                                 $("#btn").removeAttr("disabled"); 
                             }
                         });
-                    });
+                
                 }
             });
         });
     }
-
+   $("#roel_func").click(function(){
+	   init($("#role").val()); 
+   });
     //打开页面时加载一次数据
     init($("#role").val());
     getfunc("1");

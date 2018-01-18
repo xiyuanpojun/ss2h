@@ -16,5 +16,5 @@ public interface IRoleFuncDao {
 	//添加单个角色-功能
 	void add(TRoleFuncEntity tRoleFuncEntity) throws Exception;
 	List<TFuncEntity> findnofuncbyrole(String role);
-	Long findMaxOrderNUM(String string);
+	int findMaxOrderNUM(String string);
 }

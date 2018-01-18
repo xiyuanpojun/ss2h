@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class TRoleFuncEntity {
     private String roleid;
-    private Long orderNum;
+    private int orderNum;
     private String funcId;
 
     public String getRoleid() {
@@ -15,11 +15,11 @@ public class TRoleFuncEntity {
         this.roleid = roleid;
     }
 
-    public Long getOrderNum() {
+    public int getOrderNum() {
         return orderNum;
     }
 
-    public void setOrderNum(Long orderNum) {
+    public void setOrderNum(int orderNum) {
         this.orderNum = orderNum;
     }
 

@@ -78,12 +78,13 @@ public class IRoleFuncServiceImpl implements IRoleFuncService {
 	        if (tRoleFuncEntity != null&&tRoleFuncEntity.getFuncId()!=null&&tRoleFuncEntity.getRoleid()!=null&&!"".equals(tRoleFuncEntity.getFuncId())&&!"".equals(tRoleFuncEntity.getRoleid())) {
 	            try {
 	            	String [] funidlist=tRoleFuncEntity.getFuncId().split(",");
-	            	
+	            	int maxnum=roleFuncDao.findMaxOrderNUM(tRoleFuncEntity.getRoleid());
+	            	int k=maxnum+1;
 	        		for(int i=1;i<funidlist.length;i++) {
-	        			Long size=roleFuncDao.findMaxOrderNUM(tRoleFuncEntity.getRoleid());
-	        			tRoleFuncEntity.setOrderNum(size==0?1:size++);
+	        			tRoleFuncEntity.setOrderNum(k);
 	        			tRoleFuncEntity.setFuncId(funidlist[i]);
 	        			roleFuncDao.add(tRoleFuncEntity);
+	        			k++;
 	        		}
 	                map.put("message", "添加成功");
 	            } catch (Exception e) {
