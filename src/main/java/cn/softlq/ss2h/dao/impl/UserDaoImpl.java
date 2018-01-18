@@ -94,8 +94,9 @@ public class UserDaoImpl implements IUserDao {
                 sessionID = sessionID.replace("]", "");
                 HttpSession httpSession = SessionContext.getSession(sessionID);
 
-                httpSession.invalidate();
-
+                if (null != httpSession) {
+                    httpSession.invalidate();
+                }
                 transaction.commit();
                 session.close();
                 return 1;
