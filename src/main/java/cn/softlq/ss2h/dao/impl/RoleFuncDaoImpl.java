@@ -77,7 +77,6 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 
 	@Override 
 	public void delete (TRoleFuncEntity tRoleFuncEntity)  {
-		// TODO Auto-generated method stub
 		Session session = sessionFactory.openSession();
 		Transaction tran = session.beginTransaction() ;
 		
@@ -92,13 +91,11 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 	}
 	@Override
 	public void add(TRoleFuncEntity tRoleFuncEntity) throws Exception {
-		// TODO Auto-generated method stub
 		hibernateTemplate.save(tRoleFuncEntity);
 	}
 
 	@Override
 	public List<TFuncEntity> findnofuncbyrole(String role) {
-		// TODO Auto-generated method stub
 		Session session = sessionFactory.openSession();
 		 String hql="from TFuncEntity fc where fc.fId not in (select rf.funcId from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?)";
 		   Query query = session.createQuery(hql);
@@ -110,8 +107,6 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 
 	@Override
 	public Long findMaxOrderNUM(String role) {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
 				Session session = sessionFactory.openSession();
 				String  hql="select new cn.softlq.ss2h.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?";
 				  Query query = session.createQuery(hql);

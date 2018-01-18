@@ -4,12 +4,12 @@ $(function () {
     });
     layui.use('form', function () {
     	checkLogin();
-    	var rol_id="";
-    	var funcidlist="";
         var form =layui.form;
         //增加
         form.on('submit(btn)', function (data) {
         	checkLogin();
+        	var rol_id="";
+        	var funcidlist="";
         	$("input:radio[name='roleid']:checked").each(function(){//遍历name=funcid的单选按钮radio
         		rol_id=$(this).val();
         		});
@@ -128,12 +128,15 @@ $(function () {
                      		     'tRoleFuncEntity.funcId':data.func_id
                             },
                             dataType: "json",
+                            beforeSend: function (xhr) {
+            	                $("#btn").attr('disabled', "true");
+            	            },
                             success: function (data) {
                                 var error = parseInt(data.error);
                                 if (error === 0) {
                                     obj.del();
                                 }
-                                layer.alert(data.message);
+                                layer.msg(data.message);
                                 init($("#role").val());
                             },
                             error: function () {
@@ -141,6 +144,7 @@ $(function () {
                             },
                             complete: function () {
                                 layer.close(index);
+                                $("#btn").removeAttr("disabled"); 
                             }
                         });
                     });
