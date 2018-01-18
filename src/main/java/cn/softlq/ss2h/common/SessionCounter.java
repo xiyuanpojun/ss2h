@@ -22,7 +22,6 @@ public class SessionCounter implements HttpSessionListener {
         HttpSession session = httpSessionEvent.getSession();
         TUserLoginEntity userLoginEntity = new TUserLoginEntity();
         userLoginEntity.setSessionId(session.getId());
-        System.out.println("session超时了");
         //通过抽象的私有方法得到Spring容器中Bean的实例。
         IUserDao userDao = (UserDaoImpl) this.getObjectFromApplication(session.getServletContext(), "userDaoImpl");
         try {
