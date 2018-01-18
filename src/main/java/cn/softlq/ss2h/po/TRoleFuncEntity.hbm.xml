@@ -6,7 +6,7 @@
 
     <class name="cn.softlq.ss2h.po.TRoleFuncEntity" table="T_ROLE_FUNC" schema="GUOWANG_DATA">
         <id name="roleid" column="ROLEID"/>
-        <property name="orderNum" column="ORDERE_NUM"/>
+        <property name="orderNum" column="ORDER_NUM"/>
         <property name="funcId" column="FUNC_ID"/>
     </class>
 </hibernate-mapping>
