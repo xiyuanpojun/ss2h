@@ -78,9 +78,9 @@ public class IRoleFuncServiceImpl implements IRoleFuncService {
 	        if (tRoleFuncEntity != null&&tRoleFuncEntity.getFuncId()!=null&&tRoleFuncEntity.getRoleid()!=null&&!"".equals(tRoleFuncEntity.getFuncId())&&!"".equals(tRoleFuncEntity.getRoleid())) {
 	            try {
 	            	String [] funidlist=tRoleFuncEntity.getFuncId().split(",");
-	            	Long l1=new Long(10);
+	            	
 	        		for(int i=1;i<funidlist.length;i++) {
-	        			tRoleFuncEntity.setOrderNum(roleFuncDao.findMaxOrderNUM(tRoleFuncEntity.getRoleid()+l1));
+	        			tRoleFuncEntity.setOrderNum(roleFuncDao.findMaxOrderNUM(tRoleFuncEntity.getRoleid())+1L);
 	        			tRoleFuncEntity.setFuncId(funidlist[i]);
 	        			roleFuncDao.add(tRoleFuncEntity);
 	        		}

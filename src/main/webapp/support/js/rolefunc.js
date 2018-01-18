@@ -134,6 +134,7 @@ $(function () {
                                     obj.del();
                                 }
                                 layer.alert(data.message);
+                                init($("#role").val());
                             },
                             error: function () {
                                 layer.alert("连接服务器失败");
