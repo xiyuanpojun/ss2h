@@ -47,6 +47,7 @@ $(function () {
                 checkLogon(data);
                 var error = parseInt(data.error);
                 if (error === 0) {
+                    init($("#config").val());
                     $("#btn").next().click();
                     $("#checkOption").html("");
                     //重新渲染

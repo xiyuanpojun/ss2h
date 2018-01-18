@@ -16,6 +16,7 @@ $(function () {
                 checkLogon(data);
                 var error = parseInt(data.error);
                 if (error === 0) {
+                    init($("#province").val());
                     $("#btn").next().click();
                 }
                 layer.msg(data.message);
