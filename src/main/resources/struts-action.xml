@@ -102,4 +102,62 @@
             <result>/WEB-INF/jsp/home/gys/invited.jsp</result>
         </action>
     </package>
+    <!-- 功能管理 -->
+    <package name="func" namespace="/func" extends="json-default">
+    <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="namespace">/</param>
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+    <global-allowed-methods>findFuncAll,findOne,update,delete,add</global-allowed-methods>
+    <!-- 功能 列表查询，添加，查询，编辑 ,删除-->
+    <action name="func_*" class="cn.softlq.ss2h.controller.FuncController" method="{1}">
+        <result name="success" type="json">
+             <param name="root">dataMap</param>
+        </result>
+    </action>
+    <!--显示功能管理列表页面-->
+        <action name="func_list_page" class="cn.softlq.ss2h.controller.FuncController" method="showfuncpage">
+            <result name="success">/WEB-INF/jsp/home/user/func.jsp</result>
+        </action>
+    </package>
+    <!-- 角色功能管理 -->
+    <package name="rolfc" namespace="/rolfc" extends="json-default">
+    <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="namespace">/</param>
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+     <global-allowed-methods>findAll,findOne,update,delete,add,findnofuncbyrole</global-allowed-methods>
+    <action name="rolfc_*" class="cn.softlq.ss2h.controller.RoleFuncController" method="{1}">
+      <result name="success" type="json">
+            <param name="root">dataMap</param>
+      </result>
+    </action>
+    <action name="role_func_page" class="cn.softlq.ss2h.controller.RoleFuncController" method="showrolfcpage">
+        <result name="success">/WEB-INF/jsp/home/user/role_func.jsp</result>
+    </action>
+    </package>
 </struts>
