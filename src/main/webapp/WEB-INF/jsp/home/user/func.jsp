@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="${ctx}/support/css/userList.css">
     <script src="${ctx}/support/js/checkFrame.js"></script>
     <script src="${ctx}/support/js/func.js"></script>
-    
 </head>
 <body>
 <div class="base">
