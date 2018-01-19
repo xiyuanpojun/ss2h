@@ -127,7 +127,7 @@ $(function () {
                             },
                             dataType: "json",
                             beforeSend: function (xhr) {
-            	                $("#btn").attr('disabled', "true");
+            	                $(".delete").attr('disabled', "true");
             	            },
                             success: function (data) {
                                 var error = parseInt(data.error);
@@ -142,7 +142,7 @@ $(function () {
                             },
                             complete: function () {
                                 layer.close(index);
-                              
+                                $(".delete").removeAttr("disabled");
                             }
                         });
                 

@@ -50,7 +50,7 @@
                             </thead>
                         </table>
                         <script id="barTable" type="text/html">
-                            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                            <a  class="layui-btn layui-btn-danger layui-btn-xs delete" lay-event="del">删除</a>
                         </script>
                     </div>
                 </div>
