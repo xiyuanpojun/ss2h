@@ -38,7 +38,7 @@
         <iframe class="show_page" id="show_page" name="show_page" frameborder="0"></iframe>
     </div>
     <div class="layui-footer">
-        © layui.com
+        ® www.hill.org.cn
     </div>
 </div>
 </body>
