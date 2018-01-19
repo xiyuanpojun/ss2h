@@ -97,7 +97,7 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 	@Override
 	public List<TFuncEntity> findnofuncbyrole(String role) {
 		Session session = sessionFactory.openSession();
-		 String hql="from TFuncEntity fc where fc.fId not in (select rf.funcId from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?)";
+		 String hql="from TFuncEntity fc where fc.fId not in (select rf.funcId from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ? order by rf.funcId asc)";
 		   Query query = session.createQuery(hql);
 	       query.setParameter(0, role);
 	       List<TFuncEntity> list = query.list();

@@ -51,9 +51,12 @@ $(function () {
     	 checkLogin();
     	 $("#funclist").html("");
     	  $.ajax({
-			   url:ctx + "/rolfc/rolfc_findnofuncbyrole?role="+data,
+			   url:ctx + "/rolfc/rolfc_findnofuncbyrole",
 			   type:"POST",
 			   dataType:"json",
+			   data:{
+				   'role':data
+			   },
 			   success:function(data){
 				$.each(data.tfunclist,function(i,item){
 					var checkbox='<input type="checkbox" name="funcid" value="'+item.fId+'" title="'+item.fName+'">';
@@ -156,7 +159,7 @@ $(function () {
    });
    //点击添加角色功能 刷新
    $("#addrolfc").click(function(){
-	   getfunc($("#roleid").val());
+	   getfunc($("roleid").val());
    });
     //打开页面时加载一次数据
     init($("#role").val());
