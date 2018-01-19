@@ -5,7 +5,7 @@
 <!--公共配置-->
 <struts>
     <!-- 开启使用开发模式，详细错误提示 -->
-    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.devMode" value="false"/>
     <!-- 将对象交给spring管理 -->
     <constant name="struts.objectFactory" value="spring"/>
     <!-- 指定资源编码类型 -->
@@ -20,7 +20,7 @@
     <package name="default" namespace="/" extends="json-default">
         <!--&lt;!&ndash;自定义拦截器开始&ndash;&gt;-->
         <!--<interceptors>-->
-            <!--<interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>-->
+            <!--<interceptor name="myDefault" class="LoginInterceptor"/>-->
             <!--<interceptor-stack name="myStack">-->
                 <!--<interceptor-ref name="myDefault"/>-->
                 <!--<interceptor-ref name="defaultStack"/>-->
@@ -50,7 +50,7 @@
         <action name="index">
             <result>/index.jsp</result>
         </action>
-        <action name="isLogon" class="cn.softlq.ss2h.common.LoginController">
+        <action name="isLogon" class="com.hill.gwyb.common.LoginController">
             <result name="success" type="json">
                 <param name="root">dataMap</param>
             </result>

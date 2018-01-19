@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.hill.gwyb.po.TOrgEntity" table="T_ORG" schema="GUOWANG_DATA">
+        <id name="orgid" column="ORGID"/>
+        <property name="orgname" column="ORGNAME"/>
+        <property name="pOrgid" column="P_ORGID"/>
+        <property name="pOrg" column="P_ORG"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.hill.gwyb.po.TSurveyTypeEntity" table="T_SURVEY_TYPE" schema="GUOWANG_DATA">
+        <id name="typeId" column="TYPE_ID"/>
+        <property name="surveyType" column="SURVEY_TYPE"/>
+        <property name="tab" column="TAB"/>
+        <property name="showNum" column="SHOW_NUM"/>
+    </class>
+</hibernate-mapping>

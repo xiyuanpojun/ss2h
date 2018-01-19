@@ -53,6 +53,6 @@
     </session-config>
     <!--session监听器-->
     <listener>
-        <listener-class>cn.softlq.ss2h.common.SessionCounter</listener-class>
+        <listener-class>com.hill.gwyb.common.SessionCounter</listener-class>
     </listener>
 </web-app>

@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.hill.gwyb.po.TSurveyUserEntity" table="T_SURVEY_USER" schema="GUOWANG_DATA">
+        <id name="sUserId" column="S_USER_ID"/>
+        <property name="sUserName" column="S_USER_NAME"/>
+        <property name="orgid" column="ORGID"/>
+        <property name="userid" column="USERID"/>
+    </class>
+</hibernate-mapping>

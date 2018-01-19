@@ -8,7 +8,7 @@
     <package name="user" namespace="/user" extends="json-default">
         <!--自定义拦截器开始-->
         <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+            <interceptor name="myDefault" class="com.hill.gwyb.common.LoginInterceptor"/>
             <interceptor-stack name="myStack">
                 <interceptor-ref name="myDefault"/>
                 <interceptor-ref name="defaultStack"/>
@@ -27,29 +27,29 @@
             login,add,findAll,findOne,delete,update,logon,checkLogin,
         </global-allowed-methods>
         <!--登陆，添加，分页查询，查找一个，删除，更新，退出,登陆状态。<ajax>-->
-        <action name="user_*" class="cn.softlq.ss2h.controller.UserController" method="{1}">
+        <action name="user_*" class="com.hill.gwyb.controller.UserController" method="{1}">
             <result name="success" type="json">
                 <param name="root">dataMap</param>
             </result>
         </action>
         <!--显示用户界面，如果未登录转到登陆页，如果登陆了就并把用户功能列表获取。-->
-        <action name="userManage" class="cn.softlq.ss2h.controller.UserController" method="showUserPage">
+        <action name="userManage" class="com.hill.gwyb.controller.UserController" method="showUserPage">
             <result name="success">/WEB-INF/jsp/home/user/userManageFrame.jsp</result>
             <result name="error" type="redirect">/index.jsp</result>
         </action>
         <!--显示用户列表界面，并获取用户可见省份。-->
-        <action name="user_list_page" class="cn.softlq.ss2h.controller.UserController" method="showUserList">
+        <action name="user_list_page" class="com.hill.gwyb.controller.UserController" method="showUserList">
             <result name="success">/WEB-INF/jsp/home/user/userList.jsp</result>
         </action>
 
-        <action name="surveyor_*" class="cn.softlq.ss2h.controller.SurveyorController" method="{1}">
+        <action name="surveyor_*" class="com.hill.gwyb.controller.SurveyorController" method="{1}">
             <result name="success" type="json">
                 <param name="root">dataMap</param>
             </result>
         </action>
 
         <!--调查员管理列表页面,获取用户可见城市。-->
-        <action name="surveyor_list_page" class="cn.softlq.ss2h.controller.SurveyorController"
+        <action name="surveyor_list_page" class="com.hill.gwyb.controller.SurveyorController"
                 method="showSurveyorList">
             <result name="success">/WEB-INF/jsp/home/user/surveyor.jsp</result>
         </action>
@@ -59,7 +59,7 @@
     <package name="config" namespace="/config" extends="json-default">
         <!--自定义拦截器开始-->
         <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+            <interceptor name="myDefault" class="com.hill.gwyb.common.LoginInterceptor"/>
             <interceptor-stack name="myStack">
                 <interceptor-ref name="myDefault"/>
                 <interceptor-ref name="defaultStack"/>
@@ -76,23 +76,23 @@
 
         <global-allowed-methods>add,findAll,delete,update,findTabCol</global-allowed-methods>
         <!--添加，分页查询，查找一个，删除，更新,查找表字段。<ajax>-->
-        <action name="config_*" class="cn.softlq.ss2h.controller.ConfigController" method="{1}">
+        <action name="config_*" class="com.hill.gwyb.controller.ConfigController" method="{1}">
             <result name="success" type="json">
                 <param name="root">dataMap</param>
             </result>
         </action>
         <!--显示专项配置列表页面，并获取用户可见专项。-->
-        <action name="config_list_page" class="cn.softlq.ss2h.controller.ConfigController" method="showConfigList">
+        <action name="config_list_page" class="com.hill.gwyb.controller.ConfigController" method="showConfigList">
             <result name="success">/WEB-INF/jsp/home/user/configuration.jsp</result>
         </action>
 
-        <action name="sconfig_*" class="cn.softlq.ss2h.controller.SConfigController" method="{1}">
+        <action name="sconfig_*" class="com.hill.gwyb.controller.SConfigController" method="{1}">
             <result name="success" type="json">
                 <param name="root">dataMap</param>
             </result>
         </action>
 
-        <action name="sc_list_page" class="cn.softlq.ss2h.controller.SConfigController" method="showConfigList">
+        <action name="sc_list_page" class="com.hill.gwyb.controller.SConfigController" method="showConfigList">
             <result name="success">/WEB-INF/jsp/home/user/scon.jsp</result>
         </action>
 
@@ -102,7 +102,7 @@
     <package name="survey" namespace="/survey" extends="json-default">
         <!--自定义拦截器开始-->
         <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+            <interceptor name="myDefault" class="com.hill.gwyb.common.LoginInterceptor"/>
             <interceptor-stack name="myStack">
                 <interceptor-ref name="myDefault"/>
                 <interceptor-ref name="defaultStack"/>
@@ -119,7 +119,7 @@
 
         <global-allowed-methods>getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData,getSurveyUser
         </global-allowed-methods>
-        <action name="survey_*" class="cn.softlq.ss2h.controller.SurveyController" method="{1}">
+        <action name="survey_*" class="com.hill.gwyb.controller.SurveyController" method="{1}">
 
         </action>
         <!--显示页面-->
@@ -134,7 +134,7 @@
     <package name="func" namespace="/func" extends="json-default">
         <!--自定义拦截器开始-->
         <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+            <interceptor name="myDefault" class="com.hill.gwyb.common.LoginInterceptor"/>
             <interceptor-stack name="myStack">
                 <interceptor-ref name="myDefault"/>
                 <interceptor-ref name="defaultStack"/>
@@ -151,13 +151,13 @@
 
         <global-allowed-methods>findFuncAll,findOne,update,delete,add</global-allowed-methods>
         <!-- 功能 列表查询，添加，查询，编辑 ,删除-->
-        <action name="func_*" class="cn.softlq.ss2h.controller.FuncController" method="{1}">
+        <action name="func_*" class="com.hill.gwyb.controller.FuncController" method="{1}">
             <result name="success" type="json">
                 <param name="root">dataMap</param>
             </result>
         </action>
         <!--显示功能管理列表页面-->
-        <action name="func_list_page" class="cn.softlq.ss2h.controller.FuncController" method="showfuncpage">
+        <action name="func_list_page" class="com.hill.gwyb.controller.FuncController" method="showfuncpage">
             <result name="success">/WEB-INF/jsp/home/user/func.jsp</result>
         </action>
     </package>
@@ -165,7 +165,7 @@
     <package name="rolfc" namespace="/rolfc" extends="json-default">
         <!--自定义拦截器开始-->
         <interceptors>
-            <interceptor name="myDefault" class="cn.softlq.ss2h.common.LoginInterceptor"/>
+            <interceptor name="myDefault" class="com.hill.gwyb.common.LoginInterceptor"/>
             <interceptor-stack name="myStack">
                 <interceptor-ref name="myDefault"/>
                 <interceptor-ref name="defaultStack"/>
@@ -181,12 +181,12 @@
         <!--自定义拦截器结束-->
 
         <global-allowed-methods>findAll,findOne,update,delete,add,findnofuncbyrole</global-allowed-methods>
-        <action name="rolfc_*" class="cn.softlq.ss2h.controller.RoleFuncController" method="{1}">
+        <action name="rolfc_*" class="com.hill.gwyb.controller.RoleFuncController" method="{1}">
             <result name="success" type="json">
                 <param name="root">dataMap</param>
             </result>
         </action>
-        <action name="role_func_page" class="cn.softlq.ss2h.controller.RoleFuncController" method="showrolfcpage">
+        <action name="role_func_page" class="com.hill.gwyb.controller.RoleFuncController" method="showrolfcpage">
             <result name="success">/WEB-INF/jsp/home/user/role_func.jsp</result>
         </action>
     </package>

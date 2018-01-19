@@ -5,7 +5,7 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx.xsd">
-    <context:component-scan base-package="cn.softlq.ss2h"/>
+    <context:component-scan base-package="com.hill.gwyb"/>
     <context:property-placeholder location="classpath:db.properties"/>
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${driverClass}"/>
@@ -33,7 +33,7 @@
         </property>
         <property name="mappingLocations">
             <list>
-                <value>classpath:cn/softlq/ss2h/po/*.hbm.xml</value>
+                <value>classpath:com/hill/gwyb/po/*.hbm.xml</value>
             </list>
         </property>
     </bean>
