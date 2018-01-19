@@ -180,6 +180,14 @@ public class SurveyController extends ActionSupport {
         return null;
     }
 
+    public String getSurveyUser() throws IOException, SQLException {
+        PrintWriter pw = response.getWriter();
+        Object userId = request.getSession().getAttribute("userId");
+        pw.write(surveyDao.getSurveyUser(userId.toString()));
+        pw.close();
+        return null;
+    }
+
     public String getCustType() throws IOException, SQLException {
         PrintWriter pw = response.getWriter();
         pw.write(surveyDao.getCustType("客户类型"));

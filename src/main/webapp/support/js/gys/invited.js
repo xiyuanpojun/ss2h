@@ -27,6 +27,12 @@ layui.use(['table','form','laydate'], function(){
         });
         form.render('select');
     });
+    $.getJSON(ctx + "/survey/survey_getSurveyUser", function (data) {
+        $.each(data.dataList, function (i, item) {
+            $('#diaocy').append('<option  value=' + item.S_USER_ID + '>' + item.S_USER_NAME + "</option>");
+        });
+        form.render('select');
+    });
 
     $.getJSON(ctx + "/survey/survey_getStype", function (data) {
         $.each(data.dataList, function (i, item) {
@@ -72,7 +78,7 @@ layui.use(['table','form','laydate'], function(){
             var distRes=data.field.distRes;
             var diaocy=data.field.diaocy;
             if(distRes==1&&diaocy==""){
-                layer.msg('请填写调查员信息');
+                layer.msg('请选择调查员信息');
             }else{
                 if(distRes==2){
                     diaocy="";

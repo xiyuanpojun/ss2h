@@ -151,7 +151,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             col.append((String) o);
             col.append(",");
         }
-        sql = "SELECT ROWVAL,SF_DIS,TOTAL," + col + "ROWXH FROM(SELECT A.ROWID ROWVAL,CASE WHEN F.DISTRI IS NULL OR F.DISTRI='2' THEN '未分配' ELSE F.DIS_RM END SF_DIS,count(1) over() total," + col + "ROWNUM rowxh FROM " + tab + " A,T_SURVEY_INVITE F "
+        sql = "SELECT ROWVAL,SF_DIS,TOTAL," + col + "ROWXH FROM(SELECT A.ROWID ROWVAL,CASE WHEN F.DISTRI IS NULL OR F.DISTRI='2' THEN '未分配' ELSE (SELECT S_USER_NAME FROM T_SURVEY_USER WHERE S_USER_ID=F.DIS_RM) END SF_DIS,count(1) over() total," + col + "ROWNUM rowxh FROM " + tab + " A,T_SURVEY_INVITE F "
                 + "WHERE F.TAB=? AND F.USERID=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1 " + tick
                 + ") T WHERE T.ROWXH>" + start + " AND T.ROWXH <=" + end;
         SQLQuery sq = session.createSQLQuery(sql)
@@ -221,5 +221,24 @@ public class SurveyDaoImpl implements ISurveyDao {
         }
         transaction.commit();
         session.close();
+    }
+
+    public String getSurveyUser(String userid) throws SQLException {
+        Session session = sessionFactory.openSession();
+        String sql = "SELECT T.S_USER_ID,T.S_USER_NAME FROM T_SURVEY_USER T WHERE T.USERID=?";
+        Query query = session.createSQLQuery(sql)
+                .setParameter(0, userid)
+                .addScalar("S_USER_ID", StandardBasicTypes.STRING)
+                .addScalar("S_USER_NAME", StandardBasicTypes.STRING);
+        JSONArray json = new JSONArray();
+        for (Object o : query.list()) {
+            Object[] objects = (Object[]) o;
+            JSONObject jo = new JSONObject();
+            jo.put("S_USER_ID", (String) objects[0]);
+            jo.put("S_USER_NAME", (String) objects[1]);
+            json.add(jo);
+        }
+        session.close();
+        return "{\"dataList\":" + json.toJSONString() + "}";
     }
 }
