@@ -20,7 +20,7 @@ public interface ISurveyorDao {
 
     String userProvinceName(String orgid) throws Exception;
 
-    void userDelete(TSurveyUserEntity result);
+    void userDelete(TSurveyUserEntity result) throws Exception;
 
-    void userUpdate(TSurveyUserEntity entity);
+    void userUpdate(TSurveyUserEntity entity) throws Exception;
 }

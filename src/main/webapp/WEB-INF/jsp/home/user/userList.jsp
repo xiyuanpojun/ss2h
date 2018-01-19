@@ -40,7 +40,7 @@
                         <table class="layui-table" lay-filter="table">
                             <thead>
                             <tr>
-                                <th lay-data="{field:'userid'}">用户账户</th>
+                                <th lay-data="{field:'userid'}">用户账号</th>
                                 <th lay-data="{field:'uname'}">用户姓名</th>
                                 <th lay-data="{field:'orgid'}">所属省份</th>
                                 <th lay-data="{field:'urole'}">角色</th>

@@ -7,6 +7,13 @@ public class TPCodeEntity {
     private String pname;
     private String ptype;
 
+    public TPCodeEntity() {
+    }
+
+    public TPCodeEntity(String ptype) {
+        this.ptype = ptype;
+    }
+
     public String getPid() {
         return pid;
     }
@@ -45,5 +52,14 @@ public class TPCodeEntity {
     public int hashCode() {
 
         return Objects.hash(pid, pname, ptype);
+    }
+
+    @Override
+    public String toString() {
+        return "TPCodeEntity{" +
+                "pid='" + pid + '\'' +
+                ", pname='" + pname + '\'' +
+                ", ptype='" + ptype + '\'' +
+                '}';
     }
 }

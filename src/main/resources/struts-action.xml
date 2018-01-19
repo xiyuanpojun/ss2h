@@ -85,6 +85,17 @@
         <action name="config_list_page" class="cn.softlq.ss2h.controller.ConfigController" method="showConfigList">
             <result name="success">/WEB-INF/jsp/home/user/configuration.jsp</result>
         </action>
+
+        <action name="sconfig_*" class="cn.softlq.ss2h.controller.SConfigController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+
+        <action name="sc_list_page" class="cn.softlq.ss2h.controller.SConfigController" method="showConfigList">
+            <result name="success">/WEB-INF/jsp/home/user/scon.jsp</result>
+        </action>
+
     </package>
 
     <!--预约样本-->

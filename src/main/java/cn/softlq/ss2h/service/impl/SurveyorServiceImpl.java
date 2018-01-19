@@ -71,7 +71,7 @@ public class SurveyorServiceImpl implements ISurveyorService {
     }
 
     @Override
-    public Map<String, Object> userAdd(TSurveyUserEntity entity) {
+    public Map<String, Object> userAdd(TSurveyUserEntity entity)throws Exception {
         Map<String, Object> map = new HashMap<>();
         int error = 0;
         if (entity != null && entity.getsUserId() != null && entity.getsUserName() != null && entity.getOrgid() != null && entity.getUserid() != null
@@ -111,7 +111,7 @@ public class SurveyorServiceImpl implements ISurveyorService {
     }
 
     @Override
-    public Map<String, Object> userDelete(TSurveyUserEntity entity) {
+    public Map<String, Object> userDelete(TSurveyUserEntity entity) throws Exception{
         Map<String, Object> map = new HashMap<>();
         int error = 0;
         if (entity != null && entity.getsUserId() != null && entity.getUserid() != null
@@ -149,7 +149,7 @@ public class SurveyorServiceImpl implements ISurveyorService {
     }
 
     @Override
-    public Map<String, Object> userFindOne(TSurveyUserEntity entity) {
+    public Map<String, Object> userFindOne(TSurveyUserEntity entity)throws Exception {
         Map<String, Object> map = new HashMap<>();
         int error = 0;
         if (entity != null
@@ -184,7 +184,7 @@ public class SurveyorServiceImpl implements ISurveyorService {
     }
 
     @Override
-    public Map<String, Object> userUpdate(TSurveyUserEntity entity) {
+    public Map<String, Object> userUpdate(TSurveyUserEntity entity) throws Exception {
         Map<String, Object> map = new HashMap<>();
         int error = 0;
         if (entity != null && entity.getsUserId() != null && entity.getsUserName() != null && entity.getOrgid() != null && entity.getUserid() != null

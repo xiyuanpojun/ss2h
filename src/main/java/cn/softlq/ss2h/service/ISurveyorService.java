@@ -11,12 +11,12 @@ public interface ISurveyorService {
     //分页查询
     Map<String, Object> userFindAll(int currentTotal, int current, String province) throws Exception;
 
-    Map<String, Object> userAdd(TSurveyUserEntity surveyUserEntity);
+    Map<String, Object> userAdd(TSurveyUserEntity surveyUserEntity) throws Exception;
 
-    Map<String, Object> userDelete(TSurveyUserEntity surveyUserEntity);
+    Map<String, Object> userDelete(TSurveyUserEntity surveyUserEntity) throws Exception;
 
-    Map<String, Object> userFindOne(TSurveyUserEntity surveyUserEntity);
+    Map<String, Object> userFindOne(TSurveyUserEntity surveyUserEntity) throws Exception;
 
-    Map<String, Object> userUpdate(TSurveyUserEntity surveyUserEntity);
+    Map<String, Object> userUpdate(TSurveyUserEntity surveyUserEntity) throws Exception;
 
 }

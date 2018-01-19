@@ -106,7 +106,7 @@ $(function () {
         layui.use('table', function () {
             var table = layui.table;
             var tableOptions = {
-                url: '${ctx}/user/surveyor_findAll',
+                url: ctx + '/user/surveyor_findAll',
                 method: 'POST',
                 id: 'listReload',
                 where: {

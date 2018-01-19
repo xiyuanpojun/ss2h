@@ -97,7 +97,7 @@ $(function () {
         layui.use('table', function () {
             var table = layui.table;
             var tableOptions = {
-                url: '${ctx}/rolfc/rolfc_findAll',
+                url: ctx + '/rolfc/rolfc_findAll',
                 method: 'POST',
                 id: 'listReload',
                 where: {

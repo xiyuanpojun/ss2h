@@ -161,7 +161,7 @@ $(function () {
         layui.use('table', function () {
             var table = layui.table;
             var tableOptions = {
-                url: '${ctx}/config/config_findAll',
+                url: ctx + '/config/config_findAll',
                 method: 'POST',
                 id: 'listReload',
                 where: {
