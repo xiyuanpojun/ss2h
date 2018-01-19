@@ -2,7 +2,7 @@
 <html>
 <head>
     <%@include file="/WEB-INF/jsp/common.jsp" %>
-    <link rel="stylesheet" href="${ctx}/support/css/userList.css">
+    <link rel="stylesheet" href="${ctx}/support/css/func.css">
     <script src="${ctx}/support/js/checkFrame.js"></script>
     <script src="${ctx}/support/js/func.js"></script>
     

@@ -2,7 +2,7 @@
 <html>
 <head>
     <%@include file="/WEB-INF/jsp/common.jsp" %>
-    <link rel="stylesheet" href="${ctx}/support/css/userList.css">
+    <link rel="stylesheet" href="${ctx}/support/css/rolefunc.css">
     <script src="${ctx}/support/js/checkFrame.js"></script>
     <script src="${ctx}/support/js/rolefunc.js"></script>
 </head>
@@ -60,8 +60,8 @@
                              <div class="layui-form-item">
                             <label class="layui-form-label">角色</label>
                             <div class="layui-input-block">
-                                <input type="radio"  name="roleid" value="1" title="管理员" checked lay-filter="radio1">
-                                <input type="radio"  name="roleid" value="2" title="供应商"  lay-filter="radio1">
+                                <input type="radio" class="roleid" name="roleid" value="1" title="管理员" checked lay-filter="radio1">
+                                <input type="radio"  class="roleid" name="roleid" value="2" title="供应商"  lay-filter="radio1">
                             </div>
                         </div>
                         </div>

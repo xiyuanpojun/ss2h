@@ -59,12 +59,11 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 		String hql="";
 		if(role=="0") {	
 		//String hql="select r.roleid,r.orderNum,f.fId,f.fName from TRoleFuncEntity inner left jion  TFuncEntity f on r.funcId= f.fId";
-		 hql="select new cn.softlq.ss2h.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf ,TRoleEntity r ,TFuncEntity f  where rf.roleid = r.roleid and  rf.funcId = f.fId";
+		 hql="select new cn.softlq.ss2h.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf ,TRoleEntity r ,TFuncEntity f  where rf.roleid = r.roleid and  rf.funcId = f.fId order by TO_NUMBER(rf.roleid) asc";
 		
 		}
 		else {
-		 hql="select new cn.softlq.ss2h.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?";
-		
+		 hql="select new cn.softlq.ss2h.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?  order by TO_NUMBER(rf.roleid) asc";
 		}
 		   Query query = session.createQuery(hql);
 		 if(role!="0") {
@@ -97,7 +96,7 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 	@Override
 	public List<TFuncEntity> findnofuncbyrole(String role) {
 		Session session = sessionFactory.openSession();
-		 String hql="from TFuncEntity fc where fc.fId not in (select rf.funcId from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ? order by rf.funcId asc)";
+		 String hql="from TFuncEntity fc where fc.fId not in (select rf.funcId from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?)";
 		   Query query = session.createQuery(hql);
 	       query.setParameter(0, role);
 	       List<TFuncEntity> list = query.list();

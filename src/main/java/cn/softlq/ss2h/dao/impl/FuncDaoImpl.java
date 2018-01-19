@@ -26,7 +26,7 @@ public class FuncDaoImpl implements IFuncDao {
 	public List<TFuncEntity> findFuncAll(int currentTotal, int current) {
 	   Session session = sessionFactory.openSession();
        String hql;
-       hql="FROM TFuncEntity";
+       hql="FROM TFuncEntity f order by TO_NUMBER(f.fId) asc";
        Query query = session.createQuery(hql);
        query.setFirstResult(currentTotal * (current - 1));
        query.setMaxResults(currentTotal);
@@ -39,7 +39,7 @@ public class FuncDaoImpl implements IFuncDao {
 	public Integer findFuncTotal() {
 		Session session = sessionFactory.openSession();
         String hql;
-        hql="FROM TFuncEntity f ORDER BY f.fId ASC";
+        hql="From TFuncEntity";
         Query query = session.createQuery(hql);
         List<TUserEntity> list = query.list();
         session.close();

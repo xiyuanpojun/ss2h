@@ -159,9 +159,9 @@ $(function () {
    });
    //点击添加角色功能 刷新
    $("#addrolfc").click(function(){
-	   getfunc($("roleid").val());
+	   getfunc($(".roleid").val());
+	   
    });
     //打开页面时加载一次数据
     init($("#role").val());
-    getfunc("1");
 });

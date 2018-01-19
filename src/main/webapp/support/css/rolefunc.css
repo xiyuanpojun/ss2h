@@ -1,0 +1,17 @@
+.showData {
+    clear: both;
+}
+
+.serach {
+    width: 280px;
+}
+
+#update {
+    width: 500px;
+    min-height: 380px;
+}
+
+.uform {
+    width: 90%;
+    margin: 20px auto 0;
+}

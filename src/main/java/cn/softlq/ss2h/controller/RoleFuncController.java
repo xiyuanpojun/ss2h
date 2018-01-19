@@ -69,10 +69,11 @@ public class RoleFuncController extends ActionSupport {
 	} 
 	//根据据角色查找该角色当前没有的功能
 	public String findnofuncbyrole() throws Exception{
+		System.out.println("此时的角色为?????????????????????????????????????????"+role);
 		 dataMap=roleFuncService.findnofuncbyrole(role);
 		 return ActionSupport.SUCCESS;
 	}
-	//
+	//添加角色功能
 	public String add() throws Exception{
 		dataMap=roleFuncService.add(tRoleFuncEntity);
 		return ActionSupport.SUCCESS;
