@@ -3,8 +3,8 @@
 <head>
     <%@include file="/WEB-INF/jsp/common.jsp" %>
     <script src="${ctx}/support/js/checkFrame.js"></script>
-    <link rel="stylesheet" href="${ctx}/support/css/userList.css">
-    <script src="${ctx}/support/js/userList.js"></script>
+    <link rel="stylesheet" href="${ctx}/support/css/surveyor.css">
+    <script src="${ctx}/support/js/surveyor.js"></script>
 </head>
 <body>
 <div class="base">
@@ -12,9 +12,7 @@
         <div class="layui-tab">
             <ul class="layui-tab-title">
                 <li class="layui-this">用户列表</li>
-                <c:if test="${urole=='1'}">
-                    <li>增加用户</li>
-                </c:if>
+                <li>增加调查员</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
@@ -22,13 +20,11 @@
                         <div class="serach">
                             <form class="layui-form" lay-filter="add">
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">所属省份</label>
+                                    <label class="layui-form-label">所属城市</label>
                                     <div class="layui-input-block">
                                         <select name="province" id="province" lay-verify="required"
                                                 lay-filter="searchChange">
-                                            <c:if test="${urole=='1'}">
-                                                <option value="">所有省份</option>
-                                            </c:if>
+                                            <option value="">所有城市</option>
                                             <c:forEach items="${orgs}" var="org">
                                                 <option value="${org.orgid}">${org.orgname}</option>
                                             </c:forEach>
@@ -40,10 +36,9 @@
                         <table class="layui-table" lay-filter="table">
                             <thead>
                             <tr>
-                                <th lay-data="{field:'userid'}">用户账户</th>
-                                <th lay-data="{field:'uname'}">用户姓名</th>
-                                <th lay-data="{field:'orgid'}">所属省份</th>
-                                <th lay-data="{field:'urole'}">角色</th>
+                                <th lay-data="{field:'sUserId'}">调查员账号</th>
+                                <th lay-data="{field:'sUserName'}">调查员姓名</th>
+                                <th lay-data="{field:'orgid'}">所属城市</th>
                                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#barTable'}"></th>
                             </tr>
                             </thead>
@@ -57,42 +52,26 @@
                 <div class="layui-tab-item">
                     <form class="layui-form">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">用户账号</label>
+                            <label class="layui-form-label">调查员账号</label>
                             <div class="layui-input-block">
-                                <input type="text" name="userEntity.userid" required lay-verify="required"
-                                       placeholder="请输入账号"
+                                <input type="text" name="surveyUserEntity.sUserId" required lay-verify="required"
+                                       placeholder="请输入调查员账号"
                                        autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">用户姓名</label>
+                            <label class="layui-form-label">调查员姓名</label>
                             <div class="layui-input-block">
-                                <input type="text" name="userEntity.uname" required lay-verify="required"
-                                       placeholder="请输入姓名"
+                                <input type="text" name="surveyUserEntity.sUserName" required lay-verify="required"
+                                       placeholder="请输入调查员姓名"
                                        autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">用户密码</label>
-                            <div class="layui-input-inline">
-                                <input type="password" name="userEntity.upwd" required lay-verify="required"
-                                       placeholder="请输入密码" autocomplete="off" value="111111" class="layui-input">
-                            </div>
-                            <div class="layui-form-mid layui-word-aux">默认{111111}</div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">角色</label>
+                            <label class="layui-form-label">所属城市</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="userEntity.urole" lay-filter="said" value="1" title="管理员">
-                                <input type="radio" name="userEntity.urole" lay-filter="said" value="2" title="供应商"
-                                       checked>
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">选择所属省份</label>
-                            <div class="layui-input-block">
-                                <select name="userEntity.orgid" id="said" lay-verify="required">
-                                    <option value="">选择所属省份</option>
+                                <select name="surveyUserEntity.orgid" id="said" lay-verify="required">
+                                    <option value="">选择所属城市</option>
                                     <c:forEach items="${orgs}" var="org">
                                         <option value="${org.orgid}">${org.orgname}</option>
                                     </c:forEach>
@@ -101,7 +80,8 @@
                         </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button class="layui-btn" id="btn" lay-submit lay-filter="btn">确定新增</button>
+                                <button class="layui-btn" id="btn" alt="${userId}" lay-submit lay-filter="btn">确定新增
+                                </button>
                                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                             </div>
                         </div>
@@ -116,33 +96,26 @@
     <div class="uform" id="uform">
         <form class="layui-form" lay-filter="uform">
             <div class="layui-form-item">
-                <label class="layui-form-label">用户账号</label>
+                <label class="layui-form-label">调查员账号</label>
                 <div class="layui-input-block">
-                    <input type="text" id="userid" name="userEntity.userid" required lay-verify="required"
+                    <input type="text" id="sUserId" name="surveyUserEntity.sUserId" required lay-verify="required"
                            placeholder="请输入账号"
                            autocomplete="off" class="layui-input" disabled="disabled">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">用户姓名</label>
+                <label class="layui-form-label">调查员姓名</label>
                 <div class="layui-input-block">
-                    <input type="text" id="uname" name="userEntity.uname" required lay-verify="required"
-                           placeholder="请输入姓名"
+                    <input type="text" id="sUserName" name="surveyUserEntity.sUserName" required lay-verify="required"
+                           placeholder="请输入调查员姓名"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">用户密码</label>
-                <div class="layui-input-inline">
-                    <input type="password" id="upwd" name="userEntity.upwd" required lay-verify="required"
-                           placeholder="请输入密码" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">所属省份</label>
+                <label class="layui-form-label">所属城市</label>
                 <div class="layui-input-block">
-                    <select id="orgid" name="userEntity.orgid" lay-filter="updateChange">
-                        <option value="">选择所属省份</option>
+                    <select id="orgid" name="surveyUserEntity.orgid" lay-filter="updateChange" lay-verify="required">
+                        <option value="">选择所属城市</option>
                         <c:forEach items="${orgs}" var="org">
                             <option value="${org.orgid}">${org.orgname}</option>
                         </c:forEach>

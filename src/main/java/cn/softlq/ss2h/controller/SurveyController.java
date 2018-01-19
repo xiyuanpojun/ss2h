@@ -3,7 +3,6 @@ package cn.softlq.ss2h.controller;
 import cn.softlq.ss2h.dao.ISurveyDao;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.ServletResponseAware;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
