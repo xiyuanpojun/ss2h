@@ -20,7 +20,6 @@ private IFuncDao funcdao;
 //查找功能列表
 	@Override
 	public Map<String, Object> findFuncAll(int currentTotal, int current) throws Exception  {
-		// TODO Auto-generated method stub
 		  Map<String, Object> map = new HashMap<>();
 	        int error = 0;
 	        if (currentTotal >= 0 && current >= 0) {
@@ -47,7 +46,6 @@ private IFuncDao funcdao;
 	//查找单个功能的信息
 	@Override
 	public Map<String, Object> findOne(TFuncEntity funcentity) throws Exception {
-		// TODO Auto-generated method stub
 		  Map<String, Object> map = new HashMap<>();
 		int error=0;
 		
@@ -112,7 +110,6 @@ private IFuncDao funcdao;
 	//删除单个功能
 	@Override
 	public Map<String, Object> delete(TFuncEntity funcentity) throws Exception {
-		// TODO Auto-generated method stub
 		 Map<String, Object> map = new HashMap<>();
 	        int error = 0;
 
@@ -145,7 +142,6 @@ private IFuncDao funcdao;
 	}
 	@Override
 	public Map<String, Object> add(TFuncEntity funcentity) throws Exception {
-		// TODO Auto-generated method stub
 		 Map<String, Object> map = new HashMap<>();
 	        int error = 0;
 	        if (funcentity != null&&funcentity.getfId()!=null&&funcentity.getfName()!=null&&funcentity.getfUrl()!=null) {
@@ -155,15 +151,15 @@ private IFuncDao funcdao;
 	                    funcdao.add(funcentity);
 	                    map.put("message", "添加成功");
 	                } else {
-	                    //修改失败
+	                    //添加失败
 	                    error = 3;
 	                    map.put("message", "该功能id已经存在请重新添加");
 	                }
 
 	            } catch (Exception e) {
-	                //修改失败
+	                //添加失败
 	                error = 2;
-	                map.put("message", "修改失败");
+	                map.put("message", "添加失败");
 	                e.printStackTrace();
 	            }
 

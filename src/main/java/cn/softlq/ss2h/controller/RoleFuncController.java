@@ -66,13 +66,14 @@ public class RoleFuncController extends ActionSupport {
 	public String delete() throws Exception{
 		 dataMap=roleFuncService.delete(tRoleFuncEntity);
 		  return ActionSupport.SUCCESS;
-	}
+	} 
+	//根据据角色查找该角色当前没有的功能
 	public String findnofuncbyrole() throws Exception{
 		 dataMap=roleFuncService.findnofuncbyrole(role);
 		 return ActionSupport.SUCCESS;
 	}
+	//
 	public String add() throws Exception{
-		System.out.println("此时的功能id有。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。"+tRoleFuncEntity.getFuncId());
 		dataMap=roleFuncService.add(tRoleFuncEntity);
 		return ActionSupport.SUCCESS;
 	}

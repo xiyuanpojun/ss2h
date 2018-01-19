@@ -163,6 +163,7 @@ $(function (){
     $("#funclistmenu").click(function(){
   	   init();
     });
+    
     //打开页面时加载一次数据
     init();
     

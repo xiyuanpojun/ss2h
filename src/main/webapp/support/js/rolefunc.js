@@ -49,7 +49,6 @@ $(function () {
    
     function getfunc(data){
     	 checkLogin();
-    	 checkLogin();
     	 $("#funclist").html("");
     	  $.ajax({
 			   url:ctx + "/rolfc/rolfc_findnofuncbyrole?role="+data,
@@ -143,7 +142,7 @@ $(function () {
                             },
                             complete: function () {
                                 layer.close(index);
-                                $("#btn").removeAttr("disabled"); 
+                              
                             }
                         });
                 
@@ -151,8 +150,13 @@ $(function () {
             });
         });
     }
+    //点击角色功能列表刷新
    $("#roel_func").click(function(){
 	   init($("#role").val()); 
+   });
+   //点击添加角色功能 刷新
+   $("#addrolfc").click(function(){
+	   getfunc($("#roleid").val());
    });
     //打开页面时加载一次数据
     init($("#role").val());

@@ -13,7 +13,7 @@
             <ul class="layui-tab-title">
                 <li class="layui-this" id="roel_func">角色-功能列表</li>
                 <c:if test="${urole=='1'}">
-                    <li>角色功能添加</li>
+                    <li id="addrolfc">角色功能添加</li>
                 </c:if>
             </ul>
             <div class="layui-tab-content">
@@ -60,8 +60,8 @@
                              <div class="layui-form-item">
                             <label class="layui-form-label">角色</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="roleid" value="1" title="管理员" checked lay-filter="radio1">
-                                <input type="radio" name="roleid" value="2" title="供应商"  lay-filter="radio1">
+                                <input type="radio" id="roleid" name="roleid" value="1" title="管理员" checked lay-filter="radio1">
+                                <input type="radio" id="roleid" name="roleid" value="2" title="供应商"  lay-filter="radio1">
                             </div>
                         </div>
                         </div>
