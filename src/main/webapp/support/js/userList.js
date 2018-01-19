@@ -138,6 +138,7 @@ $(function () {
                                 var error = parseInt(data.error);
                                 if (error === 0) {
                                     obj.del();
+                                    init($("#province").val());
                                 }
                                 layer.msg(data.message);
                             },
