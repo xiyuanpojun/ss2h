@@ -164,7 +164,7 @@ public class UserDaoImpl implements IUserDao {
     @Override
     public List<TFuncEntity> userFunction(String urole) throws Exception {
         Session session = sessionFactory.openSession();
-        Query query1 = session.createSQLQuery("SELECT FUNC_ID FROM T_ROLE_FUNC WHERE ROLEID = ?")
+        Query query1 = session.createSQLQuery("SELECT FUNC_ID FROM T_ROLE_FUNC WHERE ROLEID = ? ORDER BY ORDER_NUM ASC")
                 .setParameter(0, urole)
                 .addScalar("FUNC_ID", StandardBasicTypes.STRING);
 
