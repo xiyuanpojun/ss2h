@@ -41,9 +41,11 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">已分配备注</label>
+        <label class="layui-form-label">调查员信息</label>
         <div class="layui-input-block">
-            <input type="text" id="diaocy" name="diaocy"  placeholder="请输入调查员信息" class="layui-input">
+            <select name="diaocy" id="diaocy">
+                <option value=""></option>
+            </select>
         </div>
     </div>
     <div class="layui-form-item">

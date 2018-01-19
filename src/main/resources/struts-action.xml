@@ -115,9 +115,9 @@
                 <param name="actionName">isLogon</param>
             </result>
         </global-results>
-
         <!--自定义拦截器结束-->
-        <global-allowed-methods>getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData
+
+        <global-allowed-methods>getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData,getSurveyUser
         </global-allowed-methods>
         <action name="survey_*" class="cn.softlq.ss2h.controller.SurveyController" method="{1}">
 
