@@ -18,9 +18,7 @@
         <div class="layui-tab">
             <ul class="layui-tab-title">
                 <li class="layui-this" id="funclistmenu">功能列表</li>
-                <c:if test="${urole=='1'}">
                     <li id="addfunc">添加功能</li>
-                </c:if>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">

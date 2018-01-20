@@ -70,7 +70,6 @@ public String findOne() throws Exception {
 }
 //修改功能
 public String update() throws Exception {
-	System.out.println("请求的 功能名称为------------"+funcentity.toString());
 	dataMap=funcService.update(funcentity);
 	return ActionSupport.SUCCESS;
 }

@@ -12,9 +12,7 @@
         <div class="layui-tab">
             <ul class="layui-tab-title">
                 <li class="layui-this" id="roel_func">角色-功能列表</li>
-                <c:if test="${urole=='1'}">
                     <li id="addrolfc">角色功能添加</li>
-                </c:if>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">

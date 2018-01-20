@@ -22,21 +22,20 @@ var flag=0;
 				          $("#checkfId").attr("style", "color:green");
 				          flag=1;
 			    		 	    		   }
-		    		   else{
+		    		   else if(data.message="0"){
 		    			   $("#checkfId").html("功能id不可用");
 		    			   flag=2;
 		    			   $("#checkfId").attr("style", "color:red");
 			    		  
 		    		   }
+		    		   else if(afId==null||afId==""){
+		 	    		  $("#checkfId").html("");  
+		 	    	}
 		    	    }
 		    	});
 	    		 
 	  		 }
-	    	else if(afId==null||afId==""){
-	    		  $("#checkfId").html("功能id不能为空 ");
-   			   flag=0;
-   			    $("#checkfId").attr("style", "color:red");
-	    	}
+	    	
 	    	else{
 	    		 $("#checkfId").html("请输入 数字");
 		          $("#checkfId").attr("style", "color:red");

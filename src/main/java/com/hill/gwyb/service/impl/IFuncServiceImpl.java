@@ -23,14 +23,10 @@ private IFuncDao funcdao;
 	        int error = 0;
 	        if (currentTotal >= 0 && current >= 0) {
 	            try {
-	            	 System.out.println("11%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	                List<TFuncEntity> funclist = funcdao.findFuncAll(currentTotal, current);
-	                System.out.println("22%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	                map.put("funclist", funclist);
 	                //获取数据的条数
-	                System.out.println("33%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	                map.put("total", funcdao.findFuncTotal());
-	                System.out.println("44%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	                map.put("message", "");
 	            } catch (Exception e) {
 	                //获取数据异常
