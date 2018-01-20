@@ -39,7 +39,7 @@ var flag=0;
 	    	}
 	    	else{
 	    		 $("#checkfId").html("请输入 数字");
-		          $("#checkfId").attr("style", "color:green");
+		          $("#checkfId").attr("style", "color:red");
 		          flag=2;
 	    	}
 	    	
