@@ -26,10 +26,14 @@ public class FuncDaoImpl implements IFuncDao {
 	   Session session = sessionFactory.openSession();
        String hql;
        hql="FROM TFuncEntity f order by TO_NUMBER(f.fId) asc";
+       System.out.println("1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
        Query query = session.createQuery(hql);
+       System.out.println("2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
        query.setFirstResult(currentTotal * (current - 1));
        query.setMaxResults(currentTotal);
+       System.out.println("4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
        List<TFuncEntity> list = query.list();
+       System.out.println("1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
        session.close();
        return list;
 	}
@@ -39,8 +43,11 @@ public class FuncDaoImpl implements IFuncDao {
 		Session session = sessionFactory.openSession();
         String hql;
         hql="From TFuncEntity";
+        System.out.println("a1%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         Query query = session.createQuery(hql);
+        System.out.println("a2%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         List<TUserEntity> list = query.list();
+        System.out.println("a3%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         session.close();
         return list.size();
 	}

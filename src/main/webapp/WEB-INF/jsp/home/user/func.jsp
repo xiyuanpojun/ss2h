@@ -5,7 +5,12 @@
     <link rel="stylesheet" href="${ctx}/support/css/func.css">
     <script src="${ctx}/support/js/checkFrame.js"></script>
     <script src="${ctx}/support/js/func.js"></script>
-    
+    <style type="text/css">
+    .checkId{
+    left:-12px;
+	width:100px;
+}
+    </style>
 </head>
 <body>
 <div class="base">
@@ -14,7 +19,7 @@
             <ul class="layui-tab-title">
                 <li class="layui-this" id="funclistmenu">功能列表</li>
                 <c:if test="${urole=='1'}">
-                    <li>添加功能</li>
+                    <li id="addfunc">添加功能</li>
                 </c:if>
             </ul>
             <div class="layui-tab-content">
@@ -39,28 +44,30 @@
                 <div class="layui-tab-item">
                     <form class="layui-form" id="funcform">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">功能id</label>
+                            <label class="layui-form-label">功能id</label> 
                             <div class="layui-input-block">
-                                <input type="text" name="funcentity.fId" required lay-verify="required"
+                                <input type="text" id="afId" name="funcentity.fId" required lay-verify="required"
                                        placeholder="请输入id"
-                                       autocomplete="off" class="layui-input">
+                                       autocomplete="off" class="layui-input" >
+                                 <label id="checkfId" class="layui-form-label checkId">ddddddddddddddd</label>
                             </div>
+                            
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">功能名称</label>
                             <div class="layui-input-block">
-                                <input type="text" name="funcentity.fName" required lay-verify="required"
+                                <input type="text" id="afName" name="funcentity.fName" required lay-verify="required"
                                        placeholder="请输入功能名称"
                                        autocomplete="off" class="layui-input">
                             </div>
+                            
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">功能地址</label>
-                            <div class="layui-input-inline">
-                               <input type="text" id="fUrl" name="funcentity.fUrl" required lay-verify="required"
+                            <div class="layui-input-block">
+                            <input type="text"  id="afUrl" name="funcentity.fUrl" required lay-verify="required"
                            placeholder="请输入功能地址"  autocomplete="off" class="layui-input">
                             </div>
-                      
                         </div>
                       
                         <div class="layui-form-item">
@@ -97,7 +104,7 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">功能地址</label>
-                <div class="layui-input-inline">
+                <div class="layui-input-block">
                     <input type="text" id="fUrl" name="funcentity.fUrl" required lay-verify="required"
                            placeholder="请输入功能地址"
                            autocomplete="off" class="layui-input">

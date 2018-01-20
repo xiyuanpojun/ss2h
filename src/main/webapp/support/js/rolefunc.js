@@ -46,7 +46,7 @@ $(function () {
             return false;
         });
     });
-   
+   //获取多选框数据 
     function getfunc(data){
     	 checkLogin();
     	 $("#funclist").html("");
@@ -74,6 +74,38 @@ $(function () {
 			   
 		   });
     }
+  //执行修改功能的方法
+    function update(data) {
+        $.ajax({
+            url: ctx + "/func/func_update",
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+                var error = parseInt(data.error);
+                if (error === 0) {
+                    layer.close(updateLayer);
+                    init();
+                }
+                layer.msg(data.message);
+            },
+            error: function () {
+                layer.alert("连接服务器失败");
+            }
+        })
+    }
+  //对功能信息修改表单form监听
+    layui.use('form', function () {
+    	
+    	 checkLogin();
+        var form = layui.form;
+        //修改
+        form.on('submit(uBtn)', function (data) {
+        	layer.msg("得到了");
+           // update(data.field);
+            return false;
+        });
+    });
     layui.use('form',function(){
   
     	var form = layui.form;
@@ -82,6 +114,7 @@ $(function () {
     		  return false;
     		});  
     });
+    
     layui.use('form', function () {
     	 checkLogin();
         var form = layui.form;
@@ -97,7 +130,7 @@ $(function () {
         layui.use('table', function () {
             var table = layui.table;
             var tableOptions = {
-                url: ctx + '/rolfc/rolfc_findAll',
+                url: '${ctx}/rolfc/rolfc_findAll',
                 method: 'POST',
                 id: 'listReload',
                 where: {
@@ -149,6 +182,47 @@ $(function () {
                             }
                         });
                 
+                }
+                else if (obj.event === 'edit') {
+                    //获取信息
+                    $.ajax({
+                        url: ctx + "/rolfc/rolfc_findOne",
+                        type: "POST",
+                        data: {
+                        	 'tRoleFuncEntity.roleid':data.role_id,
+                        	 'tRoleFuncEntity.orderNum':data.order,
+                 		     'tRoleFuncEntity.funcId':data.func_id
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.error === 0) {
+                                //设置值
+                                var roleid2 = data.tRoleFuncEntity.roleid;
+                                var order2 = data.tRoleFuncEntity.orderNum;
+                                var func_id2 = data.tRoleFuncEntity.orderNum;
+                                $("#role_id2").val(roleid2);
+                                $("#order2").val(order2);
+                                $("#func_id2").val(func_id2);
+                                //重新渲染
+                                layui.use('form', function () {
+                                    var form = layui.form;
+                                    form.render();//更新全部 ；
+                                });
+                                updateLayer = layer.open({
+                                    type: 1,
+                                    content: $('#update'),
+                                    offset: 'auto',
+                                    maxWidth: 500
+                                });
+                                layer.title('更新信息-角色-功能id:' + role_id2, updateLayer);
+                            } else {
+                                layer.alert(data.message);
+                            }
+                        },
+                        error: function () {
+                            layer.alert("连接服务器失败");
+                        }
+                    });
                 }
             });
         });

@@ -23,10 +23,14 @@ private IFuncDao funcdao;
 	        int error = 0;
 	        if (currentTotal >= 0 && current >= 0) {
 	            try {
+	            	 System.out.println("11%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	                List<TFuncEntity> funclist = funcdao.findFuncAll(currentTotal, current);
+	                System.out.println("22%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	                map.put("funclist", funclist);
 	                //获取数据的条数
+	                System.out.println("33%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	                map.put("total", funcdao.findFuncTotal());
+	                System.out.println("44%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 	                map.put("message", "");
 	            } catch (Exception e) {
 	                //获取数据异常
@@ -170,6 +174,33 @@ private IFuncDao funcdao;
 	        map.put("error", error);
 	        return map;
 	}
-	
+	@Override
+	public Map<String, Object> checkfId(String fId) {
+		Map<String, Object> map = new HashMap<>();
+        if (fId!=null&&!"".equals(fId)) {
+            try {
+                TFuncEntity result = funcdao.findOne(fId);
+                if (result!=null) {
+                    map.put("message", "0");
+                } else {
+                    //添加失败
+                    map.put("message", "1");
+                }
+
+            } catch (Exception e) {
+                //添加失败
+               
+                map.put("message", "");
+                e.printStackTrace();
+            }
+
+        } else {
+            //非法操作
+            map.put("message", "非法操作");
+        }
+       
+        return map;
+	}
+
 
 }

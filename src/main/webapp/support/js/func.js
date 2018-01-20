@@ -2,11 +2,63 @@ $(function (){
 	layui.use("element",function(){
 	  var element = layui.element;
 	});
+var flag=0;
+//对输入值 进行监听
+  layui.use("form",function(){
+	//对输入的功能id进行监听
+	    $("#afId").bind("input propertychange",function(){
+	    	var afId=$("#afId").val();
+	    	if(!isNaN(afId)){
+	    		flag=1;
+	    		$.ajax({
+		    		url:ctx+'/func/func_checkfId',
+		    		type:"POST",
+		    		data:{
+		    			'fId':$("#afId").val()
+		    		},
+		    	   success:function(data){
+		    		   if(data.message=="1"){
+		    			  $("#checkfId").html("功能id可用");
+				          $("#checkfId").attr("style", "color:green");
+				          flag=1;
+			    		 	    		   }
+		    		   else{
+		    			   $("#checkfId").html("功能id不可用");
+		    			   flag=2;
+		    			   $("#checkfId").attr("style", "color:red");
+			    		  
+		    		   }
+		    	    }
+		    	});
+	    		 
+	  		 }
+	    	else if(afId==null||afId==""){
+	    		  $("#checkfId").html("功能id不能为空 ");
+   			   flag=0;
+   			    $("#checkfId").attr("style", "color:red");
+	    	}
+	    	else{
+	    		 $("#checkfId").html("请输入 数字");
+		          $("#checkfId").attr("style", "color:green");
+		          flag=2;
+	    	}
+	    	
+	    	 return false;
+	    });
+  });
+  
 //对新增功能表单form监听
   layui.use('form',function(){
+	  var fId=$("#afId").val();
+	  var fName=$("#afName").val();
+	  var fUrl=$("#afUrl").val()
 	  checkLogin();
 	  var form=layui.form;
+	  if(fId==null||fId==""||fName==null||fName==""||fUrl==null||fUrl==""){
+		  flag==0;
+	  }
 	  form.on('submit(btn)',function(data){
+		  if(flag==1){
 	      $.ajax({
 	    	  url:ctx+"/func/func_add",
 	    	  type:"POST",
@@ -25,8 +77,16 @@ $(function (){
 	    	  complete:function(){
 	    	   $("#btn").removeAttr("disabled"); 
 	    	  }
-	    	  
+	    	 
 	      });
+	     
+		  }
+     else if(flag==1){
+    	  layer.msg("功能id不可用请重新填写");  
+    	  }
+     else{
+    	 layer.msg("存在 空 值请重新 填写 ");  
+     }
 	      return false;
 	  });
   });
@@ -163,7 +223,11 @@ $(function (){
     $("#funclistmenu").click(function(){
   	   init();
     });
-    
+    //点击添加功能重置 checkId
+    $("#addfunc").click(function(){
+      $('#funcform')[0].reset();
+      $("#checkfId").html("");
+    });
     //打开页面时加载一次数据
     init();
     

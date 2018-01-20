@@ -18,6 +18,8 @@ private IFuncService funcService;
 private Map<String,Object> dataMap;
 //获取请求中传过来的funcentity对象
 private TFuncEntity funcentity;
+//用于检查新增功能是否的存在的id
+private String fId;
 //分页
 private int currentTotal, current;
 public TFuncEntity getFuncentity() {
@@ -46,6 +48,12 @@ public void setCurrent(int current) {
 public Map<String, Object> getDataMap() {
     return dataMap;
 }
+public String getfId() {
+	return fId;
+}
+public void setfId(String fId) {
+	this.fId = fId;
+}
 //查询所有功能数据 
 public String findFuncAll() throws Exception {
 	dataMap=funcService.findFuncAll(currentTotal,current);
@@ -73,9 +81,14 @@ public String delete() throws Exception{
 }
 //添加功能
 public String add() throws Exception {
-	 System.out.println("哩哩啦啦哩哩啦啦哩哩啦啦哩哩啦啦哩哩啦啦哩哩啦啦哩哩啦啦零零落落"+funcentity);
 	dataMap=funcService.add(funcentity);
 	return ActionSupport.SUCCESS;
 }
+//根据id异步校验
+public String checkfId() {
+	 dataMap=funcService.checkfId(fId);
+	return ActionSupport.SUCCESS;
+}
+
 
 }

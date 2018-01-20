@@ -10,4 +10,5 @@ public Map<String,Object> findOne(TFuncEntity funcentity) throws Exception ;
 public Map<String, Object> update(TFuncEntity funcentity) throws Exception;
 public Map<String, Object> delete(TFuncEntity funcentity) throws Exception;
 public Map<String, Object> add(TFuncEntity funcentity) throws Exception;
+public Map<String, Object> checkfId(String fId);
 }

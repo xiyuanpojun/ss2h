@@ -149,7 +149,7 @@
         </global-results>
         <!--自定义拦截器结束-->
 
-        <global-allowed-methods>findFuncAll,findOne,update,delete,add</global-allowed-methods>
+        <global-allowed-methods>findFuncAll,findOne,update,delete,add,checkfId</global-allowed-methods>
         <!-- 功能 列表查询，添加，查询，编辑 ,删除-->
         <action name="func_*" class="com.hill.gwyb.controller.FuncController" method="{1}">
             <result name="success" type="json">
