@@ -69,7 +69,7 @@ public class UserServiceImpl implements IUserService {
             } catch (Exception e) {
                 //服务器异常
                 error = 2;
-                map.put("message", "服务器异常");
+                map.put("message", "服务器异常\n" + e.toString());
                 e.printStackTrace();
             }
         } else {
