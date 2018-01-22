@@ -5,7 +5,7 @@
 <!--公共配置-->
 <struts>
     <!-- 开启使用开发模式，详细错误提示 -->
-    <constant name="struts.devMode" value="false"/>
+    <constant name="struts.devMode" value="true"/>
     <!-- 将对象交给spring管理 -->
     <constant name="struts.objectFactory" value="spring"/>
     <!-- 指定资源编码类型 -->
@@ -20,11 +20,11 @@
     <package name="default" namespace="/" extends="json-default">
         <!--&lt;!&ndash;自定义拦截器开始&ndash;&gt;-->
         <!--<interceptors>-->
-            <!--<interceptor name="myDefault" class="LoginInterceptor"/>-->
-            <!--<interceptor-stack name="myStack">-->
-                <!--<interceptor-ref name="myDefault"/>-->
-                <!--<interceptor-ref name="defaultStack"/>-->
-            <!--</interceptor-stack>-->
+        <!--<interceptor name="myDefault" class="LoginInterceptor"/>-->
+        <!--<interceptor-stack name="myStack">-->
+        <!--<interceptor-ref name="myDefault"/>-->
+        <!--<interceptor-ref name="defaultStack"/>-->
+        <!--</interceptor-stack>-->
         <!--</interceptors>-->
         <!--<default-interceptor-ref name="myStack"/>-->
         <!--自定义拦截器结束-->
@@ -34,8 +34,8 @@
         <global-results>
             <result name="error-500">/WEB-INF/jsp/error.jsp</result>
             <!--<result name="isLogon" type="redirectAction">-->
-                <!--<param name="namespace">/</param>-->
-                <!--<param name="actionName">isLogon</param>-->
+            <!--<param name="namespace">/</param>-->
+            <!--<param name="actionName">isLogon</param>-->
             <!--</result>-->
         </global-results>
 

@@ -2,11 +2,13 @@ package com.hill.gwyb.common;
 
 import com.hill.gwyb.dao.IUserDao;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -46,6 +48,12 @@ public class LoginInterceptor extends AbstractInterceptor {
         if (login != null && login.length() > 0) {
             return actionInvocation.invoke();
         } else {
+            String header = request.getHeader("X-Requested-With");
+            if (header == null) {
+                HttpServletResponse response = ServletActionContext.getResponse();
+                response.sendRedirect("/gwyb/index.jsp");
+                return ActionSupport.NONE;
+            }
             return "isLogon";
         }
     }
