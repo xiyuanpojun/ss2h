@@ -77,9 +77,11 @@ layui.use(['table','form','laydate'], function(){
                             });
                             var tmpurl = nowOptions.url;
                             nowOptions.url = null;
+                            nowOptions.limit=loadData.length;
                             nowOptions.data = loadData;
                             table.render(nowOptions);
                             layer.closeAll('loading');
+                            $('#tab-total').text(table.cache.surveyList.length);
                             $('#subInvitForm')[0].reset();
                         }
                     },
@@ -118,9 +120,13 @@ layui.use(['table','form','laydate'], function(){
                     nowOptions={
                         elem: '#tab1'
                         ,id:'surveyList'
+                        ,height:'full-260'
                         //,size:'sm'
                         ,url: ctx + "/survey/survey_getData"
                         ,page: false
+                        ,done:function(res, curr, count){
+                            $('#tab-total').text(table.cache.surveyList.length);
+                        }
                         ,where:{
                             tab:sury_type,
                             city:city,
@@ -137,6 +143,9 @@ layui.use(['table','form','laydate'], function(){
                         tab:sury_type,
                         city:city,
                         custType:custType
+                    }
+                    ,done:function(res, curr, count){
+                        $('#tab-total').text(table.cache.surveyList.length);
                     }
                 });
             }

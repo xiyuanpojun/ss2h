@@ -6,7 +6,6 @@
 </head>
 <body>
 <form class="layui-form" action="">
-    <div class="demoTable" style="margin-top: 10px;margin-left: 10px;">
         调查类型:
         <div class="layui-inline">
             <select name="stype" id="stype">
@@ -25,6 +24,7 @@
             </select>
         </div>
         <button class="layui-btn" lay-submit lay-filter="searchForm">搜索</button>
+        共查询出样本信息<label id="tab-total">0</label>条
     </div>
 </form>
 <table id="tab1" class="layui-table" lay-filter="surveyList" style="margin-top: 0px;"></table>
