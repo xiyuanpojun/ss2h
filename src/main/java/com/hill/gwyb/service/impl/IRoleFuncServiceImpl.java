@@ -18,7 +18,6 @@ public class IRoleFuncServiceImpl implements IRoleFuncService {
   private IRoleFuncDao roleFuncDao;
 	@Override
 	public Map<String, Object> findAll(int currentTotal, int current, String role) throws Exception {
-		// TODO Auto-generated method stub
 		 Map<String, Object> map = new HashMap<>();
 	        int error = 0;
 	        if (currentTotal >= 0 && current >= 0) {
@@ -46,7 +45,6 @@ public class IRoleFuncServiceImpl implements IRoleFuncService {
 	
 	@Override
 	public Map<String, Object> delete(TRoleFuncEntity tRoleFuncEntity) throws Exception {
-		// TODO Auto-generated method stub
 		 Map<String, Object> map = new HashMap<>();
 	        int error = 0;
 	        if (tRoleFuncEntity != null&&tRoleFuncEntity.getFuncId()!=null&&tRoleFuncEntity.getRoleid()!=null&&!"".equals(tRoleFuncEntity.getFuncId())&&!"".equals(tRoleFuncEntity.getRoleid())) {
@@ -71,7 +69,6 @@ public class IRoleFuncServiceImpl implements IRoleFuncService {
 	}
 	@Override
 	public Map<String, Object> add(TRoleFuncEntity tRoleFuncEntity) throws Exception {
-		// TODO Auto-generated method stub
 		 Map<String, Object> map = new HashMap<>();
 	        int error = 0;
 
@@ -105,7 +102,6 @@ public class IRoleFuncServiceImpl implements IRoleFuncService {
 
 	@Override
 	public Map<String, Object> findnofuncbyrole(String role) {
-		// TODO Auto-generated method stub
 		 Map<String, Object> map = new HashMap<>();
 	        int error = 0;
 	        if (role!=null) {

@@ -1,7 +1,5 @@
 package com.hill.gwyb.dao.impl;
 
-import java.util.List;
-
 import com.hill.gwyb.dao.IRoleFuncDao;
 import com.hill.gwyb.po.TFuncEntity;
 import com.hill.gwyb.po.TRoleFuncEntity;
@@ -16,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 public class RoleFuncDaoImpl implements IRoleFuncDao {
@@ -26,7 +26,6 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 
     @Override
     public List<RoleFuncItemView> findAll(int currentTotal, int current, String role) throws Exception {
-        // TODO Auto-generated method stub
         Session session = sessionFactory.openSession();
         String hql = "";
         if (role == "0") {
@@ -52,7 +51,6 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 
     @Override
     public Integer findTotal(String role) throws Exception {
-        // TODO Auto-generated method stub
         Session session = sessionFactory.openSession();
         String hql = "";
         if (role == "0") {
