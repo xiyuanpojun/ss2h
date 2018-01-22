@@ -28,8 +28,6 @@ layui.use('form', function () {
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(XMLHttpRequest.status);
-                alert(XMLHttpRequest.readyState);
                 layer.msg("连接服务器失败");
             },
             complete: function () {
