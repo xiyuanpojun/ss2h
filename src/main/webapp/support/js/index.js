@@ -27,7 +27,10 @@ layui.use('form', function () {
                     layer.msg(data.message);
                 }
             },
-            error: function () {
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
                 layer.msg("连接服务器失败");
             },
             complete: function () {
