@@ -34,6 +34,7 @@ layui.use(['table','form','laydate'], function(){
         form.render('select');
         layer.closeAll('loading');
     });
+
     //预约结果提交
     form.on('submit(invitSub)', function(data){
         checkLogin();
@@ -68,6 +69,7 @@ layui.use(['table','form','laydate'], function(){
                         if(data!='ok'){
                             layer.msg(data);
                         }else{
+                            layer.msg('操作成功');
                             var allData=table.cache.surveyList;//表格当前数据
                             var loadData=[];
                             $.each(allData, function(p1, p2){
@@ -93,6 +95,12 @@ layui.use(['table','form','laydate'], function(){
             }
         }
         return false;
+    });
+    $('.box').on('click','.layui-table-body tr',function(e){
+        var evtTarget = e.target || e.srcElement;
+        if (!$(evtTarget).is('i')) {
+            $(this).find(".layui-form-checkbox i").trigger("click");
+        }
     });
     //每次点搜索，得看表格是否还有未提交数据
     form.on('submit(searchForm)', function(data){

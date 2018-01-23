@@ -4,7 +4,7 @@
     <%@include file="/WEB-INF/jsp/common.jsp" %>
     <link rel="stylesheet" href="${ctx}/support/css/index.css">
     <script src="${ctx}/support/js/index.js"></script>
-    <title>请登陆</title>
+    <title>欢迎登录</title>
 </head>
 <body>
 <div class="base">
@@ -28,7 +28,7 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="login">立即登陆</button>
+                    <button class="layui-btn" lay-submit lay-filter="login">立即登录</button>
                     <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                 </div>
             </div>

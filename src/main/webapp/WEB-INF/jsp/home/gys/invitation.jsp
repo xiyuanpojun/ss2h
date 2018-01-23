@@ -27,7 +27,9 @@
         共查询出样本信息<label id="tab-total">0</label>条
     </div>
 </form>
+<div class="box">
 <table id="tab1" class="layui-table" lay-filter="surveyList" style="margin-top: 0px;"></table>
+</div>
 <fieldset class="layui-elem-field layui-field-title" style="margin-bottom: 0px;">
     <legend>提交预约结果</legend>
 </fieldset>

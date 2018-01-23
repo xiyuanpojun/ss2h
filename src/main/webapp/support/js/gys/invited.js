@@ -67,6 +67,12 @@ layui.use(['table','form','laydate'], function(){
         });
         layer.closeAll('loading');
     });
+    $('.box').on('click','.layui-table-body tr',function(e){
+        var evtTarget = e.target || e.srcElement;
+        if (!$(evtTarget).is('i')) {
+            $(this).find(".layui-form-checkbox i").trigger("click");
+        }
+    });
     //预约结果提交
     form.on('submit(distSub)', function(data){
         checkLogin();
@@ -101,6 +107,7 @@ layui.use(['table','form','laydate'], function(){
                         if(data!='ok'){
                             layer.msg(data);
                         }else{
+                            layer.msg('操作成功');
                             table.reload('surveyList');
                             $('#subDistForm')[0].reset();
                             layer.closeAll('loading');
