@@ -117,7 +117,8 @@
         </global-results>
         <!--自定义拦截器结束-->
 
-        <global-allowed-methods>getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData,getSurveyUser
+        <global-allowed-methods>
+            getCity,getFault,getCustType,getStype,getCol,getInvitData,subDist,subInvit,getData,getSurveyUser
         </global-allowed-methods>
         <action name="survey_*" class="com.hill.gwyb.controller.SurveyController" method="{1}">
 
@@ -188,6 +189,42 @@
         </action>
         <action name="role_func_page" class="com.hill.gwyb.controller.RoleFuncController" method="showrolfcpage">
             <result name="success">/WEB-INF/jsp/home/user/role_func.jsp</result>
+        </action>
+    </package>
+    <package name="file" namespace="/file" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.gwyb.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="namespace">/</param>
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+
+        <global-allowed-methods>create,download</global-allowed-methods>
+        <action name="file_*" class="com.hill.gwyb.controller.FileController" method="{1}">
+            <!--创建文件-->
+            <result name="createSuccess" type="json">
+                <param name="root">dataMap</param>
+            </result>
+            <!--下载文件-->
+            <result name="downloadSuccess" type="stream">
+                <param name="inputName">download</param>
+                <param name="contentDisposition">attachment;fileName=${fileName}</param>
+                <param name="bufferSize">1048576</param>
+            </result>
+            <!--下载空文件-->
+            <result name="downloadError" type="json">
+                <param name="root">dataMap</param>
+            </result>
         </action>
     </package>
 </struts>

@@ -41,7 +41,6 @@
                             <tr>
                                 <th lay-data="{field:'surveyType'}">专项名称</th>
                                 <th lay-data="{field:'showNum'}">展示条数</th>
-                                <th lay-data="{field:'col'}">显示字段</th>
                                 <th lay-data="{field:'colName'}">字段说明</th>
                                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#barTable'}"></th>
                             </tr>
@@ -53,10 +52,6 @@
                         </script>
                     </div>
                 </div>
-                <%--private String surveyType;--%>
-                <%--private String showNum;--%>
-                <%--private String col;--%>
-                <%--private String colName;--%>
                 <div class="layui-tab-item">
                     <form class="layui-form">
                         <div class="layui-form-item">
