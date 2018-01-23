@@ -38,7 +38,7 @@ public class ExcelTools {
                 List titleNames = (List) titleList.get(i);
                 for (int k = 0; k < titleNames.size(); k++) {
                     title = row.createCell(k);
-                    title.setCellValue(titleNames.get(k).toString());
+                    title.setCellValue(titleNames.get(k).toString() == null ? "" : titleNames.get(k).toString());
                     title.setCellStyle(style);
                     sheet.setColumnWidth(k, 20 * 256);
                 }
