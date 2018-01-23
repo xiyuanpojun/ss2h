@@ -50,6 +50,10 @@ public class SurveyorServiceImpl implements ISurveyorService {
                     TSurveyUserEntity surveyUserEntity = users.get(i);
                     //查找城市名字
                     surveyUserEntity.setOrgid(surveyorDao.userProvinceName(surveyUserEntity.getOrgid()));
+
+                    //查找已分配样本数量
+                    Integer number = surveyorDao.getDisrmNumber(surveyUserEntity);
+                    surveyUserEntity.setDisrm(number == null ? "0" : String.valueOf(number));
                 }
                 map.put("users", users);
                 //获取数据的条数
@@ -71,7 +75,7 @@ public class SurveyorServiceImpl implements ISurveyorService {
     }
 
     @Override
-    public Map<String, Object> userAdd(TSurveyUserEntity entity)throws Exception {
+    public Map<String, Object> userAdd(TSurveyUserEntity entity) throws Exception {
         Map<String, Object> map = new HashMap<>();
         int error = 0;
         if (entity != null && entity.getsUserId() != null && entity.getsUserName() != null && entity.getOrgid() != null && entity.getUserid() != null
@@ -111,7 +115,7 @@ public class SurveyorServiceImpl implements ISurveyorService {
     }
 
     @Override
-    public Map<String, Object> userDelete(TSurveyUserEntity entity) throws Exception{
+    public Map<String, Object> userDelete(TSurveyUserEntity entity) throws Exception {
         Map<String, Object> map = new HashMap<>();
         int error = 0;
         if (entity != null && entity.getsUserId() != null && entity.getUserid() != null
@@ -149,7 +153,7 @@ public class SurveyorServiceImpl implements ISurveyorService {
     }
 
     @Override
-    public Map<String, Object> userFindOne(TSurveyUserEntity entity)throws Exception {
+    public Map<String, Object> userFindOne(TSurveyUserEntity entity) throws Exception {
         Map<String, Object> map = new HashMap<>();
         int error = 0;
         if (entity != null

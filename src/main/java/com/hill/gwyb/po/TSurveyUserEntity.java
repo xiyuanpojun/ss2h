@@ -1,12 +1,11 @@
 package com.hill.gwyb.po;
 
-import java.util.Objects;
-
 public class TSurveyUserEntity {
     private String sUserId;
     private String sUserName;
     private String orgid;
     private String userid;
+    private String disrm;
 
     public String getsUserId() {
         return sUserId;
@@ -40,21 +39,12 @@ public class TSurveyUserEntity {
         this.userid = userid;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TSurveyUserEntity that = (TSurveyUserEntity) o;
-        return Objects.equals(sUserId, that.sUserId) &&
-                Objects.equals(sUserName, that.sUserName) &&
-                Objects.equals(orgid, that.orgid) &&
-                Objects.equals(userid, that.userid);
+    public String getDisrm() {
+        return disrm;
     }
 
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(sUserId, sUserName, orgid, userid);
+    public void setDisrm(String dis_rm) {
+        this.disrm = dis_rm;
     }
 
     @Override
@@ -64,6 +54,7 @@ public class TSurveyUserEntity {
                 ", sUserName='" + sUserName + '\'' +
                 ", orgid='" + orgid + '\'' +
                 ", userid='" + userid + '\'' +
+                ", dis_rm='" + disrm + '\'' +
                 '}';
     }
 }

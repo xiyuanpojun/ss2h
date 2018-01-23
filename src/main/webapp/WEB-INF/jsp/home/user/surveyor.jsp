@@ -39,6 +39,7 @@
                                 <th lay-data="{field:'sUserId'}">调查员账号</th>
                                 <th lay-data="{field:'sUserName'}">调查员姓名</th>
                                 <th lay-data="{field:'orgid'}">所属城市</th>
+                                <th lay-data="{field:'disrm'}">已分配样本数量</th>
                                 <th lay-data="{fixed: 'right', width:120, align:'center', toolbar: '#barTable'}"></th>
                             </tr>
                             </thead>

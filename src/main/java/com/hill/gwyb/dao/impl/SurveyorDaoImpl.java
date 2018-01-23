@@ -5,11 +5,13 @@ import com.hill.gwyb.po.TOrgEntity;
 import com.hill.gwyb.po.TSurveyUserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -99,5 +101,23 @@ public class SurveyorDaoImpl implements ISurveyorDao {
     @Override
     public void userUpdate(TSurveyUserEntity entity) {
         hibernateTemplate.update(entity);
+    }
+
+    @Override
+    public Integer getDisrmNumber(TSurveyUserEntity entity) throws Exception {
+        Session session = sessionFactory.openSession();
+        NativeQuery sqlQuery = session.createSQLQuery("SELECT COUNT(DIS_RM) FROM T_SURVEY_INVITE WHERE DIS_RM = ?");
+        sqlQuery.setParameter(0, entity.getsUserId());
+        String data = Arrays.toString(sqlQuery.list().toArray());
+        if (!"[]".equals(data)) {
+            data = data.replace("[", "");
+            data = data.replace("]", "");
+            session.close();
+            return Integer.parseInt(data);
+        } else {
+            session.close();
+            return null;
+        }
+
     }
 }

@@ -23,4 +23,6 @@ public interface ISurveyorDao {
     void userDelete(TSurveyUserEntity result) throws Exception;
 
     void userUpdate(TSurveyUserEntity entity) throws Exception;
+
+    Integer getDisrmNumber(TSurveyUserEntity entity) throws Exception;
 }
