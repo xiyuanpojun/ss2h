@@ -45,7 +45,7 @@ public class ZipTools {
     private static void delete() {
         try {
             File root = new File(WebContentHelper.getRootPath() + "/upload");
-            if (!root.exists() || !root.isDirectory() || Objects.requireNonNull(root.listFiles()).length <= 20) return;
+            if (!root.exists() || !root.isDirectory() || Objects.requireNonNull(root.listFiles()).length <= 30) return;
             for (File file : Objects.requireNonNull(root.listFiles())) {
                 if (file.isDirectory()) continue;
                 String[] temp = file.getName().split("\\.", 2);
