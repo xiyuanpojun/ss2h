@@ -227,7 +227,7 @@
             </result>
         </action>
     </package>
-     <!-- 机构管理 -->
+    <!-- 机构管理 -->
     <package name="org" namespace="/org" extends="json-default">
         <!--自定义拦截器开始-->
         <interceptors>
@@ -255,9 +255,9 @@
         <action name="orgpage" class="com.hill.gwyb.controller.OrgController" method="showorgpage">
             <result name="success">/WEB-INF/jsp/home/user/org.jsp</result>
         </action>
-         <action name="sc_list_page" class="com.hill.gwyb.controller.SConfigController" method="showConfigList">
+        <action name="sc_list_page" class="com.hill.gwyb.controller.SConfigController" method="showConfigList">
             <result name="success">/WEB-INF/jsp/home/user/scon.jsp</result>
         </action>
     </package>
-    
+
 </struts>
