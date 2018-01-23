@@ -50,7 +50,7 @@ public class FileController extends ActionSupport {
         //内容
         List<String[]> bodyList = (List<String[]>) map.get("bodyList");
 
-        if (fName != null && headList != null && bodyList != null) {
+        if (fName != null && headList != null && bodyList != null && headList.size() > 0) {
             dataMap = fileService.create(fName, headList, bodyList);
             return "createSuccess";
         } else {

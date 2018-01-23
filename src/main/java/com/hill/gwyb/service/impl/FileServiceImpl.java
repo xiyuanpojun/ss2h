@@ -75,19 +75,19 @@ public class FileServiceImpl implements IFileService {
         //内容
         List<String[]> bodyList = null;
         //文件名字
-        String fName = null;
+        String fName;
         Map datMap = new HashMap();
 
         headList = new ArrayList<>();
-        headList.add("姓名");
-        headList.add("年龄");
-        headList.add("性别");
+//        headList.add("姓名");
+//        headList.add("年龄");
+//        headList.add("性别");
 
         bodyList = new ArrayList<>();
-        String[] s1 = {"张三", "20", "女"};
-        String[] s2 = {"李四", "18", "男"};
-        bodyList.add(s1);
-        bodyList.add(s2);
+//        String[] s1 = {"张三", "20", "女"};
+//        String[] s2 = {"李四", "18", "男"};
+//        bodyList.add(s1);
+//        bodyList.add(s2);
 
         fName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
