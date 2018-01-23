@@ -23,14 +23,17 @@ var flag=0;
 				          flag=1;
 			    		 	    		   }
 		    		   else if(data.message="0"){
-		    			   $("#checkfId").html("功能id不可用");
-		    			   flag=2;
-		    			   $("#checkfId").attr("style", "color:red");
+		    			   if($("#afId").val()==null||$("#afId").val()==""){
+		    				   $("#checkfId").html("");
+		    				   flag=3;
+		    			   }
+		    			   else{
+		    			      $("#checkfId").html("机构id不可用");
+		    			      flag=2;
+		    			      $("#checkfId").attr("style", "color:red");
+		    			   }
 			    		  
 		    		   }
-		    		   else if(afId==null||afId==""){
-		 	    		  $("#checkfId").html("");  
-		 	    	}
 		    	    }
 		    	});
 	    		 

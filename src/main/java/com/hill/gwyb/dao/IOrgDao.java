@@ -10,8 +10,10 @@ public interface IOrgDao {
 List<TOrgEntity> findAll(int currentTotal, int current, String porgid);
 //查找所有的功能记录总数
 Integer findTotal();
-//查找单个功能
-TOrgEntity findOne(String oid);
+//根据id查找单个功能
+TOrgEntity findOneById(String oid);
+//根据机构查找 是否存在该机构 
+boolean findOne(TOrgEntity orgentity);
 //删除单个功能
 void delete(TOrgEntity orgEntity) throws Exception;
 //添加功能列表

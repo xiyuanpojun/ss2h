@@ -91,32 +91,27 @@ public Map<String, Object> delete(TOrgEntity orgentity) throws Exception {
 @Override
 public Map<String, Object> add(TOrgEntity orgentity) throws Exception {
 	 Map<String, Object> map = new HashMap<>();
-     int error = 0;
-     if (orgentity != null&&orgentity.getOrgid()!=null&&orgentity.getOrgname()!=null) {
+     if (orgentity != null&&orgentity.getOrgid()!=null&&orgentity.getOrgname()!=null&&!"".equals(orgentity.getOrgid())&&!"".equals(orgentity.getOrgname())) {
          try {
-        	 TOrgEntity result =orgdao.findOne(orgentity.getOrgid());
-             if (result==null) {
+        	 boolean flag =orgdao.findOne(orgentity);
+             if (flag==false) {
                  orgdao.add(orgentity);
-                 map.put("message", "添加成功");
+                 map.put("message", "0");
              } else {
-                 //添加失败
-                 error = 3;
-                 map.put("message", "该机构已经存在请重新添加");
+                 //该机构已经存在 
+                 map.put("message", "1");
              }
 
          } catch (Exception e) {
              //添加失败
-             error = 2;
-             map.put("message", "添加失败");
+             map.put("message", "2");
              e.printStackTrace();
          }
 
      } else {
          //非法操作
-         error = 1;
-         map.put("message", "非法操作");
+         map.put("message", "3");
      }
-     map.put("error", error);
      return map;
 }
 //新增机构时检查 机构是否存在
@@ -125,7 +120,7 @@ public Map<String, Object> checkId(String oid) {
 	Map<String, Object> map = new HashMap<>();
     if (oid!=null&&!"".equals(oid)) {
         try {
-        	TOrgEntity result = orgdao.findOne(oid);
+        	TOrgEntity result = orgdao.findOneById(oid);
             if (result==null) {
                 map.put("message", "1");
             } else {
@@ -134,15 +129,18 @@ public Map<String, Object> checkId(String oid) {
 
         } catch (Exception e) {
            
-            map.put("message", "3");
+            map.put("message", "查询异常");
             e.printStackTrace();
         }
 
-    } else {
+    } 
+    else if(oid==null&&"".equals(oid)){
+    	 map.put("message", "3");
+    }
+    else {
         //非法操作
         map.put("message", "非法操作");
-    }
-   
+    } 
     return map;
 }
 //查找上级机构列表

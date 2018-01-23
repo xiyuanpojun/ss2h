@@ -3,11 +3,11 @@ $(function (){
 	  var element = layui.element;
 	});
 var flag=0;
-//对输入值 进行监听
   layui.use("form",function(){
-	//对输入的功能id进行监听
+	//对输入的机构id进行监听
 	    $("#orgid").bind("input propertychange",function(){
 	    	var orgid=$("#orgid").val();
+	    	 $("#checkId").html("");
 	    	if(!isNaN(orgid)){
 	    		flag=1;
 	    		$.ajax({
@@ -21,30 +21,32 @@ var flag=0;
 		    			  $("#checkId").html("机构id可用");
 				          $("#checkId").attr("style", "color:green");
 				          flag=1;
-			    		 	    		   }
+			    		 	 }
 		    		   else if(data.message="0"){
-		    			   $("#checkId").html("机构id不可用");
-		    			   flag=2;
-		    			   $("#checkId").attr("style", "color:red");
-			    		  
+		    			   if($("#orgid").val()==null||$("#orgid").val()==""){
+		    				   $("#checkId").html("");
+		    				   flag=3;
+		    			   }
+		    			   else{
+		    			      $("#checkId").html("机构id不可用");
+		    			      flag=2;
+		    			      $("#checkId").attr("style", "color:red");
+		    			   }
 		    		   }
-		    		   else if(afId==null||afId==""){
-		 	    		  $("#checkId").html("");  
-		 	    	}
+		    		  
 		    	    }
 		    	});
 	    		 
 	  		 }
-	    	
-	    	else{
-	    		 $("#checkId").html("请输入 数字");
+	    	else {
+	    		$("#checkId").html("请输入数字");
 		          $("#checkId").attr("style", "color:red");
 		          flag=2;
 	    	}
 	    	 return false;
 	    });
   });
-  //点击机构等级
+  //点击机构等级切换
   layui.use('form',function(){
 	  
   	var form = layui.form;
@@ -65,7 +67,7 @@ var flag=0;
   
 //对新增功能表单form监听
   layui.use('form',function(){
-	 // checkLogin();
+	  checkLogin();
 	  var form=layui.form;
 	  form.on('submit(btn)',function(data){
 		  if(flag==1){
@@ -78,10 +80,22 @@ var flag=0;
 	                $("#btn").attr('disabled', "true");
 	            },
 	    	  success:function(data){
-	    		  layer.msg(data.message);
+	    		  if(data.message=="0"){
+	    			  layer.msg("添加成功 ");
+	    			  orginit();
+	    			  form.render();
+	    		  }
+	    		  else if(data.message=="1"){
+	    			  layer.msg("该机构已存在请 重新添加 ");
+	    		  }
+	    		  else if(data.message=="2"){
+	    			  layer.msg("添加失败");
+	    		  }
+	    		  else{
+	    			  layer.msg("非法操作 "); 
+	    		  }
 	    		  reset();
-	    		  orginit();
-	    		  form.render();
+	    		
 	    	  },
 	    	  error:function(){
 	    		  layer.alert("连接服务器失败");
@@ -103,16 +117,6 @@ var flag=0;
 	      return false;
 	  });
   });
- //对功能信息修改表单form监听
-    layui.use('form', function () {
-    	 checkLogin();
-        var form = layui.form;
-        //修改
-        form.on('submit(uBtn)', function (data) {
-            update(data.field);
-            return false;
-        });
-    });
    layui.use('form', function () {
         var form = layui.form;
         //监听上级机构选择框
@@ -219,12 +223,12 @@ var flag=0;
 		$("#orgid").val("");
 		$("#orgname").val("");
     }
-  //点击功能列表
+  //点击机构列表
     $("#orglistmenu").click(function(){
        orginit();
   	   init($("#porgid").val());
     });
-    //点击添加功能重置 checkId
+    //点击添加机构重置 checkId
     $("#addorg").click(function(){
       $('#orgform')[0].reset();
       $("#checkfId").html("");

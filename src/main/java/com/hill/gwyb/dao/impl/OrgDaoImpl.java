@@ -17,7 +17,7 @@ import com.hill.gwyb.po.TFuncEntity;
 import com.hill.gwyb.po.TOrgEntity;
 import com.hill.gwyb.po.TUserEntity;
 @Repository
-@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+@Transactional
 public class OrgDaoImpl implements IOrgDao {
 	@Autowired
 	 private HibernateTemplate hibernateTemplate;
@@ -27,7 +27,6 @@ public class OrgDaoImpl implements IOrgDao {
 	@Override
 	public List<TOrgEntity> findAll(int currentTotal, int current,String porgid) {
 		 Session session = sessionFactory.openSession();
-		 System.out.println("ppppppppppppppp"+porgid);
 	       String hql;
 	       if(porgid=="all"||"all".equals(porgid)) {
 	    	  hql="FROM TOrgEntity o  order by TO_NUMBER(o.orgid) asc"; 
@@ -48,7 +47,6 @@ public class OrgDaoImpl implements IOrgDao {
 	//查找机构列表总记录数
 	@Override
 	public Integer findTotal() {
-		// TODO Auto-generated method stub
 		Session session = sessionFactory.openSession();
         String hql;
         hql="From TOrgEntity";
@@ -57,9 +55,9 @@ public class OrgDaoImpl implements IOrgDao {
         session.close();
         return list.size();
 	}
-//获取单个机构信息
+  //获取单个机构信息
 	@Override
-	public TOrgEntity findOne(String oid) {
+	public TOrgEntity findOneById(String oid) {
 		
         return  hibernateTemplate.get(TOrgEntity.class, oid);
 	}
@@ -71,7 +69,6 @@ public class OrgDaoImpl implements IOrgDao {
 //添加机构
 	@Override
 	public void add(TOrgEntity orgEntity) throws Exception {
-		// TODO Auto-generated method stub
 		 hibernateTemplate.save(orgEntity);
 	}
 	//查找上级机构列表
@@ -84,6 +81,26 @@ public class OrgDaoImpl implements IOrgDao {
 	       List<TOrgEntity> list = query.list();
 	       session.close();
 	       return list;	
+	}
+	@Override
+	public boolean findOne(TOrgEntity orgentity) {
+		boolean flag=false;
+		Session session = sessionFactory.openSession();
+	       String hql;
+	       hql="FROM TOrgEntity o  where  o.orgname = ?";
+	       Query query = session.createQuery(hql);
+	       query.setParameter(0,orgentity.getOrgname());
+	       List<TOrgEntity> list = query.list();
+	       
+	       session.close();
+	       if(list.size()>0){
+	    	  flag=true; 
+	       }
+	       else {
+	    	  flag=false;
+	       }
+	       
+	       return flag;	
 	}
 
 }
