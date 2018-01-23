@@ -62,7 +62,7 @@ public class FileServiceImpl implements IFileService {
         String url = ExcelTools.createFile(map);
         File[] files = new File[1];
         files[0] = new File(url);
-        File file = ZipTools.compress(files);
+        File file = ZipTools.compress(files, name);
         String pathTemp = file.getAbsolutePath().split("upload", 2)[1];
         dataMap.put("name", pathTemp.replace("\\", ""));
         dataMap.put("error", 0);

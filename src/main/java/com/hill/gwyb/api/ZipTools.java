@@ -18,6 +18,10 @@ public class ZipTools {
 
     public static File compress(File[] files) throws Exception {
         String name = sdf.format(new Date());
+        return compress(files, name);
+    }
+
+    public static File compress(File[] files, String name) throws Exception {
         File result = new File(WebContentHelper.getRootPath() + "/upload/" + name + ".zip");
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(result));
         BufferedInputStream bis;
