@@ -227,4 +227,37 @@
             </result>
         </action>
     </package>
+     <!-- 机构管理 -->
+    <package name="org" namespace="/org" extends="json-default">
+        <!--自定义拦截器开始-->
+        <interceptors>
+            <interceptor name="myDefault" class="com.hill.gwyb.common.LoginInterceptor"/>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="myDefault"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="myStack"/>
+        <global-results>
+            <result name="isLogon" type="redirectAction">
+                <param name="namespace">/</param>
+                <param name="actionName">isLogon</param>
+            </result>
+        </global-results>
+        <!--自定义拦截器结束-->
+
+        <global-allowed-methods>findAll,findOne,delete,add,checkId</global-allowed-methods>
+        <action name="org_*" class="com.hill.gwyb.controller.OrgController" method="{1}">
+            <result name="success" type="json">
+                <param name="root">dataMap</param>
+            </result>
+        </action>
+        <action name="orgpage" class="com.hill.gwyb.controller.OrgController" method="showorgpage">
+            <result name="success">/WEB-INF/jsp/home/user/org.jsp</result>
+        </action>
+         <action name="sc_list_page" class="com.hill.gwyb.controller.SConfigController" method="showConfigList">
+            <result name="success">/WEB-INF/jsp/home/user/scon.jsp</result>
+        </action>
+    </package>
+    
 </struts>
