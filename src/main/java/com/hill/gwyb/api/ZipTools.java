@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -42,20 +43,21 @@ public class ZipTools {
     }
 
     private static void delete() {
-        File rood = new File(WebContentHelper.getRootPath() + "/upload");
-        if (!rood.exists() || !rood.isDirectory()) return;
-        for (File file : rood.listFiles()) {
-            if (file.isDirectory()) continue;
-            String[] temp = file.getName().split("\\.", 2);
-            try {
+        try {
+            File root = new File(WebContentHelper.getRootPath() + "/upload");
+            if (!root.exists() || !root.isDirectory() || Objects.requireNonNull(root.listFiles()).length <= 20) return;
+            for (File file : Objects.requireNonNull(root.listFiles())) {
+                if (file.isDirectory()) continue;
+                String[] temp = file.getName().split("\\.", 2);
+
                 Date creaTime = sdf.parse(temp[0]);
                 Date nowTime = new Date();
                 if (nowTime.getTime() - creaTime.getTime() >= 1000 * 60 * 60 * 24) {
                     file.delete();
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 }
