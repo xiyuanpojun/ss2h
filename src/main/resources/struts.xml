@@ -18,7 +18,7 @@
     <constant name="struts.multipart.maxSize" value="1073741824"/>
     <!--通用配置-->
     <package name="default" namespace="/" extends="json-default">
-        <!--&lt;!&ndash;自定义拦截器开始&ndash;&gt;-->
+        <!--自定义拦截器开始-->
         <!--<interceptors>-->
         <!--<interceptor name="myDefault" class="LoginInterceptor"/>-->
         <!--<interceptor-stack name="myStack">-->
