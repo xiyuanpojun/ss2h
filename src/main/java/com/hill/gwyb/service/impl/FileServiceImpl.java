@@ -14,7 +14,7 @@ import java.util.*;
 @Transactional
 public class FileServiceImpl implements IFileService {
     @Override
-    public synchronized Map create(String fName, List<String> headList, List<String[]> bodyList) throws Exception {
+    public synchronized Map create(List<String> headList, List<String[]> bodyList) throws Exception {
         Map dataMap = new HashMap();
         Map<String, Object> map = null;
         String name = null;//文件名
@@ -22,7 +22,7 @@ public class FileServiceImpl implements IFileService {
         List titleList, detailList;
 
         //文件名
-        name = fName;
+        name = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
         map = new HashMap();
         head = new ArrayList();
@@ -70,7 +70,7 @@ public class FileServiceImpl implements IFileService {
     }
 
     @Override
-    public Map getData() throws Exception {
+    public Map getData(List<String> head, List<String> body) throws Exception {
         List<String> headList = null;
         //内容
         List<String[]> bodyList = null;
@@ -78,20 +78,17 @@ public class FileServiceImpl implements IFileService {
         String fName;
         Map datMap = new HashMap();
 
-        headList = new ArrayList<>();
-//        headList.add("姓名");
-//        headList.add("年龄");
-//        headList.add("性别");
+        headList = head;
 
         bodyList = new ArrayList<>();
-//        String[] s1 = {"张三", "20", "女"};
-//        String[] s2 = {"李四", "18", "男"};
-//        bodyList.add(s1);
-//        bodyList.add(s2);
-
-        fName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-
-        datMap.put("fName", fName);
+        if (body != null) {
+            for (String ss : body) {
+                if (ss != null) {
+                    String[] s = ss.split(",");
+                    bodyList.add(s);
+                }
+            }
+        }
         datMap.put("headList", headList);
         datMap.put("bodyList", bodyList);
         return datMap;

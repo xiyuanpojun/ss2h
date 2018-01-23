@@ -21,6 +21,24 @@ public class FileController extends ActionSupport {
     @Autowired
     private IFileService fileService;
 
+    private List<String> head;
+    private List<String> body;
+
+    public List<String> getHead() {
+        return head;
+    }
+
+    public void setHead(List<String> head) {
+        this.head = head;
+    }
+
+    public List<String> getBody() {
+        return body;
+    }
+
+    public void setBody(List<String> body) {
+        this.body = body;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -42,23 +60,29 @@ public class FileController extends ActionSupport {
 
     //创建文件调用的方法
     public String create() throws Exception {
-        Map map = fileService.getData();
-        //文件名字
-        String fName = (String) map.get("fName");
-        //表头
-        List<String> headList = (List<String>) map.get("headList");
-        //内容
-        List<String[]> bodyList = (List<String[]>) map.get("bodyList");
+        try {
+            Map map = fileService.getData(head, body);
+            //表头
+            List<String> headList = (List<String>) map.get("headList");
+            //内容
+            List<String[]> bodyList = (List<String[]>) map.get("bodyList");
 
-        if (fName != null && headList != null && bodyList != null && headList.size() > 0) {
-            dataMap = fileService.create(fName, headList, bodyList);
-            return "createSuccess";
-        } else {
-            dataMap = new HashMap();
-            dataMap.put("error", 1);
-            dataMap.put("message", "参数不正确，生成文件失败。");
-            return "downloadError";
+            if (headList != null && bodyList != null && headList.size() > 0) {
+                dataMap = fileService.create(headList, bodyList);
+                return "createSuccess";
+            } else {
+                dataMap = new HashMap();
+                dataMap.put("error", 1);
+                dataMap.put("message", "参数不正确，生成文件失败。");
+                return "downloadError";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        dataMap = new HashMap();
+        dataMap.put("error", 1);
+        dataMap.put("message", "参数不正确，生成文件失败。");
+        return "downloadError";
     }
 
     //下载文件调用的方法

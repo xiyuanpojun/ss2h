@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IFileService {
-    Map create(String fName, List<String> headList, List<String[]> bodyList) throws Exception;
+    Map create(List<String> headList, List<String[]> bodyList) throws Exception;
 
-    Map getData() throws Exception;
+    Map getData(List<String> head, List<String> body) throws Exception;
 }
