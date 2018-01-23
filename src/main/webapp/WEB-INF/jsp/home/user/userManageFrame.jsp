@@ -6,7 +6,7 @@
     <%@include file="/WEB-INF/jsp/common.jsp" %>
     <link rel="stylesheet" href="${ctx}/support/css/userManageFrame.css">
     <script src="${ctx}/support/js/userManageFrame.js"></script>
-    <title>管理中心</title>
+    <title>供应商样本预约管理系统</title>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">

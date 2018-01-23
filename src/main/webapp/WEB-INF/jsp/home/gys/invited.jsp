@@ -28,7 +28,9 @@
         <button class="layui-btn" lay-submit lay-filter="searchForm">搜索</button>
     </div>
 </form>
+<div class="box">
 <table id="tab1" class="layui-table" lay-filter="surveyList" style="margin-top: 0px;"></table>
+</div>
 <fieldset class="layui-elem-field layui-field-title" style="margin-bottom: 0px;">
     <legend>提交样本分配结果</legend>
 </fieldset>
@@ -37,7 +39,7 @@
         <label class="layui-form-label">是否已分配</label>
         <div class="layui-input-block">
             <input type="radio" name="distRes" value="1" title="已分配" checked="">
-            <input type="radio" name="distRes" value="2" title="未分配">
+            <input type="radio" name="distRes" value="2" title="取消分配">
         </div>
     </div>
     <div class="layui-form-item">
