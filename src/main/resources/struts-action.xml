@@ -17,7 +17,6 @@
         <default-interceptor-ref name="myStack"/>
         <global-results>
             <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
                 <param name="actionName">isLogon</param>
             </result>
         </global-results>
@@ -68,7 +67,6 @@
         <default-interceptor-ref name="myStack"/>
         <global-results>
             <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
                 <param name="actionName">isLogon</param>
             </result>
         </global-results>
@@ -111,7 +109,6 @@
         <default-interceptor-ref name="myStack"/>
         <global-results>
             <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
                 <param name="actionName">isLogon</param>
             </result>
         </global-results>
@@ -144,7 +141,6 @@
         <default-interceptor-ref name="myStack"/>
         <global-results>
             <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
                 <param name="actionName">isLogon</param>
             </result>
         </global-results>
@@ -175,7 +171,6 @@
         <default-interceptor-ref name="myStack"/>
         <global-results>
             <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
                 <param name="actionName">isLogon</param>
             </result>
         </global-results>
@@ -203,7 +198,6 @@
         <default-interceptor-ref name="myStack"/>
         <global-results>
             <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
                 <param name="actionName">isLogon</param>
             </result>
         </global-results>
@@ -240,7 +234,6 @@
         <default-interceptor-ref name="myStack"/>
         <global-results>
             <result name="isLogon" type="redirectAction">
-                <param name="namespace">/</param>
                 <param name="actionName">isLogon</param>
             </result>
         </global-results>
