@@ -21,7 +21,6 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -62,36 +61,36 @@ public class UserDaoImpl implements IUserDao {
     public Integer userLoginInfoCheck(TUserLoginEntity userLoginEntity) throws Exception {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "SELECT LOG_TIME FROM (SELECT LOG_TIME FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL ORDER BY LOG_TIME DESC) WHERE ROWNUM = 1";
+        String sql = "SELECT LOG_TIME,SESSION_ID FROM (SELECT LOG_TIME,SESSION_ID FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL ORDER BY LOG_TIME DESC) WHERE ROWNUM = 1";
         NativeQuery sqlQuery = session.createSQLQuery(sql)
                 .setParameter(0, userLoginEntity.getUserid())
-                .addScalar("LOG_TIME", StandardBasicTypes.TIMESTAMP);
+                .addScalar("LOG_TIME", StandardBasicTypes.TIMESTAMP)
+                .addScalar("SESSION_ID", StandardBasicTypes.STRING);
         //没有查到数据说明是未登录状态，反之就已经登陆。
         //true代表正常。
-        String date = Arrays.toString(sqlQuery.list().toArray());
-        Boolean flag = "[]".equals(date);
+        List list = sqlQuery.list();
+        String date = null;
+        String sessionID = null;
+        Boolean flag = true;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (Object o : list) {
+            flag = false;
+            Object[] objects = (Object[]) o;
+            date = df.format((Timestamp) objects[0]);
+            sessionID = (String) objects[1];
+        }
         //正常
         if (flag) {
             transaction.commit();
             session.close();
             return 0;
         } else {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-            date = date.replace("[", "");
-            date = date.replace("]", "");
             Date dt1 = df.parse(date);
             Date dt2 = df.parse(new Timestamp(System.currentTimeMillis()).toString());
             //登陆超过三十分钟还没有退出。
             if (dt2.getTime() - dt1.getTime() > 1000 * 60 * 30) {
                 //修改时间
                 //记录用户登陆信息
-
-                sqlQuery = session.createSQLQuery("SELECT SESSION_ID FROM (SELECT SESSION_ID FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL ORDER BY LOG_TIME DESC) WHERE ROWNUM = 1")
-                        .setParameter(0, userLoginEntity.getUserid())
-                        .addScalar("SESSION_ID", StandardBasicTypes.STRING);
-                String sessionID = Arrays.toString(sqlQuery.list().toArray());
-                sessionID = sessionID.replace("[", "");
-                sessionID = sessionID.replace("]", "");
                 HttpSession httpSession = SessionContext.getSession(sessionID);
 
                 if (null != httpSession) {
