@@ -47,11 +47,19 @@ public class OrgDaoImpl implements IOrgDao {
 	//查找机构列表总记录数
 	@Override
 	public Integer findTotal(String porgid) {
+		System.out.println("此时的 porgid为"+porgid);
 		Session session = sessionFactory.openSession();
         String hql;
+        if(porgid=="all"||"all".equals(porgid)) {
+        	hql="From TOrgEntity";
+        }
+        else {
         hql="From TOrgEntity o where  o.pOrgid = ?";
+        }
         Query query = session.createQuery(hql);
-        query.setParameter(0, porgid);
+        if(porgid!="all"&&!"all".equals(porgid)) {
+           query.setParameter(0, porgid);
+        }
         List<TUserEntity> list = query.list();
         session.close();
         return list.size();
