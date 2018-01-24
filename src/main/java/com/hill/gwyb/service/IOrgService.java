@@ -1,5 +1,6 @@
 package com.hill.gwyb.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.hill.gwyb.po.TFuncEntity;
@@ -12,5 +13,5 @@ public Map<String, Object> update(TOrgEntity orgentity) throws Exception;
 public Map<String, Object> delete(TOrgEntity orgentity) throws Exception;
 public Map<String, Object> add(TOrgEntity orgentity) throws Exception;
 public Map<String, Object> checkId(String oid);
-public void showporglist() throws Exception;
+public Map<String, Object> showporglist() throws Exception;
 }

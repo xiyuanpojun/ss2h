@@ -35,7 +35,7 @@ public class OrgDaoImpl implements IOrgDao {
 	        hql="FROM TOrgEntity o where o.pOrgid = ? order by TO_NUMBER(o.orgid) asc";
 	       }
 	       Query query = session.createQuery(hql);
-	       if(porgid!="all"&&!"all".equals(porgid)){
+	       if(!"all".equals(porgid)){
 	    	   query.setParameter(0, porgid);
 	       }
 	       query.setFirstResult(currentTotal * (current - 1));
@@ -50,7 +50,7 @@ public class OrgDaoImpl implements IOrgDao {
 		System.out.println("此时的 porgid为"+porgid);
 		Session session = sessionFactory.openSession();
         String hql;
-        if(porgid=="all"||"all".equals(porgid)) {
+        if("all".equals(porgid)) {
         	hql="From TOrgEntity";
         	
         }

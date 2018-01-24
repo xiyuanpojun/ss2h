@@ -27,11 +27,11 @@
                             <form class="layui-form" lay-filter="add">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">上级机构</label>
-                                    <div class="layui-input-block">
+                                    <div class="layui-input-block" id="porg">
                                         <select name="porgid" id="porgid" lay-verify="required"
-                                                lay-filter="searchChange">
+                                                lay-filter="searchChange" class="pog">
                                             <option value="all">所有机构</option>
-                                            <c:forEach items="${porglist}" var="org">
+                                            <c:forEach items="${sessionScope.porglist}" var="org">
                                                 <option value="${org.orgid}">${org.orgname}</option>
                                             </c:forEach>
                                         </select>
@@ -87,8 +87,8 @@
                         </div>
                         <div class="layui-form-item" id="porglist">
                             <label class="layui-form-label">上级机构</label>
-                           <div class="layui-input-block">
-                                        <select name="orgentity.pOrgid" id="porgid2" lay-verify="required"
+                           <div class="layui-input-block" id="porg">
+                                        <select name="orgentity.pOrgid" id="porgid2" class="pog" lay-verify="required"
                                                 lay-filter="searchChange1">
                                             <c:forEach items="${porglist}" var="org">
                                                 <option value="${org.orgid}">${org.orgname}</option>

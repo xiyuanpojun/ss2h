@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.hill.gwyb.dao.IFuncDao;
 import com.hill.gwyb.dao.IOrgDao;
@@ -145,16 +146,18 @@ public Map<String, Object> checkId(String oid) {
 }
 //查找上级机构列表
 @Override
-public void showporglist() throws Exception {
-	// TODO Auto-generated method stub
-	 if(request.getAttribute("porglist")!=null) {
-		 request.setAttribute("porglist",null);
+public Map<String, Object> showporglist()  throws Exception {
+	Map<String, Object> map = new HashMap<>();
+	HttpSession session=request.getSession();
+	 if(session.getAttribute("porglist")!=null) {
+		 session.setAttribute("porglist",null);
 	 }
 	 else {
-	 request.setAttribute("porglist", orgdao.showporglist());
-	 List<TOrgEntity> alist=orgdao.showporglist();
-	 System.out.println("孙悟"+alist.size());
+		 session.setAttribute("porglist", orgdao.showporglist());
 	 }
+	 List<TOrgEntity> porglist=orgdao.showporglist();
+	 map.put("porglist",porglist);
+		return map;
 }
 
 
