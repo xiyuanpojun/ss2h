@@ -66,7 +66,6 @@ var flag=0;
     		 return false;
   		});  
   });
-  
 //对新增功能表单form监听
   layui.use('form',function(){
 	  checkLogin();
@@ -247,6 +246,14 @@ var flag=0;
       $('#orgform')[0].reset();
       $("#checkfId").html("");
     });
+    //点击重置
+    $("#reset1").click(function(){
+    	layui.use("form",function(){
+    		var form =layui.form;
+    		  $("#porglist").show();
+    		 form.render();
+          });
+      });
     //打开页面时加载一次数据
     init($("#porgid").val());
     
