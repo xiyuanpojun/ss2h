@@ -149,12 +149,7 @@ public Map<String, Object> checkId(String oid) {
 public Map<String, Object> showporglist()  throws Exception {
 	Map<String, Object> map = new HashMap<>();
 	HttpSession session=request.getSession();
-	 if(session.getAttribute("porglist")!=null) {
-		 session.setAttribute("porglist",null);
-	 }
-	 else {
-		 session.setAttribute("porglist", orgdao.showporglist());
-	 }
+	session.setAttribute("porglist", orgdao.showporglist());
 	 List<TOrgEntity> porglist=orgdao.showporglist();
 	 map.put("porglist",porglist);
 		return map;
