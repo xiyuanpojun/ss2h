@@ -86,7 +86,7 @@ public class UserDaoImpl implements IUserDao {
                 //修改时间
                 //记录用户登陆信息
 
-                sqlQuery = session.createSQLQuery("SELECT SESSION_ID FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL")
+                sqlQuery = session.createSQLQuery("SELECT SESSION_ID FROM (SELECT SESSION_ID FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL ORDER BY LOG_TIME DESC) WHERE ROWNUM = 1")
                         .setParameter(0, userLoginEntity.getUserid())
                         .addScalar("SESSION_ID", StandardBasicTypes.STRING);
                 String sessionID = Arrays.toString(sqlQuery.list().toArray());
