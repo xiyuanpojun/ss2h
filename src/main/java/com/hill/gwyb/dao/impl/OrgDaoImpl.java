@@ -52,6 +52,7 @@ public class OrgDaoImpl implements IOrgDao {
         String hql;
         if(porgid=="all"||"all".equals(porgid)) {
         	hql="From TOrgEntity";
+        	
         }
         else {
         hql="From TOrgEntity o where  o.pOrgid = ?";
