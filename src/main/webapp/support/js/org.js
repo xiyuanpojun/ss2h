@@ -209,10 +209,12 @@ var flag=0;
 	    	  success:function(data){
 	    		 $(".pog option").remove();
 	    		 var li=data.porglist;
-	    		 $(".pog").append($('<option value="all">所有机构</option>'));
+	    		 $("#porgid").append($('<option value="all">所有机构</option>'));
+	    		 $("#porgid2").append($('<option value="">选择上级机构</option>'));
 	    		 for (var i = 0; i < li.length; i++) {
                     var porglist = $("<option value="+li[i].orgid+">"+li[i].orgname+"</option>");
 	    			 $(".pog").append(porglist);
+	    			
                  }
 	    		
 	    	  },
