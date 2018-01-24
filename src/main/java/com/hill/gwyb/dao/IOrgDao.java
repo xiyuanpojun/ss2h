@@ -9,7 +9,7 @@ public interface IOrgDao {
 //分页查找功能列表
 List<TOrgEntity> findAll(int currentTotal, int current, String porgid);
 //查找所有的功能记录总数
-Integer findTotal();
+Integer findTotal(String porgid);
 //根据id查找单个功能
 TOrgEntity findOneById(String oid);
 //根据机构查找 是否存在该机构 

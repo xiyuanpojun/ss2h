@@ -145,14 +145,14 @@ private IFuncDao funcdao;
 	        int error = 0;
 	        if (funcentity != null&&funcentity.getfId()!=null&&funcentity.getfName()!=null&&funcentity.getfUrl()!=null) {
 	            try {
-	                TFuncEntity result = funcdao.findOne(funcentity.getfId());
-	                if (result==null) {
+	              boolean flag   = funcdao.find(funcentity);
+	                if (flag==false) {
 	                    funcdao.add(funcentity);
 	                    map.put("message", "添加成功");
 	                } else {
 	                    //添加失败
 	                    error = 3;
-	                    map.put("message", "该功能id已经存在请重新添加");
+	                    map.put("message", "该功能已经存在请重新添加");
 	                }
 
 	            } catch (Exception e) {

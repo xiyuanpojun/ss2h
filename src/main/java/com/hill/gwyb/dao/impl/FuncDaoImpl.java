@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hill.gwyb.dao.IFuncDao;
 import com.hill.gwyb.po.TFuncEntity;
+import com.hill.gwyb.po.TOrgEntity;
 import com.hill.gwyb.po.TUserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -64,6 +65,26 @@ public class FuncDaoImpl implements IFuncDao {
 	@Override
 	public void add(TFuncEntity funcentity) {
 		 hibernateTemplate.save(funcentity);
+	}
+
+	@Override
+	public boolean find(TFuncEntity funcentity) {
+		boolean flag=false;
+		Session session = sessionFactory.openSession();
+	       String hql;
+	       hql="FROM TFuncEntity f  where  f.fName = ?";
+	       Query query = session.createQuery(hql);
+	       query.setParameter(0,funcentity.getfName());
+	       List<TFuncEntity> list = query.list();
+	       session.close();
+	       if(list.size()>0){
+	    	  flag=true; 
+	       }
+	       else {
+	    	  flag=false;
+	       }
+	       System.out.println("此时 list的size大小为"+list.size());
+	       return flag;	
 	}
 
 }

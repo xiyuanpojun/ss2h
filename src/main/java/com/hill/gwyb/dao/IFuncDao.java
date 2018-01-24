@@ -17,4 +17,6 @@ void funcUpdate(TFuncEntity funcentity) throws Exception;
 void delete(TFuncEntity funcentity) throws Exception;
 //添加功能列表
 void add(TFuncEntity funcentity) throws Exception;
+//判断功能是否存在
+boolean  find(TFuncEntity funcentity);
 }
