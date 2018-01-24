@@ -33,7 +33,7 @@ private IOrgDao orgdao;
 	            	 List<TOrgEntity> orglist =orgdao.findAll(currentTotal, current,porgid);
 	                  map.put("orglist", orglist);
 	                //获取数据的条数
-	                map.put("total", orgdao.findTotal());
+	                map.put("total", orgdao.findTotal(porgid));
 	                map.put("message", "");
 	            } catch (Exception e) {
 	                //获取数据异常

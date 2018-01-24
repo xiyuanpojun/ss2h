@@ -94,6 +94,7 @@ var flag=0;
 	    		  else{
 	    			  layer.msg("非法操作 "); 
 	    		  }
+	    		  $("#checkfId").html("");
 	    		  reset();
 	    		
 	    	  },
@@ -212,7 +213,6 @@ var flag=0;
     }
     //检查orgid是否为空
     function checkorgid(){
-    	alert("咳咳咳");
     	if(	$("#orgid").val()==null||$("#orgid").val()==""){
     		$("#checkId").html("");
         }

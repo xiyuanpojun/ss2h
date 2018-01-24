@@ -70,8 +70,11 @@ var flag=0;
 	                $("#btn").attr('disabled', "true");
 	            },
 	    	  success:function(data){
-	    		  layer.msg(data.message);
-	    		  $('#funcform')[0].reset();
+	    		   layer.msg(data.message);
+	    		   $("#checkfId").html("");
+	    		   $('#funcform')[0].reset();
+	    		  
+	    		
 	    	  },
 	    	  error:function(){
 	    		  layer.alert("连接服务器失败");

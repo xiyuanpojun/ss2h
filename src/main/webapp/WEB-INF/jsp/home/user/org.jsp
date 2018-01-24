@@ -79,7 +79,7 @@
                             <label class="layui-form-label">机构名称</label>
                             <div class="layui-input-block">
                                 <input type="text" id="orgname" name="orgentity.orgname" required lay-verify="required"
-                                       placeholder="请输入功能名称"
+                                       placeholder="请输入机构名称"
                                        autocomplete="off" class="layui-input">
                                  <label id="checkfname" class="layui-form-label check"></label>
                             </div>
