@@ -71,7 +71,7 @@ public class UserController extends ActionSupport {
 
     //显示用户界面，并把用户功能列表获取。
     public String showUserPage() throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(1500);
         if (userService.checkLogin()) {
             //获取用户功能列表,存放到request中。
             userService.userFunction();
