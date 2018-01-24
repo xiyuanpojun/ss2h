@@ -200,10 +200,21 @@ var flag=0;
     //上级机构数据初始化
     function orginit(){
     	 $.ajax({
-	    	  url:ctx+"/org/orgpage",
+	    	  url:ctx+"/org/org_showporglist",
 	    	  type:"POST",
 	    	  success:function(data){
-	    		 window.location.reload();
+	    		 $(".pog option").remove();
+	    		 var li=data.porglist;
+	    		 $(".pog").append($('<option value="all">所有机构</option>'));
+	    		 for (var i = 0; i < li.length; i++) {
+                    var porglist = $("<option value="+li[i].orgid+">"+li[i].orgname+"</option>");
+	    			 $(".pog").append(porglist);
+                 }
+//	    			 var porglist = $("<option value="+list.TOrgEntity.orgid+">"+list.TOrgEntity.orgname+"</option>");
+//	    			 $("#porgid").append(porglist);
+//	    			 window.location.href=" /WEB-INF/jsp/home/user/org.jsp";
+	    		
+	    		
 	    	  },
 	    	  error:function(){
 	    		  layer.alert("连接服务器失败");

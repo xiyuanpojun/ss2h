@@ -2,6 +2,9 @@ package com.hill.gwyb.controller;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.hill.gwyb.po.TFuncEntity;
 import com.hill.gwyb.po.TOrgEntity;
 import com.hill.gwyb.service.IFuncService;
@@ -19,6 +22,8 @@ public class OrgController extends ActionSupport{
 private IOrgService orgService;
 //json数据
 private Map<String,Object> dataMap;
+@Autowired
+private HttpServletResponse response;
 //获取请求中传过来的orgentity对象
 private TOrgEntity orgentity;
 public TOrgEntity getOrgentity() {
@@ -75,9 +80,10 @@ public String findAll() throws Exception {
 }
 //显示 机构列表页面
 public String showorgpage() throws Exception {
-	orgService.showporglist();
+	dataMap=orgService.showporglist();
 	return ActionSupport.SUCCESS;
 }
+
 //查询单个机构的信息
 public String findOne() throws Exception {
 	dataMap= orgService.findOne(orgentity);
@@ -99,7 +105,13 @@ public String checkId() {
 	 dataMap=orgService.checkId(oid);
 	return ActionSupport.SUCCESS;
 }
-
+//获取上级机构列表数据 
+public String showporglist() throws Exception {
+	
+	dataMap=orgService.showporglist();
+	System.out.println("进来了llllllllllllllllllll拍"+dataMap.toString());
+	return ActionSupport.SUCCESS;
+}
 
 
 }
