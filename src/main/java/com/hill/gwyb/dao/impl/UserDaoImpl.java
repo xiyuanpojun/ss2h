@@ -62,7 +62,7 @@ public class UserDaoImpl implements IUserDao {
     public Integer userLoginInfoCheck(TUserLoginEntity userLoginEntity) throws Exception {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "SELECT LOG_TIME FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL";
+        String sql = "SELECT LOG_TIME FROM (SELECT LOG_TIME FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL ORDER BY LOG_TIME DESC) WHERE ROWNUM = 1";
         NativeQuery sqlQuery = session.createSQLQuery(sql)
                 .setParameter(0, userLoginEntity.getUserid())
                 .addScalar("LOG_TIME", StandardBasicTypes.TIMESTAMP);
