@@ -53,7 +53,9 @@ var flag=0;
   	form.on('radio(radio1)', function(data){
   		 if(data.value=="1"){
     		   $("#porglist").show();
+    		   orginit();
     		   reset();
+    		   form.render();
     		 }
     		 else{
     		   $("#porglist").hide();
@@ -199,6 +201,9 @@ var flag=0;
     }
     //上级机构数据初始化
     function orginit(){
+    	layui.use("form",function (){
+    		var form =layui.form;
+    	
     	 $.ajax({
 	    	  url:ctx+"/org/org_showporglist",
 	    	  type:"POST",
@@ -210,16 +215,14 @@ var flag=0;
                     var porglist = $("<option value="+li[i].orgid+">"+li[i].orgname+"</option>");
 	    			 $(".pog").append(porglist);
                  }
-//	    			 var porglist = $("<option value="+list.TOrgEntity.orgid+">"+list.TOrgEntity.orgname+"</option>");
-//	    			 $("#porgid").append(porglist);
-//	    			 window.location.href=" /WEB-INF/jsp/home/user/org.jsp";
-	    		
 	    		
 	    	  },
 	    	  error:function(){
 	    		  layer.alert("连接服务器失败");
 	    	  },
 	      });
+    	 form.render();
+    	});
     	
     }
     //检查orgid是否为空
