@@ -170,7 +170,11 @@ public class IConfigServiceImpl implements IConfigService {
         if (configItemView != null && configItemView.getShowNum() != null && configItemView.getSurveyType() != null && fruits != null
                 && !"".equals(configItemView.getShowNum()) && !"".equals(configItemView.getSurveyType()) && !"".equals(fruits)) {
             TSurveyTypeEntity result = configDao.configFindOne(configItemView.getSurveyType());
-            if (result != null) {
+            boolean flag = false;
+            if (fruits.contains("YDDZ") || fruits.contains("YJRDZ")) {
+                flag = true;
+            }
+            if (result != null && flag) {
                 result.setShowNum(Long.valueOf(configItemView.getShowNum()));
                 configDao.configUpdate(result);//第一步更新
                 configDao.configDeleteAll(result);//第二步删除
@@ -180,7 +184,7 @@ public class IConfigServiceImpl implements IConfigService {
             } else {
                 //参数异常
                 error = 2;
-                map.put("message", "参数异常");
+                map.put("message", "请完成必填选项");
             }
 
         } else {

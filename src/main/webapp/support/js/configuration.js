@@ -1,3 +1,4 @@
+var address;
 $(function () {
     layui.use('element', function () {
         var element = layui.element;
@@ -18,6 +19,9 @@ $(function () {
                     $("#checkOption").html("");
                     //插入的数据
                     for (var i = 0; i < data.cols.length; i++) {
+                        if (data.cols[i].col === "YDDZ" || data.cols[i].col === "YJRDZ") {
+                            address = data.cols[i].col;
+                        }
                         var str = "<input name='" + data.cols[i].col + "' title='" + data.cols[i].colName + "' type='checkbox'>";
                         $("#checkOption").append(str);
                     }
@@ -116,6 +120,18 @@ $(function () {
             fruits = fruits.replace("typeId,showNum", "");
             if ("" === fruits) {
                 layer.alert("请选择显示字段");
+                return false;
+            }
+            if (address === "YDDZ") {
+                if (fruits.indexOf(address) < 0) {
+                    layer.alert("必须勾选用电地址");
+                }
+                return false;
+            }
+            if (address === "YJRDZ") {
+                if (fruits.indexOf(address) < 0) {
+                    layer.alert("必须勾选意见人地址");
+                }
                 return false;
             }
             var msg = {

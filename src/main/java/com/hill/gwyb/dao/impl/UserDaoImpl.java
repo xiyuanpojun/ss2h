@@ -1,5 +1,6 @@
 package com.hill.gwyb.dao.impl;
 
+import com.hill.gwyb.api.LoggerTools;
 import com.hill.gwyb.common.SessionContext;
 import com.hill.gwyb.dao.IUserDao;
 import com.hill.gwyb.po.TFuncEntity;
