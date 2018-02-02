@@ -236,6 +236,10 @@ $(function () {
 	   getfunc($(".roleid").val());
 	   
    });
+   //点击重置
+   $("#reset").click(function(){
+	   getfunc("1");
+   });
     //打开页面时加载一次数据
     init($("#role").val());
 });

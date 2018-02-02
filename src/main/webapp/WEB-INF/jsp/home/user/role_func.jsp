@@ -73,7 +73,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" id="btn" lay-submit lay-filter="btn">确定新增</button>
-                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                <button id="reset" type="reset" class="layui-btn layui-btn-primary">重置</button>
                             </div>
                         </div>
                     </form>
@@ -81,58 +81,6 @@
             </div>
         </div>
     </div>
-</div>
-<!-- 
-<%--更新面板--%>
-<div id="update" hidden="hidden">
-    <div class="uform" id="uform">
-        <form class="layui-form" lay-filter="uform">
-            <div class="layui-form-item">
-                <label class="layui-form-label">角色名称</label>
-                <div class="layui-input-block">
-                  <select name="tRoleFuncEntity.role_id" id="role_id2" lay-verify="required"
-                                                lay-filter="searchChange">
-                                                <option name="tRoleFuncEntity.role_id" value="">当前角色</option>
-                                                <option name="tRoleFuncEntity.role_id" value="1">管理员</option>
-                                                <option name="tRoleFuncEntity.role_id" value="2">供应商</option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">序号</label>
-                <div class="layui-input-block">
-                     <select name="tRoleFuncEntity.order" id="order2" lay-verify="required"
-                                                lay-filter="searchChange">
-                                                <option  value="">当前序号</option>
-                                                <option  value="">1</option>
-                                                
-                      </select>
-                   
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">功能名称</label>
-                <div class="layui-input-block">
-                 <select name="tRoleFuncEntity.func_name" id="func_name2" lay-verify="required"
-                                                lay-filter="searchChange">
-                                                <option   value="">当前功能名称</option>
-                                                
-                      </select>
-                    <input type="text" id="fUrl" name="tRoleFuncEntity.func_name" required lay-verify="required"
-                           placeholder="请输入功能地址"
-                           autocomplete="off" class="layui-input">
-                   
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" id="uBtn" lay-submit lay-filter="uBtn">确定修改</button>
-                    <button type="button" id="uCan" class="layui-btn layui-btn-primary">取消</button>
-                </div>
-            </div>
-        </form>
-    </div>
-     -->
 </div>
 </body>
 </html>

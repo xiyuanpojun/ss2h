@@ -53,7 +53,9 @@ var flag=0;
   	form.on('radio(radio1)', function(data){
   		 if(data.value=="1"){
     		   $("#porglist").show();
+    		   orginit();
     		   reset();
+    		   form.render();
     		 }
     		 else{
     		   $("#porglist").hide();
@@ -64,7 +66,6 @@ var flag=0;
     		 return false;
   		});  
   });
-  
 //对新增功能表单form监听
   layui.use('form',function(){
 	  checkLogin();
@@ -199,27 +200,30 @@ var flag=0;
     }
     //上级机构数据初始化
     function orginit(){
+    	layui.use("form",function (){
+    		var form =layui.form;
+    	
     	 $.ajax({
 	    	  url:ctx+"/org/org_showporglist",
 	    	  type:"POST",
 	    	  success:function(data){
 	    		 $(".pog option").remove();
 	    		 var li=data.porglist;
-	    		 $(".pog").append($('<option value="all">所有机构</option>'));
+	    		 $("#porgid").append($('<option value="all">所有机构</option>'));
+	    		 $("#porgid2").append($('<option value="">选择上级机构</option>'));
 	    		 for (var i = 0; i < li.length; i++) {
                     var porglist = $("<option value="+li[i].orgid+">"+li[i].orgname+"</option>");
 	    			 $(".pog").append(porglist);
+	    			
                  }
-//	    			 var porglist = $("<option value="+list.TOrgEntity.orgid+">"+list.TOrgEntity.orgname+"</option>");
-//	    			 $("#porgid").append(porglist);
-//	    			 window.location.href=" /WEB-INF/jsp/home/user/org.jsp";
-	    		
 	    		
 	    	  },
 	    	  error:function(){
 	    		  layer.alert("连接服务器失败");
 	    	  },
 	      });
+    	 form.render();
+    	});
     	
     }
     //检查orgid是否为空
@@ -244,6 +248,14 @@ var flag=0;
       $('#orgform')[0].reset();
       $("#checkfId").html("");
     });
+    //点击重置
+    $("#reset1").click(function(){
+    	layui.use("form",function(){
+    		var form =layui.form;
+    		  $("#porglist").show();
+    		 form.render();
+          });
+      });
     //打开页面时加载一次数据
     init($("#porgid").val());
     

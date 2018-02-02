@@ -101,7 +101,7 @@
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" id="btn" lay-submit lay-filter="btn">确定新增</button>
-                                <button type="reset"  class="layui-btn layui-btn-primary">重置</button>
+                                <button  type="reset" id="reset1" class="layui-btn layui-btn-primary">重置</button>
                             </div>
                         </div>
                     </form>
