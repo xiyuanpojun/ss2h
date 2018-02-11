@@ -91,7 +91,6 @@ public class GeocodingTools {
             e1.printStackTrace();
         }
         String url = String.format("http://api.map.baidu.com/geocoder/v2/?ak=" + ak + "&output=json&address=%s", address);
-        if ("伊犁".equals(addr)) return null;
         URL myURL = null;
         URLConnection httpsConn;
         //进行转码
@@ -159,14 +158,14 @@ public class GeocodingTools {
         } else {
             sql = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE CITY = ?";
         }
-        for (int i = 0; i < entity2s.length; i++) {
+        for (TCityLocationEntity2 entity2 : entity2s) {
             pre = con.prepareStatement(sql);
-            pre.setString(1, entity2s[i].getCode());
-            pre.setDouble(2, entity2s[i].getLng());
-            pre.setDouble(3, entity2s[i].getLat());
-            pre.setDouble(4, entity2s[i].getDist());
-            pre.setString(5, entity2s[i].getCity());
-            if (pre.executeUpdate() == 1) total++;
+            pre.setString(1, entity2.getCode());
+            pre.setDouble(2, entity2.getLng());
+            pre.setDouble(3, entity2.getLat());
+            pre.setDouble(4, entity2.getDist());
+            pre.setString(5, entity2.getCity());
+            if (pre.executeUpdate() >= 1) total++;
             pre.close();
         }
         System.out.println("成功：" + total);
