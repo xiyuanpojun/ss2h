@@ -32,7 +32,7 @@ public class GeocodingTools {
         String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_TSJB", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
         for (String table : tables) {
             //获取表中所有的城市《数据去重》
-            String[] citys = getCity("USER_CBJF");
+            String[] citys = getCity(table);
             TCityLocationEntity2[] entity2s = new TCityLocationEntity2[citys.length];
             //得到每一个地点的经纬度，距离信息
             for (int i = 0; i < citys.length; i++) {
