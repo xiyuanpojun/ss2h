@@ -6,6 +6,14 @@ public class TCityLocationEntity {
      */
     private String city;
     /**
+     * 省份
+     */
+    private String province;
+    /**
+     * 详细地址
+     */
+    private  String adress;
+    /**
      * 经度
      */
     private double lng;
@@ -21,6 +29,22 @@ public class TCityLocationEntity {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
     }
 
     public double getLng() {
@@ -45,6 +69,8 @@ public class TCityLocationEntity {
         if (o == null || getClass() != o.getClass()) return false;
         TCityLocationEntity that = (TCityLocationEntity) o;
         return Objects.equals(city, that.city) &&
+                Objects.equals(province, that.province) &&
+                Objects.equals(adress, that.adress) &&
                 Objects.equals(lng, that.lng) &&
                 Objects.equals(lat, that.lat);
     }
@@ -52,13 +78,15 @@ public class TCityLocationEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(city, lng, lat);
+        return Objects.hash(city,province,adress, lng, lat);
     }
 
     @Override
     public String toString() {
         return "TCityLocationEntity{" +
                 "city='" + city + '\'' +
+                ",province='" + province +
+                ", adress=" + adress +
                 ", lng=" + lng +
                 ", lat=" + lat +
                 '}';

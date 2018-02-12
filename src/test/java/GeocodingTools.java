@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * json消息使用fastjson解析。
  */
-public class GeocodingTools {
+public class GeocodingTools{
     /**
      * 启动程序
      *
@@ -27,25 +27,33 @@ public class GeocodingTools {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws SQLException, InterruptedException {
-        //BcShrO8gVPAhutauLVVQYHdFdqmdIXfM
+        DistUpdate();
+    }
+//修改数据库用户档案表的LNG,LAT,DIST-CT属性
+    private static void DistUpdate() throws SQLException {
         //多个表
-        String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_TSJB", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
+        String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
         for (String table : tables) {
-            //获取表中所有的城市《数据去重》
-            String[] citys = getCity(table);
-            TCityLocationEntity2[] entity2s = new TCityLocationEntity2[citys.length];
+            //获取表中所有的地址去重
+            TCityLocationEntity[] adress = getAdress(table);
+            TCityLocationEntity2[] entity2s = new TCityLocationEntity2[adress.length];
             //得到每一个地点的经纬度，距离信息
-            for (int i = 0; i < citys.length; i++) {
-                //得到经纬度
-                entity2s[i] = getLatAndLngByAddress(citys[i]);
-                //得到距离
-                getDist(entity2s[i]);
+            for (int i = 0; i < adress.length; i++) {
+                //由于有些地址没有省市所以拼接完整地址
+                entity2s[i] = getLatAndLngByAddress(adress[i].getProvince()+"-"+adress[i].getCity()+"-"+adress[i].getAdress());
+                //获得市中心的经纬度
+                TCityLocationEntity centralcity=getLatAndLngByAddress(adress[i].getProvince()+"-"+adress[i].getCity());
+                centralcity.setCity(adress[i].getCity());
+                //计算地址到市中心距离
+                Double distance=MapUtil.getDistance(entity2s[i].getLng(),entity2s[i].getLat(),centralcity.getLng(),centralcity.getLat());
+                //保存地址到市中心的距离(DIST-CT)
+                entity2s[i].setAdress(adress[i].getAdress());
+                entity2s[i].setDist(distance);
             }
             //更新数据库的内容
             updata(entity2s, table);
         }
     }
-
     /**
      * 获取数据库中的所有地点
      *
@@ -53,26 +61,33 @@ public class GeocodingTools {
      * @return
      * @throws SQLException
      */
-    public static String[] getCity(String table) throws SQLException {
-        List<String> list = new ArrayList<>();
+    public static TCityLocationEntity[] getAdress(String table) throws SQLException {
+       // TCityLocationEntity cplist;
+        List<TCityLocationEntity> cplist = new ArrayList<TCityLocationEntity>();
         Connection con = DataSource.getCon();
         PreparedStatement pre;
         ResultSet result;
         String sql;
         if (table.equals("USER_GZBX")) {
-            sql = "SELECT DISTINCT ORG FROM USER_GZBX";
+            sql = "SELECT DISTINCT ORG,PROV,YDDZ FROM USER_GZBX";
         } else {
-            sql = "SELECT DISTINCT CITY FROM " + table;
+            sql = "SELECT DISTINCT CITY,PROV,YDDZ FROM " + table;
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
-        while (result.next()) {
-            list.add(result.getString(1));
-        }
+            while (result.next()) {
+                    TCityLocationEntity clentity = new TCityLocationEntity();
+                    clentity.setCity(result.getString(1));
+                    clentity.setProvince(result.getString(2));
+                    clentity.setAdress(result.getString(3));
+                    cplist.add(clentity);
+                    System.out.println("当前地址数"+cplist.size());
+            }
+
         result.close();
         pre.close();
         con.close();
-        return list.toArray(new String[0]);
+        return cplist.toArray(new TCityLocationEntity[0]);
     }
 
     /**
@@ -84,7 +99,7 @@ public class GeocodingTools {
     public static TCityLocationEntity2 getLatAndLngByAddress(String addr) {
         TCityLocationEntity2 entity = null;
         String address = "";
-        String ak = "BcShrO8gVPAhutauLVVQYHdFdqmdIXfM";
+        String ak = "bsrU3l7k7oG04yHw3BTQ8UAG5bokrfM0";
         try {
             address = java.net.URLEncoder.encode(addr, "UTF-8");
         } catch (UnsupportedEncodingException e1) {
@@ -110,8 +125,6 @@ public class GeocodingTools {
                 if ((data = br.readLine()) != null) {
                     JSONObject object = JSON.parseObject(data);
                     entity = new TCityLocationEntity2();
-                    //查询的地点名称
-                    entity.setCity(addr);
                     if (object.getString("status").equals("0")) {
                         entity.setCode("1");
                         object = object.getJSONObject("result").getJSONObject("location");
@@ -128,17 +141,6 @@ public class GeocodingTools {
         }
         return entity;
     }
-
-    /**
-     * 计算距离
-     *
-     * @param entity2
-     */
-    private static void getDist(TCityLocationEntity2 entity2) {
-
-    }
-
-
     /**
      * 更新数据库
      *
@@ -154,9 +156,9 @@ public class GeocodingTools {
         String sql;
         System.out.println("共：" + entity2s.length);
         if (table.equals("USER_GZBX")) {
-            sql = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE ORG = ?";
+            sql = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
         } else {
-            sql = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE CITY = ?";
+            sql = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
         }
         for (TCityLocationEntity2 entity2 : entity2s) {
             pre = con.prepareStatement(sql);
@@ -164,11 +166,30 @@ public class GeocodingTools {
             pre.setDouble(2, entity2.getLng());
             pre.setDouble(3, entity2.getLat());
             pre.setDouble(4, entity2.getDist());
-            pre.setString(5, entity2.getCity());
+            pre.setString(5, entity2.getAdress());
             if (pre.executeUpdate() >= 1) total++;
             pre.close();
         }
         System.out.println("成功：" + total);
         con.close();
     }
+
+    //获取市经纬度
+  private  static TCityLocationEntity getLatAndLngByprovince(String province) throws SQLException {
+      TCityLocationEntity clentity = new TCityLocationEntity();
+      Connection conn = DataSource.getCon();
+      PreparedStatement ps = conn.prepareStatement("SELECT CITY,LNG,LAT FROM T_CITY_LOCATION WHERE CITY = ?");
+      ps.setString(1,province);
+      ResultSet resultSet = ps.executeQuery();
+      int index = 0;
+      while (resultSet.next()) {
+          clentity.setCity(resultSet.getString(1));
+          clentity.setLng(resultSet.getDouble(2));
+          clentity.setLat(resultSet.getDouble(3));
+      }
+      resultSet.close();
+      ps.close();
+      conn.close();
+      return  clentity;
+  }
 }
