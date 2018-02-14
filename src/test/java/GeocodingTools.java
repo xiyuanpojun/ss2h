@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * json消息使用fastjson解析。
  */
-public class GeocodingTools{
+public class GeocodingTools {
     /**
      * 启动程序
      *
@@ -26,11 +26,12 @@ public class GeocodingTools{
      * @throws SQLException
      * @throws InterruptedException
      */
-    public static void main(String[] args) throws SQLException, InterruptedException {
-        DistUpdate();
+    public static void main(String[] args) throws SQLException {
+        begin();
     }
-//修改数据库用户档案表的LNG,LAT,DIST-CT属性
-    private static void DistUpdate() throws SQLException {
+
+    //修改数据库用户档案表的LNG,LAT,DIST-CT属性
+    private static void begin() throws SQLException {
         //多个表
         String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
         for (String table : tables) {
@@ -40,12 +41,12 @@ public class GeocodingTools{
             //得到每一个地点的经纬度，距离信息
             for (int i = 0; i < adress.length; i++) {
                 //由于有些地址没有省市所以拼接完整地址
-                entity2s[i] = getLatAndLngByAddress(adress[i].getProvince()+"-"+adress[i].getCity()+"-"+adress[i].getAdress());
+                entity2s[i] = getLatAndLngByAddress(adress[i].getProvince() + "-" + adress[i].getCity() + "-" + adress[i].getAdress());
                 //获得市中心的经纬度
-                TCityLocationEntity centralcity=getLatAndLngByAddress(adress[i].getProvince()+"-"+adress[i].getCity());
+                TCityLocationEntity centralcity = getLatAndLngByAddress(adress[i].getProvince() + "-" + adress[i].getCity());
                 centralcity.setCity(adress[i].getCity());
                 //计算地址到市中心距离
-                Double distance=MapUtil.getDistance(entity2s[i].getLng(),entity2s[i].getLat(),centralcity.getLng(),centralcity.getLat());
+                Double distance = MapUtil.getDistance(entity2s[i].getLng(), entity2s[i].getLat(), centralcity.getLng(), centralcity.getLat());
                 //保存地址到市中心的距离(DIST-CT)
                 entity2s[i].setAdress(adress[i].getAdress());
                 entity2s[i].setDist(distance);
@@ -54,6 +55,7 @@ public class GeocodingTools{
             updata(entity2s, table);
         }
     }
+
     /**
      * 获取数据库中的所有地点
      *
@@ -62,28 +64,26 @@ public class GeocodingTools{
      * @throws SQLException
      */
     public static TCityLocationEntity[] getAdress(String table) throws SQLException {
-       // TCityLocationEntity cplist;
-        List<TCityLocationEntity> cplist = new ArrayList<TCityLocationEntity>();
+        List<TCityLocationEntity> cplist = new ArrayList<>();
         Connection con = DataSource.getCon();
         PreparedStatement pre;
         ResultSet result;
         String sql;
         if (table.equals("USER_GZBX")) {
-            sql = "SELECT DISTINCT ORG,PROV,YDDZ FROM USER_GZBX";
+            sql = "SELECT ORG,PROV,YDDZ FROM USER_GZBX";
         } else {
-            sql = "SELECT DISTINCT CITY,PROV,YDDZ FROM " + table;
+            sql = "SELECT CITY,PROV,YDDZ FROM " + table;
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
-            while (result.next()) {
-                    TCityLocationEntity clentity = new TCityLocationEntity();
-                    clentity.setCity(result.getString(1));
-                    clentity.setProvince(result.getString(2));
-                    clentity.setAdress(result.getString(3));
-                    cplist.add(clentity);
-                    System.out.println("当前地址数"+cplist.size());
-            }
-
+        while (result.next()) {
+            TCityLocationEntity clentity = new TCityLocationEntity();
+            clentity.setCity(result.getString(1));
+            clentity.setProvince(result.getString(2));
+            clentity.setAdress(result.getString(3));
+            cplist.add(clentity);
+            System.out.println("当前地址数" + cplist.size());
+        }
         result.close();
         pre.close();
         con.close();
@@ -141,6 +141,7 @@ public class GeocodingTools{
         }
         return entity;
     }
+
     /**
      * 更新数据库
      *
@@ -155,11 +156,7 @@ public class GeocodingTools{
         PreparedStatement pre;
         String sql;
         System.out.println("共：" + entity2s.length);
-        if (table.equals("USER_GZBX")) {
-            sql = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
-        } else {
-            sql = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
-        }
+        sql = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
         for (TCityLocationEntity2 entity2 : entity2s) {
             pre = con.prepareStatement(sql);
             pre.setString(1, entity2.getCode());
@@ -175,21 +172,20 @@ public class GeocodingTools{
     }
 
     //获取市经纬度
-  private  static TCityLocationEntity getLatAndLngByprovince(String province) throws SQLException {
-      TCityLocationEntity clentity = new TCityLocationEntity();
-      Connection conn = DataSource.getCon();
-      PreparedStatement ps = conn.prepareStatement("SELECT CITY,LNG,LAT FROM T_CITY_LOCATION WHERE CITY = ?");
-      ps.setString(1,province);
-      ResultSet resultSet = ps.executeQuery();
-      int index = 0;
-      while (resultSet.next()) {
-          clentity.setCity(resultSet.getString(1));
-          clentity.setLng(resultSet.getDouble(2));
-          clentity.setLat(resultSet.getDouble(3));
-      }
-      resultSet.close();
-      ps.close();
-      conn.close();
-      return  clentity;
-  }
+    private static TCityLocationEntity getLatAndLngByprovince(String province) throws SQLException {
+        TCityLocationEntity clentity = new TCityLocationEntity();
+        Connection conn = DataSource.getCon();
+        PreparedStatement ps = conn.prepareStatement("SELECT CITY,LNG,LAT FROM T_CITY_LOCATION WHERE CITY = ?");
+        ps.setString(1, province);
+        ResultSet resultSet = ps.executeQuery();
+        while (resultSet.next()) {
+            clentity.setCity(resultSet.getString(1));
+            clentity.setLng(resultSet.getDouble(2));
+            clentity.setLat(resultSet.getDouble(3));
+        }
+        resultSet.close();
+        ps.close();
+        conn.close();
+        return clentity;
+    }
 }
