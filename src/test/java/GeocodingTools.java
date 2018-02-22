@@ -19,17 +19,6 @@ import java.util.List;
  * json消息使用fastjson解析。
  */
 public class GeocodingTools {
-    /**
-     * 启动程序
-     *
-     * @param args
-     * @throws SQLException
-     * @throws InterruptedException
-     */
-    public static void main(String[] args) throws SQLException {
-        begin();
-    }
-
     //修改数据库用户档案表的LNG,LAT,DIST-CT属性
     public static void begin() throws SQLException {
         //多个表
@@ -187,5 +176,18 @@ public class GeocodingTools {
         ps.close();
         conn.close();
         return clentity;
+    }
+}
+
+class test {
+    /**
+     * 启动程序
+     *
+     * @param args
+     * @throws SQLException
+     * @throws InterruptedException
+     */
+    public static void main(String[] args) throws SQLException {
+        GeocodingTools.begin();
     }
 }
