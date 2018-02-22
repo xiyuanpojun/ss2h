@@ -57,6 +57,7 @@ public class GeocodingTools2 {
                 result.close();
                 pre.close();
                 con.close();
+                System.out.println("请求配额已用完");
                 return;
             }
             // 计算地址到市中心距离
@@ -68,6 +69,11 @@ public class GeocodingTools2 {
             pre2.setDouble(3, entity2.getLat());
             pre2.setDouble(4, distance);
             pre2.setString(5, result.getString(3));
+            if(pre2.executeUpdate()>=1){
+                System.out.println("更新成功"+entity2.toString());
+            }else {
+                System.out.println("更新失败"+entity2.toString());
+            }
             pre2.close();
         }
         result.close();

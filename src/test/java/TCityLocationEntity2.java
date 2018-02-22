@@ -26,6 +26,13 @@ public class TCityLocationEntity2 extends TCityLocationEntity {
 
     @Override
     public String toString() {
-        return "{\"city\"=\"" + getCity() + "\",\"lng\"=\"" + getLng() + "\",\"lat\"=\"" + getLat() + "\",\"code\"=\"" + code + "\",\"dist\"=\"" + dist + "\"}";
+        return "{\"city\"=\"" + getCity() + '\'' +
+                ",province='" + getProvince() +
+                ", adress=" + getAdress() +
+                "\",\"lng\"=\"" + getLng() +
+                "\",\"lat\"=\"" + getLat() +
+                "\",\"code\"=\"" + code +
+                "\",\"dist\"=\"" + dist +
+                "\"}";
     }
 }
