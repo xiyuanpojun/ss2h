@@ -1,10 +1,7 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -14,12 +11,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GeocodingTools2 {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
         GeocodingTools2.distUpdate();
     }
 
     // 修改数据库用户档案表的LNG,LAT,DIST-CT属性
-    public static void distUpdate() throws SQLException {
+    public static void distUpdate() throws SQLException, IOException {
         // 多个表
         String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
         for (String table : tables) {
@@ -35,21 +32,21 @@ public class GeocodingTools2 {
      * @return
      * @throws SQLException
      */
-    private static void update(String table) throws SQLException {
+    private static void update(String table) throws SQLException, IOException {
         Connection con = DataSource.getCon();
         PreparedStatement pre, pre2;
         ResultSet result;
         String sql, sql2;
-
         if (table.equals("USER_GZBX")) {
             sql = "SELECT ORG,PROV,YDDZ FROM USER_GZBX WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
             sql2 = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
         } else {
-            sql = "SELECT CITY,PROV,YDDZ FROM " + table+" WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
+            sql = "SELECT CITY,PROV,YDDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
             sql2 = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(System.getProperty("user.dir"+"/"+table+"-log")))));
         while (result.next()) {
             pre2 = con.prepareStatement(sql2);
             TCityLocationEntity2 entity2 = getLatAndLngByAddress(
@@ -65,12 +62,17 @@ public class GeocodingTools2 {
             pre2.setDouble(4, distance);
             pre2.setString(5, result.getString(3));
             if (pre2.executeUpdate() >= 1) {
+                writer.append("修改成功" + result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3) + "距离：" + distance);
                 System.out.println("修改成功" + result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3) + "距离：" + distance);
             } else {
+                writer.append("修改失败");
                 System.out.println("修改失败");
             }
             pre2.close();
+            writer.newLine();
         }
+        writer.flush();
+        writer.close();
 
         result.close();
         pre.close();
