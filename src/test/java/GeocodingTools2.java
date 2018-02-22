@@ -18,7 +18,7 @@ public class GeocodingTools2 {
     // 修改数据库用户档案表的LNG,LAT,DIST-CT属性
     public static void distUpdate() throws SQLException, IOException {
         // 多个表
-        String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
+        String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW","USER_TSJB"};
         for (String table : tables) {
             // 修改地址
             update(table);
@@ -40,13 +40,22 @@ public class GeocodingTools2 {
         if (table.equals("USER_GZBX")) {
             sql = "SELECT ORG,PROV,YDDZ FROM USER_GZBX WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
             sql2 = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
-        } else {
+        }else if(table.equals("USER_TSJB")){
+            sql = "SELECT CITY,PROV,YJRDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
+            sql2 = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YJRDZ = ?";
+        }
+        else {
             sql = "SELECT CITY,PROV,YDDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
             sql2 = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
-        BufferedWriter writer = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + File.separator + table.toLowerCase() + "-log.txt"));
+        BufferedWriter writer;
+        if(!new File(System.getProperty("user.dir") + File.separator + table.toLowerCase() + "-log.txt").exists()) {
+            writer= new BufferedWriter(new FileWriter(System.getProperty("user.dir") + File.separator + table.toLowerCase() + "-log.txt"));
+        }else{
+            writer= new BufferedWriter(new FileWriter(System.getProperty("user.dir") + File.separator + table.toLowerCase() + "-log.txt",true));
+        }
         while (result.next()) {
             pre2 = con.prepareStatement(sql2);
             TCityLocationEntity2 entity2 = getLatAndLngByAddress(
