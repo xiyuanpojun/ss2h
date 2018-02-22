@@ -46,7 +46,7 @@ public class GeocodingTools2 {
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
-        BufferedWriter writer = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + table.toLowerCase() + "-log"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + File.separator + table.toLowerCase() + "-log"));
         while (result.next()) {
             pre2 = con.prepareStatement(sql2);
             TCityLocationEntity2 entity2 = getLatAndLngByAddress(
