@@ -31,7 +31,7 @@ public class GeocodingTools {
     }
 
     //修改数据库用户档案表的LNG,LAT,DIST-CT属性
-    private static void begin() throws SQLException {
+    public static void begin() throws SQLException {
         //多个表
         String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
         for (String table : tables) {
@@ -63,7 +63,7 @@ public class GeocodingTools {
      * @return
      * @throws SQLException
      */
-    public static TCityLocationEntity[] getAdress(String table) throws SQLException {
+    private static TCityLocationEntity[] getAdress(String table) throws SQLException {
         List<TCityLocationEntity> cplist = new ArrayList<>();
         Connection con = DataSource.getCon();
         PreparedStatement pre;
@@ -96,7 +96,7 @@ public class GeocodingTools {
      * @param addr
      * @return
      */
-    public static TCityLocationEntity2 getLatAndLngByAddress(String addr) {
+    private static TCityLocationEntity2 getLatAndLngByAddress(String addr) {
         TCityLocationEntity2 entity = null;
         String address = "";
         String ak = "bsrU3l7k7oG04yHw3BTQ8UAG5bokrfM0";
@@ -149,7 +149,7 @@ public class GeocodingTools {
      * @param table
      * @throws SQLException
      */
-    public static void updata(TCityLocationEntity2[] entity2s, String table) throws SQLException {
+    private static void updata(TCityLocationEntity2[] entity2s, String table) throws SQLException {
         System.out.println("更新数据库");
         int total = 0;
         Connection con = DataSource.getCon();
