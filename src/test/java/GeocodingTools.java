@@ -22,7 +22,7 @@ public class GeocodingTools {
     //修改数据库用户档案表的LNG,LAT,DIST-CT属性
     public static void begin() throws SQLException {
         //多个表
-        String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
+        String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW", "USER_TSJB"};
         for (String table : tables) {
             //获取表中所有的地址去重
             TCityLocationEntity[] adress = getAdress(table);
@@ -59,9 +59,11 @@ public class GeocodingTools {
         ResultSet result;
         String sql;
         if (table.equals("USER_GZBX")) {
-            sql = "SELECT ORG,PROV,YDDZ FROM USER_GZBX";
+            sql = "SELECT ORG,PROV,YDDZ FROM USER_GZBX WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
+        } else if (table.equals("USER_TSJB")) {
+            sql = "SELECT CITY,PROV,YJRDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
         } else {
-            sql = "SELECT CITY,PROV,YDDZ FROM " + table;
+            sql = "SELECT CITY,PROV,YDDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
@@ -145,7 +147,11 @@ public class GeocodingTools {
         PreparedStatement pre;
         String sql;
         System.out.println("共：" + entity2s.length);
-        sql = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
+        if (table.equals("USER_TSJB")) {
+            sql = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YJRDZ = ?";
+        } else {
+            sql = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
+        }
         for (TCityLocationEntity2 entity2 : entity2s) {
             pre = con.prepareStatement(sql);
             pre.setString(1, entity2.getCode());
