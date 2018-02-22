@@ -70,8 +70,8 @@ public class GeocodingTools2 {
             }
             pre2.close();
             writer.newLine();
+            writer.flush();
         }
-        writer.flush();
         writer.close();
 
         result.close();
