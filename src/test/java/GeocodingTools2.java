@@ -49,46 +49,27 @@ public class GeocodingTools2 {
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
-        BufferedWriter writer;
-        if (!new File(System.getProperty("user.dir") + File.separator + table.toLowerCase() + "-log.txt").exists()) {
-            writer = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + File.separator + table.toLowerCase() + "-log.txt"));
-        } else {
-            writer = new BufferedWriter(new FileWriter(System.getProperty("user.dir") + File.separator + table.toLowerCase() + "-log.txt", true));
-        }
         while (result.next()) {
-            pre2 = con.prepareStatement(sql2);
             TCityLocationEntity2 entity2 = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3));
             // 获得市中心的经纬度
             TCityLocationEntity2 centralcity = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1));
             if (entity2 == null) {
-                writer.close();
                 result.close();
                 pre.close();
-                pre2.close();
                 con.close();
                 return;
             }
             // 计算地址到市中心距离
             Double distance = MapUtil.getDistance(entity2.getLng(), entity2.getLat(), centralcity.getLng(),
                     centralcity.getLat());
+            pre2 = con.prepareStatement(sql2);
             pre2.setString(1, entity2.getCode());
             pre2.setDouble(2, entity2.getLng());
             pre2.setDouble(3, entity2.getLat());
             pre2.setDouble(4, distance);
             pre2.setString(5, result.getString(3));
-            if (pre2.executeUpdate() >= 1) {
-                writer.append("修改成功").append(result.getString(2)).append("-").append(result.getString(1)).append("-").append(result.getString(3)).append("距离：").append(String.valueOf(distance));
-                System.out.println("修改成功" + result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3) + "距离：" + distance);
-            } else {
-                writer.append("修改失败");
-                System.out.println("修改失败");
-            }
             pre2.close();
-            writer.newLine();
-            writer.flush();
         }
-        writer.close();
-
         result.close();
         pre.close();
         con.close();
