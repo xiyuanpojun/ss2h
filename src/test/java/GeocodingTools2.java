@@ -1,3 +1,6 @@
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,32 +12,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 public class GeocodingTools2 {
-    /**
-     * 启动程序
-     *
-     * @param args
-     * @throws SQLException
-     * @throws InterruptedException
-     */
-    public static void main(String[] args) throws SQLException, InterruptedException {
-        DistUpdate();
+    public static void main(String[] args) throws SQLException {
+        GeocodingTools2.distUpdate();
     }
 
     // 修改数据库用户档案表的LNG,LAT,DIST-CT属性
-    private static void DistUpdate() throws SQLException {
+    public static void distUpdate() throws SQLException {
         // 多个表
         String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW"};
         for (String table : tables) {
             // 修改地址
             update(table);
-
         }
     }
 
@@ -45,7 +35,7 @@ public class GeocodingTools2 {
      * @return
      * @throws SQLException
      */
-    public static void update(String table) throws SQLException {
+    private static void update(String table) throws SQLException {
         Connection con = DataSource.getCon();
         PreparedStatement pre, pre2;
         ResultSet result;
@@ -74,12 +64,11 @@ public class GeocodingTools2 {
             pre2.setDouble(3, entity2.getLat());
             pre2.setDouble(4, distance);
             pre2.setString(5, result.getString(3));
-//			 if( pre2.executeUpdate()>=1) {
-//			 System.out.println("修改成功"+result.getString(2)+"-"+result.getString(1)+"-"+result.getString(3)+"距离："+distance);
-//			 }
-//			 else {
-//			 System.out.println("修改失败");
-//			 }
+//            if (pre2.executeUpdate() >= 1) {
+//                System.out.println("修改成功" + result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3) + "距离：" + distance);
+//            } else {
+//                System.out.println("修改失败");
+//            }
             pre2.close();
         }
 
@@ -94,7 +83,7 @@ public class GeocodingTools2 {
      * @param addr
      * @return
      */
-    public static TCityLocationEntity2 getLatAndLngByAddress(String addr) {
+    private static TCityLocationEntity2 getLatAndLngByAddress(String addr) {
         TCityLocationEntity2 entity = null;
         String address = "";
         String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
@@ -139,5 +128,4 @@ public class GeocodingTools2 {
         }
         return entity;
     }
-
 }
