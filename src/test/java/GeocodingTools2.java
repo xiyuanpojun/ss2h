@@ -62,7 +62,7 @@ public class GeocodingTools2 {
             pre2.setDouble(4, distance);
             pre2.setString(5, result.getString(3));
             if (pre2.executeUpdate() >= 1) {
-                writer.append("修改成功" + result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3) + "距离：" + distance);
+                writer.append("修改成功").append(result.getString(2)).append("-").append(result.getString(1)).append("-").append(result.getString(3)).append("距离：").append(String.valueOf(distance));
                 System.out.println("修改成功" + result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3) + "距离：" + distance);
             } else {
                 writer.append("修改失败");
