@@ -4,4 +4,4 @@
 *.iml
 .classpath
 .project
-*.txt
+*-log.txt
