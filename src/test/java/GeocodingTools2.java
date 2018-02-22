@@ -57,10 +57,17 @@ public class GeocodingTools2 {
         }
         while (result.next()) {
             pre2 = con.prepareStatement(sql2);
-            TCityLocationEntity2 entity2 = getLatAndLngByAddress(
-                    result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3));
+            TCityLocationEntity2 entity2 = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3));
             // 获得市中心的经纬度
             TCityLocationEntity2 centralcity = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1));
+            if (entity2 == null) {
+                writer.close();
+                result.close();
+                pre.close();
+                pre2.close();
+                con.close();
+                return;
+            }
             // 计算地址到市中心距离
             Double distance = MapUtil.getDistance(entity2.getLng(), entity2.getLat(), centralcity.getLng(),
                     centralcity.getLat());
@@ -129,6 +136,9 @@ public class GeocodingTools2 {
                         entity.setLat(object.getDouble("lat"));
                     } else {
                         entity.setCode("0");
+                        if(object.getString("status").equals("302")){
+                            entity=null;
+                        }
                     }
                 }
                 insr.close();
