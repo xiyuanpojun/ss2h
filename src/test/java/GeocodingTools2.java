@@ -9,10 +9,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GeocodingTools2 {
-    public static void main(String[] args) throws SQLException, IOException {
-        GeocodingTools2.distUpdate();
+    public static void main(String[] args) throws Exception {
+        //定时器执行在距离凌晨后
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-23 00:01:00");
+        long time = date.getTime() - System.currentTimeMillis();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                try {
+                    GeocodingTools2.distUpdate();
+                } catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                }
+                this.cancel();
+                timer.cancel();
+            }
+        }, time);
+//        System.out.println(time/60/60/1000);
     }
 
     // 修改数据库用户档案表的LNG,LAT,DIST-CT属性
@@ -73,10 +94,10 @@ public class GeocodingTools2 {
             pre2.setDouble(3, entity2.getLat());
             pre2.setDouble(4, distance);
             pre2.setString(5, result.getString(3));
-            if(pre2.executeUpdate()>=1){
-                System.out.println("更新成功"+entity2.toString());
-            }else {
-                System.out.println("更新失败"+entity2.toString());
+            if (pre2.executeUpdate() >= 1) {
+                System.out.println("更新成功" + entity2.toString());
+            } else {
+                System.out.println("更新失败" + entity2.toString());
             }
             pre2.close();
         }
@@ -127,8 +148,8 @@ public class GeocodingTools2 {
                         entity.setLat(object.getDouble("lat"));
                     } else {
                         entity.setCode("0");
-                        if(object.getString("status").equals("302")){
-                            entity=null;
+                        if (object.getString("status").equals("302")) {
+                            entity = null;
                         }
                     }
                 }
