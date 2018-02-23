@@ -58,8 +58,8 @@ public class GeocodingTools extends Thread {
             if (!addr.contains(result.getString(1))) addr = result.getString(1) + addr;
             if (!addr.contains(result.getString(2))) addr = result.getString(2) + addr;
             if (addr.length() >= 20) addr = addr.substring(0, 20);
-            Map<String, Object> map1 = null;
-            Map<String, Object> map2 = null;
+            Map<String, Object> map1;
+            Map<String, Object> map2;
             map1 = getLatAndLngByAddress(addr, aks[akindex]);
             map2 = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1), aks[akindex]);
             if (map1.get("status").equals("302") || map2.get("status").equals("302")) {
