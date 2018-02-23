@@ -1,7 +1,10 @@
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -19,24 +22,6 @@ public class GeocodingTools extends Thread {
 
     public GeocodingTools(String table) {
         this.table = table;
-    }
-
-    public static void main(String[] args) throws Exception {
-        //定时器执行在距离凌晨后
-        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-23 00:01:00");
-        long time = date.getTime() - System.currentTimeMillis();
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW", "USER_TSJB"};
-                for (String table : tables) {
-                    // 修改地址
-                    new GeocodingTools(table).start();
-                }
-                this.cancel();
-                timer.cancel();
-            }
-        }, time);
     }
 
     /**
@@ -169,5 +154,23 @@ public class GeocodingTools extends Thread {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        //定时器执行在距离凌晨后
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-23 00:01:00");
+        long time = date.getTime() - System.currentTimeMillis();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW", "USER_TSJB"};
+                for (String table : tables) {
+                    // 修改地址
+                    new GeocodingTools(table).start();
+                }
+                this.cancel();
+                timer.cancel();
+            }
+        }, time);
     }
 }
