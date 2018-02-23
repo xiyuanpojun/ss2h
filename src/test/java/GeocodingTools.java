@@ -12,10 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GeocodingTools extends Thread {
     private String table;
@@ -52,21 +50,32 @@ public class GeocodingTools extends Thread {
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
+        //znp,twz,lq
+        String[] aks = {"xh2XppvAc5uB36HDZHKTOMnV3gSUULTb", "3zHanTbughwzhKX5ecVmDa6Ab8c9T7fP", "BcShrO8gVPAhutauLVVQYHdFdqmdIXfM"};
+        int akindex = 0;
         while (result.next()) {
             String addr = result.getString(3);
             if (!addr.contains(result.getString(1))) addr = result.getString(1) + addr;
             if (!addr.contains(result.getString(2))) addr = result.getString(2) + addr;
             if (addr.length() >= 20) addr = addr.substring(0, 20);
-            TCityLocationEntity2 entity2 = getLatAndLngByAddress(addr);
-            // 获得市中心的经纬度
-            TCityLocationEntity2 centralcity = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1));
-            if (entity2 == null) {
-                result.close();
-                pre.close();
-                con.close();
-                System.out.println("请求配额已用完");
-                return;
+            Map<String, Object> map1 = null;
+            Map<String, Object> map2 = null;
+            map1 = getLatAndLngByAddress(addr, aks[akindex]);
+            map2 = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1), aks[akindex]);
+            if (map1.get("status").equals("302") || map2.get("status").equals("302")) {
+                akindex++;
+                if (akindex >= aks.length) {
+                    result.close();
+                    pre.close();
+                    con.close();
+                    System.out.println(this.getName() + "请求配额已用完 ak=" + aks[akindex - 1]);
+                    return;
+                }
             }
+            TCityLocationEntity2 entity2 = (TCityLocationEntity2) map1.get("entity");
+            // 获得市中心的经纬度
+            TCityLocationEntity2 centralcity = (TCityLocationEntity2) map2.get("entity");
+            if (entity2 == null || centralcity == null) continue;
             // 计算地址到市中心距离
             Double distance = MapUtil.getDistance(entity2.getLng(), entity2.getLat(), centralcity.getLng(),
                     centralcity.getLat());
@@ -77,9 +86,9 @@ public class GeocodingTools extends Thread {
             pre2.setDouble(4, distance);
             pre2.setString(5, result.getString(3));
             if (pre2.executeUpdate() >= 1) {
-                System.out.println(table + "更新成功" + entity2.toString());
+                System.out.println(this.getName() + table + "更新成功" + entity2.toString());
             } else {
-                System.out.println(table + "更新失败" + entity2.toString());
+                System.out.println(this.getName() + table + "更新失败" + entity2.toString());
             }
             pre2.close();
         }
@@ -94,12 +103,10 @@ public class GeocodingTools extends Thread {
      * @param addr
      * @return
      */
-    private TCityLocationEntity2 getLatAndLngByAddress(String addr) {
+    private Map<String, Object> getLatAndLngByAddress(String addr, String ak) {
+        Map<String, Object> map = new HashMap<>();
         TCityLocationEntity2 entity = null;
         String address = "";
-        //String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";//张乃平
-        String ak = "3zHanTbughwzhKX5ecVmDa6Ab8c9T7fP";//佟卫征
-//        String ak = "BcShrO8gVPAhutauLVVQYHdFdqmdIXfM";//梁强
         try {
             address = java.net.URLEncoder.encode(addr, "UTF-8");
         } catch (UnsupportedEncodingException e1) {
@@ -123,7 +130,7 @@ public class GeocodingTools extends Thread {
                 BufferedReader br = new BufferedReader(insr);
                 String data;
                 if ((data = br.readLine()) != null) {
-                    System.out.println(data);
+                    System.out.println(this.getName() + data);
                     JSONObject object = JSON.parseObject(data);
                     entity = new TCityLocationEntity2();
                     if (object.getString("status").equals("0")) {
@@ -137,13 +144,15 @@ public class GeocodingTools extends Thread {
                             entity = null;
                         }
                     }
+                    map.put("status", object.getString("status"));
                 }
                 insr.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return entity;
+        map.put("entity", entity);
+        return map;
     }
 
     @Override
@@ -158,19 +167,19 @@ public class GeocodingTools extends Thread {
 
     public static void main(String[] args) throws Exception {
         //定时器执行在距离凌晨后
-        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-23 00:01:00");
-        long time = date.getTime() - System.currentTimeMillis();
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW", "USER_TSJB"};
-                for (String table : tables) {
-                    // 修改地址
-                    new GeocodingTools(table).start();
-                }
-                this.cancel();
-                timer.cancel();
-            }
-        }, time);
+//        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-23 00:01:00");
+//        long time = date.getTime() - System.currentTimeMillis();
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            public void run() {
+        String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW", "USER_TSJB"};
+        for (String table : tables) {
+            // 修改地址
+            new GeocodingTools(table).start();
+        }
+//                this.cancel();
+//                timer.cancel();
+//            }
+//        }, time);
     }
 }
