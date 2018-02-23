@@ -112,8 +112,7 @@ public class GeocodingTools extends Thread {
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
         }
-        String url = String.format("http://api.map.baidu.com/geocoder/v2/?ak=" + ak + "&output=json&address=%s",
-                address);
+        String url = String.format("http://api.map.baidu.com/geocoder/v2/?ak=" + ak + "&output=json&address=%s", address);
         URL myURL = null;
         URLConnection httpsConn;
         // 进行转码
