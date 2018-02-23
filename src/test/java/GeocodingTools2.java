@@ -19,21 +19,20 @@ import java.util.TimerTask;
 public class GeocodingTools2 {
     public static void main(String[] args) throws Exception {
         //定时器执行在距离凌晨后
-        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-23 00:01:00");
-        long time = date.getTime() - System.currentTimeMillis();
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                try {
+//        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-23 00:01:00");
+//        long time = date.getTime() - System.currentTimeMillis();
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            public void run() {
+//                try {
                     GeocodingTools2.distUpdate();
-                } catch (SQLException | IOException e) {
-                    e.printStackTrace();
-                }
-                this.cancel();
-                timer.cancel();
-            }
-        }, time);
-//        System.out.println(time/60/60/1000);
+//                } catch (SQLException | IOException e) {
+//                    e.printStackTrace();
+//                }
+//                this.cancel();
+//                timer.cancel();
+//            }
+//        }, time);
     }
 
     // 修改数据库用户档案表的LNG,LAT,DIST-CT属性
@@ -75,7 +74,10 @@ public class GeocodingTools2 {
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
         while (result.next()) {
-            TCityLocationEntity2 entity2 = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1) + "-" + result.getString(3));
+            String addr=result.getString(3);
+            if(!addr.contains(result.getString(1))) addr=result.getString(1)+addr;
+            if(!addr.contains(result.getString(2))) addr=result.getString(2)+addr;
+            TCityLocationEntity2 entity2 = getLatAndLngByAddress(addr);
             // 获得市中心的经纬度
             TCityLocationEntity2 centralcity = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1));
             if (entity2 == null) {
@@ -115,7 +117,8 @@ public class GeocodingTools2 {
     private static TCityLocationEntity2 getLatAndLngByAddress(String addr) {
         TCityLocationEntity2 entity = null;
         String address = "";
-        String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
+        //String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
+        String ak = "BcShrO8gVPAhutauLVVQYHdFdqmdIXfM";
         try {
             address = java.net.URLEncoder.encode(addr, "UTF-8");
         } catch (UnsupportedEncodingException e1) {
@@ -139,6 +142,7 @@ public class GeocodingTools2 {
                 BufferedReader br = new BufferedReader(insr);
                 String data;
                 if ((data = br.readLine()) != null) {
+                    System.out.println(data);
                     JSONObject object = JSON.parseObject(data);
                     entity = new TCityLocationEntity2();
                     if (object.getString("status").equals("0")) {
