@@ -129,9 +129,9 @@ public class GeocodingTools extends Thread {
                 BufferedReader br = new BufferedReader(insr);
                 String data;
                 if ((data = br.readLine()) != null) {
-                    System.out.println(this.getName() + data);
                     JSONObject object = JSON.parseObject(data);
                     entity = new TCityLocationEntity2();
+                    map.put("status", object.getString("status"));
                     if (object.getString("status").equals("0")) {
                         entity.setCode("1");
                         object = object.getJSONObject("result").getJSONObject("location");
@@ -143,7 +143,6 @@ public class GeocodingTools extends Thread {
                             entity = null;
                         }
                     }
-                    map.put("status", object.getString("status"));
                 }
                 insr.close();
             }
