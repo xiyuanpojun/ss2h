@@ -50,7 +50,6 @@ public class GeocodingTools extends Thread {
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
-        //znp,twz,lq
         String[] aks = {"xh2XppvAc5uB36HDZHKTOMnV3gSUULTb", "3zHanTbughwzhKX5ecVmDa6Ab8c9T7fP", "BcShrO8gVPAhutauLVVQYHdFdqmdIXfM"};
         int akindex = 0;
         while (result.next()) {
