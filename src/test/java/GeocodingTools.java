@@ -36,21 +36,22 @@ public class GeocodingTools extends Thread {
         String sql, sql2;
         switch (table) {
             case "USER_GZBX":
-                sql = "SELECT ORG,PROV,YDDZ FROM USER_GZBX WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
+                sql = "SELECT ORG,PROV,YDDZ FROM USER_GZBX WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0' OR DIST_CT = 0";
                 sql2 = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
                 break;
             case "USER_TSJB":
-                sql = "SELECT CITY,PROV,YJRDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
+                sql = "SELECT CITY,PROV,YJRDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0' OR DIST_CT = 0";
                 sql2 = "UPDATE USER_GZBX SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YJRDZ = ?";
                 break;
             default:
-                sql = "SELECT CITY,PROV,YDDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0'";
+                sql = "SELECT CITY,PROV,YDDZ FROM " + table + " WHERE ADDR_CODE IS NULL OR ADDR_CODE= '0' OR DIST_CT = 0";
                 sql2 = "UPDATE " + table + " SET ADDR_CODE = ? , LNG = ? , LAT = ? ,DIST_CT = ? WHERE YDDZ = ?";
                 break;
         }
         pre = con.prepareStatement(sql);
         result = pre.executeQuery();
-        String[] aks = {"xh2XppvAc5uB36HDZHKTOMnV3gSUULTb", "3zHanTbughwzhKX5ecVmDa6Ab8c9T7fP", "BcShrO8gVPAhutauLVVQYHdFdqmdIXfM"};
+        //znp,twz,lq,ywd
+        String[] aks = {"xh2XppvAc5uB36HDZHKTOMnV3gSUULTb", "3zHanTbughwzhKX5ecVmDa6Ab8c9T7fP", "BcShrO8gVPAhutauLVVQYHdFdqmdIXfM","cXvqMh90NDoHaYCCl4p3T5jIq7yv46cl"};
         int akindex = 0;
         while (result.next()) {
             String addr = result.getString(3);
@@ -63,11 +64,12 @@ public class GeocodingTools extends Thread {
             map2 = getLatAndLngByAddress(result.getString(2) + "-" + result.getString(1), aks[akindex]);
             if (map1.get("status").equals("302") || map2.get("status").equals("302")) {
                 akindex++;
+                System.out.println(this.getName() + "请求配额已用完 ak=" + aks[akindex - 1]);
                 if (akindex >= aks.length) {
                     result.close();
                     pre.close();
                     con.close();
-                    System.out.println(this.getName() + "请求配额已用完 ak=" + aks[akindex - 1]);
+                    System.out.println(this.getName() + "所有请求配额已用完");
                     return;
                 }
             }
@@ -78,6 +80,7 @@ public class GeocodingTools extends Thread {
             // 计算地址到市中心距离
             Double distance = MapUtil.getDistance(entity2.getLng(), entity2.getLat(), centralcity.getLng(),
                     centralcity.getLat());
+            if(distance==0)entity2.setCode("0");
             pre2 = con.prepareStatement(sql2);
             pre2.setString(1, entity2.getCode());
             pre2.setDouble(2, entity2.getLng());
