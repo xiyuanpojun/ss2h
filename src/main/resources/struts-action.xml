@@ -52,6 +52,12 @@
                 method="showSurveyorList">
             <result name="success">/WEB-INF/jsp/home/user/surveyor.jsp</result>
         </action>
+
+        <action name="gwUser" class="com.hill.gwyb.controller.GwUserController" method="execute"/>
+        <!--/user/showGwUserPage-->
+        <action name="showGwUserPage">
+            <result>/WEB-INF/jsp/home/user/impGwUser.jsp</result>
+        </action>
     </package>
 
     <!--专项配置操作-->
@@ -246,9 +252,9 @@
             </result>
         </action>
         <action name="orgpage" class="com.hill.gwyb.controller.OrgController" method="showorgpage">
-             <result name="success">
-              /WEB-INF/jsp/home/user/org.jsp
-             </result>
+            <result name="success">
+                /WEB-INF/jsp/home/user/org.jsp
+            </result>
         </action>
         <action name="sc_list_page" class="com.hill.gwyb.controller.SConfigController" method="showConfigList">
             <result name="success">/WEB-INF/jsp/home/user/scon.jsp</result>
