@@ -54,7 +54,7 @@ public class GwUserController extends ActionSupport {
             Iterator iter = fileItems.iterator();
             File file = null;
 //            filePath = this.getServletConfig().getServletContext().getRealPath("/");
-            filePath = WebContentHelper.getRootPath();
+            filePath = WebContentHelper.getRootPath() + "/";
             file = new File(filePath + fileDir);
 //			System.out.println(filePath);
             if (!file.exists()) {

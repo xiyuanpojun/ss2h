@@ -55,4 +55,8 @@
     <listener>
         <listener-class>com.hill.gwyb.common.SessionCounter</listener-class>
     </listener>
+    <!--spring内存监听-->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
 </web-app>
