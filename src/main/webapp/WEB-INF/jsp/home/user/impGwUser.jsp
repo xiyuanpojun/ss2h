@@ -5,7 +5,6 @@
     <meta http-equiv="Pragma" content="no-cache">
     <%@include file="/WEB-INF/jsp/common.jsp" %>
     <script src="${ctx}/support/js/checkFrame.js"></script>
-    <title>用户数据导入</title>
 </head>
 <body>
 <form class="layui-form" action="">

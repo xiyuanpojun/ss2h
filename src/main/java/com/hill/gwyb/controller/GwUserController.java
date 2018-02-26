@@ -3,23 +3,16 @@ package com.hill.gwyb.controller;
 import com.hill.gwyb.api.WebContentHelper;
 import com.hill.gwyb.service.impl.ReadExcelGw;
 import com.opensymphony.xwork2.ActionSupport;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
+import java.io.*;
 import java.util.ResourceBundle;
 
 public class GwUserController extends ActionSupport {
-    private static final long serialVersionUID = 1L;
     ResourceBundle resource = ResourceBundle.getBundle("db");
     private String fileDir = resource.getString("upload.dir");
     private String MaxSizeStr = resource.getString("MaxSize");
@@ -29,6 +22,12 @@ public class GwUserController extends ActionSupport {
     private HttpSession session;
     private HttpServletRequest request = ServletActionContext.getRequest();
     private HttpServletResponse response = ServletActionContext.getResponse();
+
+    private File file;//得到上传的文件
+    private String survyName;//参数二
+
+    private String fileContentType; //得到文件的类型
+    private String fileFileName; //得到文件的名称
 
     @Override
     public String execute() throws Exception {
@@ -47,40 +46,61 @@ public class GwUserController extends ActionSupport {
         String fileName = "";
         String filePath = "";
         try {
-            DiskFileItemFactory fileFactory = new DiskFileItemFactory();
-            fileFactory.setSizeThreshold(MaxSize);
-            ServletFileUpload fu = new ServletFileUpload(fileFactory);
-            List fileItems = fu.parseRequest(request);
-            Iterator iter = fileItems.iterator();
             File file = null;
-//            filePath = this.getServletConfig().getServletContext().getRealPath("/");
-            filePath = WebContentHelper.getRootPath() + "/";
+            filePath = WebContentHelper.getRootPath() + File.separator;
             file = new File(filePath + fileDir);
-//			System.out.println(filePath);
             if (!file.exists()) {
                 file.mkdirs();
             }
-
-            filePath = filePath + fileDir + "\\";
-            String survyName = "";//问卷
-            while (iter.hasNext()) {
-                FileItem item = (FileItem) iter.next();
-                if (!item.isFormField()) {
-                    fileName = item.getName();
-                    int index = fileName.lastIndexOf("\\");
-                    if (index != -1) {
-                        fileName = fileName.substring(index + 1);
-                    }
-                    item.write(new File(filePath + fileName));// fileDir+"/"+
-                } else {
-                    survyName = item.getString("utf-8");
-                }
+            fileName = getFileFileName();
+            BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(getFile()));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(file.getAbsolutePath() + "/" + fileName)));
+            byte[] bytes = new byte[1024];
+            int index;
+            while ((index = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, index);
             }
-            result = ReadExcelGw.main(new String[]{filePath + fileName, survyName});
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+            survyName = getSurvyName();
+            result = ReadExcelGw.main(new String[]{file.getAbsolutePath() + "/" + fileName, survyName});
         } catch (Exception e) {
             e.printStackTrace();
             result = e.getMessage();
         }
         return result;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public String getSurvyName() {
+        return survyName;
+    }
+
+    public void setSurvyName(String survyName) {
+        this.survyName = survyName;
+    }
+
+    public String getFileContentType() {
+        return fileContentType;
+    }
+
+    public void setFileContentType(String fileContentType) {
+        this.fileContentType = fileContentType;
+    }
+
+    public String getFileFileName() {
+        return fileFileName;
+    }
+
+    public void setFileFileName(String fileFileName) {
+        this.fileFileName = fileFileName;
     }
 }
