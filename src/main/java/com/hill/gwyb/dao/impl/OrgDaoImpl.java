@@ -28,7 +28,7 @@ public class OrgDaoImpl implements IOrgDao {
 	public List<TOrgEntity> findAll(int currentTotal, int current,String porgid) {
 		 Session session = sessionFactory.openSession();
 	       String hql;
-	       if(porgid=="all"||"all".equals(porgid)) {
+	       if("all".equals(porgid)) {
 	    	  hql="FROM TOrgEntity o  order by TO_NUMBER(o.orgid) asc"; 
 	       }
 	       else {
