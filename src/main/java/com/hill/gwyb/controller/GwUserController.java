@@ -64,7 +64,7 @@ public class GwUserController extends ActionSupport {
             outputStream.close();
             inputStream.close();
             survyName = getSurvyName();
-            result = ReadExcelGw.main(new String[]{file.getAbsolutePath() + "/" + fileName, survyName});
+            result = ReadExcelGw.main(new String[]{file.getAbsolutePath() + "/" + fileName, survyName}, request);
         } catch (Exception e) {
             e.printStackTrace();
             result = e.getMessage();

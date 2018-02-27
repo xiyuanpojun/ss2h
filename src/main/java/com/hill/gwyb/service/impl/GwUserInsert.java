@@ -1,7 +1,10 @@
 package com.hill.gwyb.service.impl;
 
-import com.hill.gwyb.api.GetConnection;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -9,13 +12,10 @@ import java.util.List;
 
 public class GwUserInsert {
     private Connection con = null;
+    private HttpServletRequest request;
 
-    public GwUserInsert() {
-        try {
-            con = new GetConnection().getCon();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
+    public GwUserInsert(HttpServletRequest request) {
+        this.request = request;
     }
 
     private String[] getSql(String zxName) {
@@ -66,13 +66,9 @@ public class GwUserInsert {
      */
     public void doInsert(List<List> li, String zxName) {
         try {
-            if (null == con) {
-                try {
-                    con = new GetConnection().getCon();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
+            SessionFactory sessionFactory = (SessionFactory) WebApplicationContextUtils.getWebApplicationContext(request.getServletContext()).getBean("sessionFactory");
+            Session session = sessionFactory.openSession();
+            session.doWork(connection -> con = connection);
             con.setAutoCommit(false);
             int len = li.size();
             String[] sql = getSql(zxName);
@@ -104,6 +100,7 @@ public class GwUserInsert {
             con.commit();
             pre.close();
             con.setAutoCommit(true);
+            session.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
