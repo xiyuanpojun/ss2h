@@ -27,7 +27,7 @@ public class RoleFuncController extends ActionSupport {
 	private String role;
 	 //分页
     private int currentTotal, current;
-	
+
 	public String getRole() {
 		return role;
 	}
@@ -65,10 +65,9 @@ public class RoleFuncController extends ActionSupport {
 	public String delete() throws Exception{
 		 dataMap=roleFuncService.delete(tRoleFuncEntity);
 		  return ActionSupport.SUCCESS;
-	} 
+	}
 	//根据据角色查找该角色当前没有的功能
 	public String findnofuncbyrole() throws Exception{
-		System.out.println("此时的角色为?????????????????????????????????????????"+role);
 		 dataMap=roleFuncService.findnofuncbyrole(role);
 		 return ActionSupport.SUCCESS;
 	}

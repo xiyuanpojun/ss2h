@@ -14,169 +14,173 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class IFuncServiceImpl implements IFuncService {
-@Autowired
-private IFuncDao funcdao;
-//查找功能列表
-	@Override
-	public Map<String, Object> findFuncAll(int currentTotal, int current) throws Exception  {
-		  Map<String, Object> map = new HashMap<>();
-	        int error = 0;
-	        if (currentTotal >= 0 && current >= 0) {
-	            try {
-	                List<TFuncEntity> funclist = funcdao.findFuncAll(currentTotal, current);
-	                map.put("funclist", funclist);
-	                //获取数据的条数
-	                map.put("total", funcdao.findFuncTotal());
-	                map.put("message", "");
-	            } catch (Exception e) {
-	                //获取数据异常
-	                error = 2;
-	                map.put("message", "获取数据异常");
-	                e.printStackTrace();
-	            }
-	        } else {
-	            //请求参数异常
-	            error = 1;
-	            map.put("message", "请求参数异常");
-	        }
-	        map.put("error", error);
-	        return map;
-	}
-	//查找单个功能的信息
-	@Override
-	public Map<String, Object> findOne(TFuncEntity funcentity) throws Exception {
-		  Map<String, Object> map = new HashMap<>();
-		int error=0;
-		
-		if(funcentity!=null&&funcentity.getfId()!=null&&!"".equals(funcentity.getfId())) {
-			try {
-			Map<String,Object> fm=new HashMap();
-			TFuncEntity func=funcdao.findOne(funcentity.getfId());
-			fm.put("fId",func.getfId());
-			fm.put("fName",func.getfName());
-			fm.put("fUrl",func.getfUrl());
-			map.put("func",fm);
-		}
-		catch(Exception e) {
-			//获取失败
-				error=2;
-				map.put("message","请求数据失败");
-			}
-		}
-		else {
-			 error=1;
-			 map.put("message", "请求参数异常");
-		}
-		map.put("error",error);
-		return map;
-	}
-	//更改单个功能的信息
-	@Override
-	public Map<String, Object> update(TFuncEntity funcentity) throws Exception{
-		 Map<String, Object> map = new HashMap<>();
-	        int error = 0;
+    @Autowired
+    private IFuncDao funcdao;
 
-	        if (funcentity != null&&funcentity.getfId()!=null&&funcentity.getfName()!=null&&funcentity.getfUrl()!=null&&!"".equals(funcentity.getfId())&&!"".equals(funcentity.getfName())&&!"".equals(funcentity.getfUrl())) {
-	            try {
-	                TFuncEntity result = funcdao.findOne(funcentity.getfId());
-	                if (result != null) {
-	                    result.setfName(funcentity.getfName());
-	                    result.setfUrl(funcentity.getfUrl());
-	                   
-	                    funcdao.funcUpdate(funcentity);
-	                    map.put("message", "修改成功");
-	                } else {
-	                    //修改失败
-	                    error = 3;
-	                    map.put("message", "修改失败");
-	                }
+    //查找功能列表
+    @Override
+    public Map<String, Object> findFuncAll(int currentTotal, int current) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        int error = 0;
+        if (currentTotal >= 0 && current >= 0) {
+            try {
+                List<TFuncEntity> funclist = funcdao.findFuncAll(currentTotal, current);
+                map.put("funclist", funclist);
+                //获取数据的条数
+                map.put("total", funcdao.findFuncTotal());
+                map.put("message", "");
+            } catch (Exception e) {
+                //获取数据异常
+                error = 2;
+                map.put("message", "获取数据异常");
+                e.printStackTrace();
+            }
+        } else {
+            //请求参数异常
+            error = 1;
+            map.put("message", "请求参数异常");
+        }
+        map.put("error", error);
+        return map;
+    }
 
-	            } catch (Exception e) {
-	                //修改失败
-	                error = 2;
-	                map.put("message", "修改失败");
-	                e.printStackTrace();
-	            }
+    //查找单个功能的信息
+    @Override
+    public Map<String, Object> findOne(TFuncEntity funcentity) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        int error = 0;
 
-	        } else {
-	            //非法操作
-	            error = 1;
-	            map.put("message", "非法操作");
-	        }
-	        map.put("error", error);
-	        return map;
-	}
-	//删除单个功能
-	@Override
-	public Map<String, Object> delete(TFuncEntity funcentity) throws Exception {
-		 Map<String, Object> map = new HashMap<>();
-	        int error = 0;
+        if (funcentity != null && funcentity.getfId() != null && !"".equals(funcentity.getfId())) {
+            try {
+                Map<String, Object> fm = new HashMap();
+                TFuncEntity func = funcdao.findOne(funcentity.getfId());
+                fm.put("fId", func.getfId());
+                fm.put("fName", func.getfName());
+                fm.put("fUrl", func.getfUrl());
+                map.put("func", fm);
+            } catch (Exception e) {
+                //获取失败
+                error = 2;
+                map.put("message", "请求数据失败");
+            }
+        } else {
+            error = 1;
+            map.put("message", "请求参数异常");
+        }
+        map.put("error", error);
+        return map;
+    }
 
-	        if (funcentity != null&&funcentity.getfId()!=null&&!"".equals(funcentity.getfId())) {
-	            try {
-	                TFuncEntity result = funcdao.findOne(funcentity.getfId());
-	                if (result != null) {
-	                    funcdao.delete(funcentity);
-	                    map.put("message", "删除成功");
-	                } else {
-	                    //修改失败
-	                    error = 3;
-	                    map.put("message", "删除失败");
-	                }
+    //更改单个功能的信息
+    @Override
+    public Map<String, Object> update(TFuncEntity funcentity) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        int error = 0;
 
-	            } catch (Exception e) {
-	                //修改失败
-	                error = 2;
-	                map.put("message", "数据异常");
-	                e.printStackTrace();
-	            }
+        if (funcentity != null && funcentity.getfId() != null && funcentity.getfName() != null && funcentity.getfUrl() != null && !"".equals(funcentity.getfId()) && !"".equals(funcentity.getfName()) && !"".equals(funcentity.getfUrl())) {
+            try {
+                TFuncEntity result = funcdao.findOne(funcentity.getfId());
+                if (result != null) {
+                    result.setfName(funcentity.getfName());
+                    result.setfUrl(funcentity.getfUrl());
 
-	        } else {
-	            //非法操作
-	            error = 1;
-	            map.put("message", "非法操作");
-	        }
-	        map.put("error", error);
-	        return map;
-	}
-	@Override
-	public Map<String, Object> add(TFuncEntity funcentity) throws Exception {
-		 Map<String, Object> map = new HashMap<>();
-	        int error = 0;
-	        if (funcentity != null&&funcentity.getfId()!=null&&funcentity.getfName()!=null&&funcentity.getfUrl()!=null) {
-	            try {
-	              boolean flag   = funcdao.find(funcentity);
-	                if (flag==false) {
-	                    funcdao.add(funcentity);
-	                    map.put("message", "添加成功");
-	                } else {
-	                    //添加失败
-	                    error = 3;
-	                    map.put("message", "该功能已经存在请重新添加");
-	                }
+                    funcdao.funcUpdate(funcentity);
+                    map.put("message", "修改成功");
+                } else {
+                    //修改失败
+                    error = 3;
+                    map.put("message", "修改失败");
+                }
 
-	            } catch (Exception e) {
-	                //添加失败
-	                error = 2;
-	                map.put("message", "添加失败");
-	                e.printStackTrace();
-	            }
+            } catch (Exception e) {
+                //修改失败
+                error = 2;
+                map.put("message", "修改失败");
+                e.printStackTrace();
+            }
 
-	        } else {
-	            //非法操作
-	            error = 1;
-	            map.put("message", "非法操作");
-	        }
-	        map.put("error", error);
-	        return map;
-	}
-	@Override
-	public Map<String, Object> checkfId(String fId) {
-		Map<String, Object> map = new HashMap<>();
-        if (fId!=null&&!"".equals(fId)) {
+        } else {
+            //非法操作
+            error = 1;
+            map.put("message", "非法操作");
+        }
+        map.put("error", error);
+        return map;
+    }
+
+    //删除单个功能
+    @Override
+    public Map<String, Object> delete(TFuncEntity funcentity) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        int error = 0;
+
+        if (funcentity != null && funcentity.getfId() != null && !"".equals(funcentity.getfId())) {
+            try {
+                TFuncEntity result = funcdao.findOne(funcentity.getfId());
+                if (result != null) {
+                    funcdao.delete(funcentity);
+                    map.put("message", "删除成功");
+                } else {
+                    //修改失败
+                    error = 3;
+                    map.put("message", "删除失败");
+                }
+
+            } catch (Exception e) {
+                //修改失败
+                error = 2;
+                map.put("message", "数据异常");
+                e.printStackTrace();
+            }
+
+        } else {
+            //非法操作
+            error = 1;
+            map.put("message", "非法操作");
+        }
+        map.put("error", error);
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> add(TFuncEntity funcentity) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        int error = 0;
+        if (funcentity != null && funcentity.getfId() != null && funcentity.getfName() != null && funcentity.getfUrl() != null) {
+            try {
+                boolean flag = funcdao.find(funcentity);
+                if (flag == false) {
+                    funcdao.add(funcentity);
+                    map.put("message", "添加成功");
+                } else {
+                    //添加失败
+                    error = 3;
+                    map.put("message", "该功能已经存在请重新添加");
+                }
+
+            } catch (Exception e) {
+                //添加失败
+                error = 2;
+                map.put("message", "添加失败");
+                e.printStackTrace();
+            }
+
+        } else {
+            //非法操作
+            error = 1;
+            map.put("message", "非法操作");
+        }
+        map.put("error", error);
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> checkfId(String fId) {
+        Map<String, Object> map = new HashMap<>();
+        if (fId != null && !"".equals(fId)) {
             try {
                 TFuncEntity result = funcdao.findOne(fId);
-                if (result!=null) {
+                if (result != null) {
                     map.put("message", "0");
                 } else {
                     //添加失败
@@ -185,7 +189,7 @@ private IFuncDao funcdao;
 
             } catch (Exception e) {
                 //添加失败
-               
+
                 map.put("message", "");
                 e.printStackTrace();
             }
@@ -194,9 +198,9 @@ private IFuncDao funcdao;
             //非法操作
             map.put("message", "非法操作");
         }
-       
+
         return map;
-	}
+    }
 
 
 }

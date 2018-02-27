@@ -83,8 +83,7 @@ public class FuncDaoImpl implements IFuncDao {
 	       else {
 	    	  flag=false;
 	       }
-	       System.out.println("此时 list的size大小为"+list.size());
-	       return flag;	
+	       return flag;
 	}
 
 }

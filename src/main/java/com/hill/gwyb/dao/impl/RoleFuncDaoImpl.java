@@ -28,7 +28,7 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
     public List<RoleFuncItemView> findAll(int currentTotal, int current, String role) throws Exception {
         Session session = sessionFactory.openSession();
         String hql = "";
-        if (role == "0") {
+        if (role.equals("0")) {
             //String hql="select r.roleid,r.orderNum,f.fId,f.fName from TRoleFuncEntity inner left jion  TFuncEntity f on r.funcId= f.fId";
             hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf ,TRoleEntity r ,TFuncEntity f  where rf.roleid = r.roleid and  rf.funcId = f.fId";
 
@@ -37,7 +37,7 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
 
         }
         Query query = session.createQuery(hql);
-        if (role != "0") {
+        if (!role.equals("0")) {
             query.setParameter(0, role);
         }
         query.setFirstResult(currentTotal * (current - 1));
@@ -53,7 +53,7 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
     public Integer findTotal(String role) throws Exception {
         Session session = sessionFactory.openSession();
         String hql = "";
-        if (role == "0") {
+        if (role.equals("0")) {
             //String hql="select r.roleid,r.orderNum,f.fId,f.fName from TRoleFuncEntity inner left jion  TFuncEntity f on r.funcId= f.fId";
             hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf ,TRoleEntity r ,TFuncEntity f  where rf.roleid = r.roleid and  rf.funcId = f.fId order by TO_NUMBER(rf.roleid) asc";
 
@@ -61,7 +61,7 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
             hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?  order by TO_NUMBER(rf.roleid) asc";
         }
         Query query = session.createQuery(hql);
-        if (role != "0") {
+        if (!role.equals("0")) {
             query.setParameter(0, role);
         }
         List<RoleFuncItemView> list = query.list();

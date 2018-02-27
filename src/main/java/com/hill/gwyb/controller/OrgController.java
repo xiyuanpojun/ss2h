@@ -16,102 +16,107 @@ import org.springframework.stereotype.Controller;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Controller
-public class OrgController extends ActionSupport{ 
-//自动装配
-@Autowired
-private IOrgService orgService;
-//json数据
-private Map<String,Object> dataMap;
-@Autowired
-private HttpServletResponse response;
-//获取请求中传过来的orgentity对象
-private TOrgEntity orgentity;
-public TOrgEntity getOrgentity() {
-	return orgentity;
-}
+public class OrgController extends ActionSupport {
+    //自动装配
+    @Autowired
+    private IOrgService orgService;
+    //json数据
+    private Map<String, Object> dataMap;
+    //获取请求中传过来的orgentity对象
+    private TOrgEntity orgentity;
 
-public void setOrgentity(TOrgEntity orgentity) {
-	this.orgentity = orgentity;
-}
-private String porgid;
-public String getPorgid() {
-	return porgid;
-}
+    public TOrgEntity getOrgentity() {
+        return orgentity;
+    }
 
-public void setPorgid(String porgid) {
-	this.porgid = porgid;
-}
-//用于检查新增机构是否的存在的id
-private String oid;
-//分页
-private int currentTotal, current;
+    public void setOrgentity(TOrgEntity orgentity) {
+        this.orgentity = orgentity;
+    }
 
-public String getOid() {
-	return oid;
-}
+    private String porgid;
 
-public void setOid(String oid) {
-	this.oid = oid;
-}
-public int getCurrentTotal() {
-    return currentTotal;
-}
+    public String getPorgid() {
+        return porgid;
+    }
 
-public void setCurrentTotal(int currentTotal) {
-    this.currentTotal = currentTotal;
-}
+    public void setPorgid(String porgid) {
+        this.porgid = porgid;
+    }
 
-public int getCurrent() {
-    return current;
-}
+    //用于检查新增机构是否的存在的id
+    private String oid;
+    //分页
+    private int currentTotal, current;
 
-public void setCurrent(int current) {
-    this.current = current;
-}
+    public String getOid() {
+        return oid;
+    }
 
-public Map<String, Object> getDataMap() {
-    return dataMap;
-}
+    public void setOid(String oid) {
+        this.oid = oid;
+    }
+
+    public int getCurrentTotal() {
+        return currentTotal;
+    }
+
+    public void setCurrentTotal(int currentTotal) {
+        this.currentTotal = currentTotal;
+    }
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(int current) {
+        this.current = current;
+    }
+
+    public Map<String, Object> getDataMap() {
+        return dataMap;
+    }
 
 
-public String findAll() throws Exception {
-	dataMap=orgService.findAll(currentTotal,current,porgid);
-	return ActionSupport.SUCCESS;
-}
-//显示 机构列表页面
-public String showorgpage() throws Exception {
-	dataMap=orgService.showporglist();
-	return ActionSupport.SUCCESS;
-}
+    public String findAll() throws Exception {
+        dataMap = orgService.findAll(currentTotal, current, porgid);
+        return ActionSupport.SUCCESS;
+    }
 
-//查询单个机构的信息
-public String findOne() throws Exception {
-	dataMap= orgService.findOne(orgentity);
-	return ActionSupport.SUCCESS;
-}
-//删除单个机构
-public String delete() throws Exception{
-	dataMap=orgService.delete(orgentity);
-	return ActionSupport.SUCCESS;
-}
-//添加机构
-public String add() throws Exception {
-	dataMap=orgService.add(orgentity);
-	return ActionSupport.SUCCESS;
-}
+    //显示 机构列表页面
+    public String showorgpage() throws Exception {
+        dataMap = orgService.showporglist();
+        return ActionSupport.SUCCESS;
+    }
 
-//根据id异步校验
-public String checkId() {
-	 dataMap=orgService.checkId(oid);
-	return ActionSupport.SUCCESS;
-}
-//获取上级机构列表数据 
-public String showporglist() throws Exception {
-	
-	dataMap=orgService.showporglist();
-	System.out.println("进来了llllllllllllllllllll拍"+dataMap.toString());
-	return ActionSupport.SUCCESS;
-}
+    //查询单个机构的信息
+    public String findOne() throws Exception {
+        dataMap = orgService.findOne(orgentity);
+        return ActionSupport.SUCCESS;
+    }
+
+    //删除单个机构
+    public String delete() throws Exception {
+        dataMap = orgService.delete(orgentity);
+        return ActionSupport.SUCCESS;
+    }
+
+    //添加机构
+    public String add() throws Exception {
+        dataMap = orgService.add(orgentity);
+        return ActionSupport.SUCCESS;
+    }
+
+    //根据id异步校验
+    public String checkId() {
+        dataMap = orgService.checkId(oid);
+        return ActionSupport.SUCCESS;
+    }
+
+    //获取上级机构列表数据
+    public String showporglist() throws Exception {
+        dataMap = orgService.showporglist();
+        return ActionSupport.SUCCESS;
+    }
 
 
 }
