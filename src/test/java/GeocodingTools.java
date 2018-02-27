@@ -12,8 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class GeocodingTools extends Thread {
     private String table;
@@ -169,20 +169,25 @@ public class GeocodingTools extends Thread {
     }
 
     public static void main(String[] args) throws Exception {
-        //定时器执行在距离凌晨后
-//        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-23 00:01:00");
-//        long time = date.getTime() - System.currentTimeMillis();
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            public void run() {
         String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW", "USER_TSJB"};
         for (String table : tables) {
             // 修改地址
             new GeocodingTools(table).start();
         }
-//                this.cancel();
-//                timer.cancel();
-//            }
-//        }, time);
+//        //定时器执行在距离凌晨后
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2018-02-27 00:03:00");
+        long time = date.getTime() - System.currentTimeMillis();
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                String[] tables = {"USER_CBJF", "USER_GDZL", "USER_GZBX", "USER_YKBZ_DY", "USER_YKBZ_GY", "USER_YYTFW", "USER_TSJB"};
+                for (String table : tables) {
+                    // 修改地址
+                    new GeocodingTools(table).start();
+                }
+                this.cancel();
+                timer.cancel();
+            }
+        }, time);
     }
 }
