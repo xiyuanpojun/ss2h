@@ -59,7 +59,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">用户账号</label>
                             <div class="layui-input-block">
-                                <input type="text" name="userEntity.userid" required lay-verify="required"
+                                <input type="text" name="userEntity.userid" required lay-verify="required|check_ts"
                                        placeholder="请输入账号"
                                        autocomplete="off" class="layui-input">
                             </div>
@@ -67,7 +67,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">用户姓名</label>
                             <div class="layui-input-block">
-                                <input type="text" name="userEntity.uname" required lay-verify="required"
+                                <input type="text" name="userEntity.uname" required lay-verify="required|check_ts"
                                        placeholder="请输入姓名"
                                        autocomplete="off" class="layui-input">
                             </div>
@@ -75,7 +75,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">用户密码</label>
                             <div class="layui-input-inline">
-                                <input type="password" name="userEntity.upwd" required lay-verify="required"
+                                <input type="password" name="userEntity.upwd" required lay-verify="required|check_ts"
                                        placeholder="请输入密码" autocomplete="off" value="111111" class="layui-input">
                             </div>
                             <div class="layui-form-mid layui-word-aux">默认{111111}</div>
