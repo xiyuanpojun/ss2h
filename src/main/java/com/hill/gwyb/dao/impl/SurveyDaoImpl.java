@@ -106,12 +106,16 @@ public class SurveyDaoImpl implements ISurveyDao {
                 .addScalar("COL", StandardBasicTypes.STRING);
         List colObj = query.list();
         StringBuilder col = new StringBuilder();
+        String orderCol="YDDZ";
+        if(tab.equals("USER_TSJB")){
+            orderCol="YJRDZ";
+        }
         for (Object o : colObj) {
             col.append((String) o);
             col.append(",");
         }
         sql = "SELECT ROWVAL," + col.toString() + "RANDOM_VAL FROM ("
-                + "SELECT A.ROWID ROWVAL," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.random) RANDOM_VAL FROM " + tab + " A,T_ORG B "
+                + "SELECT A.ROWID ROWVAL," + col.toString() + "ROW_NUMBER() OVER(ORDER BY "+orderCol+") RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=? "
                 + "AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                 + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
@@ -147,13 +151,17 @@ public class SurveyDaoImpl implements ISurveyDao {
                 .addScalar("COL", StandardBasicTypes.STRING);
         List colObj = query.list();
         StringBuilder col = new StringBuilder();
+        String orderCol="YDDZ";
+        if(tab.equals("USER_TSJB")){
+            orderCol="YJRDZ";
+        }
         for (Object o : colObj) {
             col.append((String) o);
             col.append(",");
         }
         sql = "SELECT ROWVAL,SF_DIS,TOTAL," + col + "ROWXH FROM(SELECT A.ROWID ROWVAL,CASE WHEN F.DISTRI IS NULL OR F.DISTRI='2' THEN '未分配' ELSE (SELECT S_USER_NAME FROM T_SURVEY_USER WHERE S_USER_ID=F.DIS_RM) END SF_DIS,count(1) over() total," + col + "ROWNUM rowxh FROM " + tab + " A,T_SURVEY_INVITE F "
                 + "WHERE F.TAB=? AND F.USERID=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1 " + tick
-                + ") T WHERE T.ROWXH>" + start + " AND T.ROWXH <=" + end;
+                + " ORDER BY "+orderCol+") T WHERE T.ROWXH>" + start + " AND T.ROWXH <=" + end;
         SQLQuery sq = session.createSQLQuery(sql)
                 .setParameter(0, tab)
                 .setParameter(1, userid)

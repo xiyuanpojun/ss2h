@@ -128,12 +128,22 @@ layui.use(['table','form','laydate'], function(){
                     nowOptions={
                         elem: '#tab1'
                         ,id:'surveyList'
-                        ,height:'full-260'
+                        ,height:'full-360'
                         //,size:'sm'
                         ,url: ctx + "/survey/survey_getData"
                         ,page: false
                         ,done:function(res, curr, count){
-                            $('#tab-total').text(table.cache.surveyList.length);
+                            var allData=table.cache.surveyList;
+                            $('#tab-total').text(allData.length);
+                            var dzArray=new Array()
+                            $.each(allData, function(p1, p2){
+                                if(typeof(p2.YJRDZ)!="undefined"){
+                                    dzArray[p1]=p2.YJRDZ;
+                                }else if(typeof(p2.YDDZ)!="undefined"){
+                                    dzArray[p1]=p2.YDDZ;
+                                }
+                            });
+                            bdGEO(dzArray);
                         }
                         ,where:{
                             tab:sury_type,
@@ -160,4 +170,45 @@ layui.use(['table','form','laydate'], function(){
         }
         return false;
     });
+
+// 百度地图API功能
+    var map = new BMap.Map("map");
+//以当前城市为中心打开地图
+    map.centerAndZoom("北京",12);
+    map.enableScrollWheelZoom();
+    var index = 0;
+// 创建地址解析器实例
+    var myGeo = new BMap.Geocoder();
+    function bdGEO(adds){
+        for(var i=0;i<adds.length;i++){
+            geocodeSearch(adds[i],i+1);
+        }
+    }
+    function geocodeSearch(add,idx){
+        myGeo.getPoint(add, function(point){
+            if (point) {
+                //document.getElementById("result").innerHTML +=  idx+"、" +add +"</br>";
+                var address = new BMap.Point(point.lng, point.lat);
+                if(idx==1){
+                    map.panTo(new BMap.Point(point.lng, point.lat));
+                }
+                addMarker(address,new BMap.Label(idx),add);
+            }
+        }, "全国");
+    }
+// 编写自定义函数,创建标注
+    function addMarker(point,label,addr){
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        marker.setLabel(label);
+        var opts = {
+            width : 150,     // 信息窗口宽度
+            height: 60,     // 信息窗口高度
+            title : "详细信息"
+        }
+        var infoWindow = new BMap.InfoWindow("地址："+addr, opts);  // 创建信息窗口对象
+        marker.addEventListener("click", function(){
+            map.openInfoWindow(infoWindow,point); //开启信息窗口
+        });
+    }
 });
