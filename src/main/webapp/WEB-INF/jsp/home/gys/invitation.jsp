@@ -2,35 +2,54 @@
 <html>
 <head>
     <%@include file="/WEB-INF/jsp/common.jsp" %>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=cXvqMh90NDoHaYCCl4p3T5jIq7yv46cl"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=3.0&ak=cXvqMh90NDoHaYCCl4p3T5jIq7yv46cl"></script>
     <script src="${ctx}/support/js/gys/invitation.js"></script>
 
 </head>
 <body>
 <form class="layui-form" action="">
-        调查类型:
-        <div class="layui-inline">
-            <select name="stype" id="stype">
-            </select>
-        </div>
-        地市:
-        <div class="layui-inline">
-            <select name="city" id="city">
-                <option value=""></option>
-            </select>
-        </div>
-        客户类型:
-        <div class="layui-inline">
-            <select name="custType" id="custType">
-                <option value=""></option>
-            </select>
-        </div>
-        <button class="layui-btn" lay-submit lay-filter="searchForm">搜索</button>
-        共查询出样本信息<label id="tab-total">0</label>条
+    调查类型:
+    <div class="layui-inline">
+        <select name="stype" id="stype">
+        </select>
     </div>
+    地市:
+    <div class="layui-inline">
+        <select name="city" id="city">
+            <option value=""></option>
+        </select>
+    </div>
+    客户类型:
+    <div class="layui-inline">
+        <select name="custType" id="custType">
+            <option value=""></option>
+        </select>
+    </div>
+
+    <br/>
+    <br/>
+    地址搜索:
+    <div class="layui-inline">
+        <input name="address" class="layui-input" style="width: 438px;" type="text" placeholder="请输入地址搜索"
+               autocomplete="off"
+               lay-verify="title">
+    </div>
+    距离范围:
+    <div class="layui-inline">
+        <select name="dist">
+            <option value="1">1公里</option>
+            <option value="2">2公里</option>
+            <option value="3">3公里</option>
+            <option value="4">4公里</option>
+            <option value="5">5公里</option>
+        </select>
+    </div>
+    <button class="layui-btn" lay-submit lay-filter="searchForm">搜索</button>
+    共查询出样本信息<label id="tab-total">0</label>条
 </form>
 <div class="box" style="margin-top: 0px;">
-<table id="tab1" class="layui-table" lay-filter="surveyList" style="margin-top: 0px;"></table>
+    <table id="tab1" class="layui-table" lay-filter="surveyList" style="margin-top: 0px;"></table>
 </div>
 <fieldset class="layui-elem-field layui-field-title" style="margin-bottom: 0px;">
     <legend>提交预约结果</legend>
@@ -60,7 +79,7 @@
             </div>
         </form>
     </div>
-    <div class="layui-col-md9" >
+    <div class="layui-col-md9">
         <div id="map" style="width:100%;height:250px"></div>
     </div>
 

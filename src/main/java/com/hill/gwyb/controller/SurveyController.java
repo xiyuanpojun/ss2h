@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 public class SurveyController extends ActionSupport {
 
-    public SurveyController(){
+    public SurveyController() {
         response.setCharacterEncoding("utf-8");
     }
 
@@ -36,6 +36,9 @@ public class SurveyController extends ActionSupport {
     private String limit;
     private String city;
     private String custType;
+
+    private String address;
+    private String dist;
 
     public String getTab() {
         return tab;
@@ -107,6 +110,22 @@ public class SurveyController extends ActionSupport {
 
     public void setCustType(String custType) {
         this.custType = custType;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDist() {
+        return dist;
+    }
+
+    public void setDist(String dist) {
+        this.dist = dist;
     }
 
     public String getCity() throws IOException, SQLException {
