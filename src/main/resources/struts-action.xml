@@ -260,5 +260,4 @@
             <result name="success">/WEB-INF/jsp/home/user/scon.jsp</result>
         </action>
     </package>
-
 </struts>

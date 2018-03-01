@@ -1,5 +1,8 @@
 package com.hill.gwyb.dao.impl;
 
+import com.hill.gwyb.api.maputil.GeocodingTools2;
+import com.hill.gwyb.api.maputil.MapUtil;
+import com.hill.gwyb.api.maputil.TCityLocationEntity2;
 import com.hill.gwyb.dao.ISurveyDao;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -7,13 +10,16 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SurveyDaoImpl implements ISurveyDao {
@@ -97,7 +103,23 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"dataList\":" + json.toJSONString() + "}";
     }
 
-    public String getSurveyData(String tab, String orgid, String tick) throws SQLException {
+    public String getSurveyData(String tab, String orgid, String tick, String city, String address, int dist) throws SQLException {
+        //获取省份名称
+        String orgname = getOrgname(orgid);
+        //获取城市名称
+        String cityname = getOrgname(city);
+        //声明ak
+        String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
+        if (!address.contains(cityname)) address = cityname + address;
+        if (!address.contains(orgname)) address = orgname + address;
+        System.out.println(address);
+        Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
+        TCityLocationEntity2 cityentity = (TCityLocationEntity2) map1.get("entity");
+        System.out.println("经度"+cityentity.getLng()+"纬度"+cityentity.getLat());
+        double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
+        for (int i = 0; i < locaion.length; i++) {
+            System.out.println("获取到四个数据为"+locaion[i]);
+        }
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
         String sql = "SELECT T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
@@ -116,22 +138,40 @@ public class SurveyDaoImpl implements ISurveyDao {
         }
         sql = "SELECT ROWVAL," + col.toString() + "RANDOM_VAL FROM ("
                 + "SELECT A.ROWID ROWVAL," + col.toString() + "ROW_NUMBER() OVER(ORDER BY " + orderCol + ") RANDOM_VAL FROM " + tab + " A,T_ORG B "
-                + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=? "
-                + "AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
+                + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                + "AND LNG BETWEEN ? AND ? "
+                + "AND LAT BETWEEN ? AND ?"
                 + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
         SQLQuery sq = session.createSQLQuery(sql)
+//                .setParameter(0, orgid)
+//                .setParameter(1, tab)
+//                .setParameter(2, tab)
                 .setParameter(0, orgid)
-                .setParameter(1, tab)
-                .setParameter(2, tab)
+                //minLat, minLng, maxLat, maxLng;
+                .setParameter(1, locaion[1])
+                .setParameter(2, locaion[3])
+                .setParameter(3, locaion[0])
+                .setParameter(4, locaion[2])
+                .setParameter(5, tab)
+                .setParameter(6, tab)
                 .addScalar("ROWVAL", StandardBasicTypes.STRING);
+        for (int i = 0; i < locaion.length ; i++) {
+            System.out.println(locaion[i]);
+        }
         for (Object o : colObj) {
             sq.addScalar((String) o, StandardBasicTypes.STRING);
         }
+
         sq.addScalar("RANDOM_VAL", StandardBasicTypes.INTEGER);
         int total = 100;
+        int k = 0;
         for (Object o : sq.list()) {
+            k++;
             JSONObject jo = new JSONObject();
             Object[] objects = (Object[]) o;
+            //计算获取的地址与数据库地址的距离
+            //  Double aadistance=getDistance((Double) objects[0],(Double) objects[1]);
             jo.put("ROWVAL", (String) objects[0]);
             for (int i = 0; i < colObj.size(); i++) {
                 jo.put((String) colObj.get(i), (String) objects[i + 1]);
@@ -195,7 +235,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         String sql = "INSERT INTO T_SURVEY_INVITE(TAB, ROWVAL, USERID, IN_FLAG, FAULT_CODE) VALUES(?,?,?,?,?)";
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createSQLQuery(sql);
+        NativeQuery  query = session.createSQLQuery(sql);
         for (int i = 0; i < rw.length; i++) {
             if ("".equals(rw[i])) {
                 break;
@@ -216,7 +256,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         String sql = "UPDATE T_SURVEY_INVITE SET DISTRI=?,DIS_RM=? WHERE TAB=? AND ROWVAL=?";
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createSQLQuery(sql);
+        NativeQuery query = session.createSQLQuery(sql);
         for (int i = 0; i < rw.length; i++) {
             if ("".equals(rw[i])) {
                 break;
@@ -248,5 +288,44 @@ public class SurveyDaoImpl implements ISurveyDao {
         }
         session.close();
         return "{\"dataList\":" + json.toJSONString() + "}";
+    }
+
+    @Override
+    public String getOrgname(String orgid) {
+        String orgname = "";
+        String sql = "SELECT ORGNAME FROM T_ORG  O WHERE O.ORGID = ?";
+        Session session = sessionFactory.openSession();
+        Query query = session.createSQLQuery(sql)
+                .setParameter(0, orgid)
+                .addScalar("ORGNAME", StandardBasicTypes.STRING);
+        JSONArray json = new JSONArray();
+        for (Object o : query.list()) {
+            orgname = o.toString();
+        }
+        session.close();
+        return orgname;
+    }
+
+    public Map<String, Object> getDistance(String city, String addr) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Double distance = null;
+        String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
+        Map<String, Object> map1;
+        Map<String, Object> map2;
+        map1 = GeocodingTools2.getLatAndLngByAddress(city, ak);
+        map2 = GeocodingTools2.getLatAndLngByAddress(addr, ak);
+        TCityLocationEntity2 cityentity = (TCityLocationEntity2) map1.get("entity");
+        TCityLocationEntity2 addrentity = (TCityLocationEntity2) map2.get("entity");
+        if (cityentity.getCode().equals("0") || addrentity.getCode().equals("0")) {
+            System.out.println("获取地址坐标失败请重新输入");
+        } else if (map1.get("status").equals("302") || map2.get("status").equals("302")) {
+            System.out.println("请求配额已用完");
+        } else {
+            distance = MapUtil.getDistance(addrentity.getLng(), addrentity.getLat(), cityentity.getLng(), cityentity.getLat());
+        }
+//        System.out.println("此次距离"+addrentity.getLng()+addrentity.getLat()+"-"+cityentity.getLng()+cityentity.getLat()+distance);
+        map.put("entity", addrentity);
+        map.put("distance", distance);
+        return map;
     }
 }

@@ -31,18 +31,18 @@
     <br/>
     地址搜索:
     <div class="layui-inline">
-        <input name="address" class="layui-input" style="width: 438px;" type="text" placeholder="请输入地址搜索"
+        <input value="北京朝阳" name="address" class="layui-input" style="width: 438px;" type="text" placeholder="请输入地址搜索"
                autocomplete="off"
                lay-verify="title">
     </div>
     距离范围:
     <div class="layui-inline">
         <select name="dist">
-            <option value="1">1公里</option>
-            <option value="2">2公里</option>
-            <option value="3">3公里</option>
-            <option value="4">4公里</option>
-            <option value="5">5公里</option>
+            <option value="1000">1公里</option>
+            <option value="2000">2公里</option>
+            <option value="3000">3公里</option>
+            <option value="4000">4公里</option>
+            <option value="5000">5公里</option>
         </select>
     </div>
     <button class="layui-btn" lay-submit lay-filter="searchForm">搜索</button>

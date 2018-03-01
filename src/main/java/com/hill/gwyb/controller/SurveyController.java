@@ -1,5 +1,8 @@
 package com.hill.gwyb.controller;
 
+import com.hill.gwyb.api.maputil.GeocodingTools2;
+import com.hill.gwyb.api.maputil.MapUtil;
+import com.hill.gwyb.api.maputil.TCityLocationEntity2;
 import com.hill.gwyb.dao.ISurveyDao;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.ServletActionContext;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class SurveyController extends ActionSupport {
 
@@ -38,7 +42,7 @@ public class SurveyController extends ActionSupport {
     private String custType;
 
     private String address;
-    private String dist;
+    private int dist;
 
     public String getTab() {
         return tab;
@@ -120,11 +124,11 @@ public class SurveyController extends ActionSupport {
         this.address = address;
     }
 
-    public String getDist() {
+    public int getDist() {
         return dist;
     }
 
-    public void setDist(String dist) {
+    public void setDist(int dist) {
         this.dist = dist;
     }
 
@@ -180,7 +184,9 @@ public class SurveyController extends ActionSupport {
         if (!"".equals(custType) && null != custType) {
             sql.append(" AND EXISTS (SELECT 1 FROM T_P_CODE P WHERE P.PID='" + custType + "' AND A.YDLB LIKE '%'||P.PNAME||'%') ");
         }
-        pw.write(surveyDao.getSurveyData(tab, orgid, sql.toString()));
+
+
+        pw.write( surveyDao.getSurveyData(tab, orgid, sql.toString(),city,address,dist));
         pw.close();
         return null;
     }
@@ -220,4 +226,5 @@ public class SurveyController extends ActionSupport {
         pw.close();
         return null;
     }
+
 }
