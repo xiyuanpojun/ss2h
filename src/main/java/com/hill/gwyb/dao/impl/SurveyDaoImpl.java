@@ -109,18 +109,22 @@ public class SurveyDaoImpl implements ISurveyDao {
         //获取城市名称
         String cityname = getOrgname(city);
         System.out.println("省份：" + orgname + "城市：" + cityname + "搜索地址：" + address + "搜索半径：" + dist);
-        //声明ak
-        String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
-        if (!address.contains(cityname)) address = cityname + address;
-        if (!address.contains(orgname)) address = orgname + address;
+        String arsql="";
+        if(!"".equals(address)){
+            //声明ak
+            String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
+            if (!address.contains(cityname)) address = cityname + address;
+            if (!address.contains(orgname)) address = orgname + address;
 
-        Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
-        TCityLocationEntity2 cityentity = (TCityLocationEntity2) map1.get("entity");
-        double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
-
-        System.out.println("拼接后搜索地址：" + address);
-        //minLat, minLng, maxLat, maxLng;
-        System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
+            Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
+            TCityLocationEntity2 cityentity = (TCityLocationEntity2) map1.get("entity");
+            double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
+            System.out.println("拼接后搜索地址：" + address);
+            //minLat, minLng, maxLat, maxLng;
+            System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
+            arsql=   " AND LNG BETWEEN "+locaion[1]+" AND "+locaion[3]
+                    + " AND LAT BETWEEN "+locaion[0]+" AND "+locaion[2];
+        }
 
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
@@ -142,17 +146,13 @@ public class SurveyDaoImpl implements ISurveyDao {
                 + "SELECT A.ROWID ROWVAL," + col.toString() + "ROW_NUMBER() OVER(ORDER BY " + orderCol + ") RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                 + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                + " AND LNG BETWEEN "+locaion[1]+" AND "+locaion[3]
-                + " AND LAT BETWEEN "+locaion[0]+" AND "+locaion[2]
+                +arsql
                 + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
         SQLQuery sq = session.createSQLQuery(sql)
                 .setParameter(0, orgid)
                 .setParameter(1, tab)
                 .setParameter(2, tab)
                 .addScalar("ROWVAL", StandardBasicTypes.STRING);
-        for (int i = 0; i < locaion.length; i++) {
-            System.out.println(locaion[i]);
-        }
         for (Object o : colObj) {
             sq.addScalar((String) o, StandardBasicTypes.STRING);
         }
