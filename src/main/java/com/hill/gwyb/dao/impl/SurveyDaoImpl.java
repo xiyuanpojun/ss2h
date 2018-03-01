@@ -109,21 +109,24 @@ public class SurveyDaoImpl implements ISurveyDao {
         //获取城市名称
         String cityname = getOrgname(city);
         System.out.println("省份：" + orgname + "城市：" + cityname + "搜索地址：" + address + "搜索半径：" + dist);
-        String arsql="";
-        if(!"".equals(address)){
+        String arsql = "";
+        boolean flag = false;
+        TCityLocationEntity2 cityentity = new TCityLocationEntity2();
+        if (!"".equals(address)) {
+            flag = true;
             //声明ak
             String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
             if (!address.contains(cityname)) address = cityname + address;
             if (!address.contains(orgname)) address = orgname + address;
 
             Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
-            TCityLocationEntity2 cityentity = (TCityLocationEntity2) map1.get("entity");
+            cityentity = (TCityLocationEntity2) map1.get("entity");
             double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
             System.out.println("拼接后搜索地址：" + address);
             //minLat, minLng, maxLat, maxLng;
             System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
-            arsql=   " AND LNG BETWEEN "+locaion[1]+" AND "+locaion[3]
-                    + " AND LAT BETWEEN "+locaion[0]+" AND "+locaion[2];
+            arsql = " AND LNG BETWEEN " + locaion[1] + " AND " + locaion[3]
+                    + " AND LAT BETWEEN " + locaion[0] + " AND " + locaion[2];
         }
 
         JSONArray json = new JSONArray();
@@ -142,17 +145,19 @@ public class SurveyDaoImpl implements ISurveyDao {
             col.append((String) o);
             col.append(",");
         }
-        sql = "SELECT ROWVAL," + col.toString() + "RANDOM_VAL FROM ("
-                + "SELECT A.ROWID ROWVAL," + col.toString() + "ROW_NUMBER() OVER(ORDER BY " + orderCol + ") RANDOM_VAL FROM " + tab + " A,T_ORG B "
+        sql = "SELECT ROWVAL,LNG,LAT," + col.toString() + "RANDOM_VAL FROM ("
+                + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY " + orderCol + ") RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                 + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                +arsql
+                + arsql
                 + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
         SQLQuery sq = session.createSQLQuery(sql)
                 .setParameter(0, orgid)
                 .setParameter(1, tab)
                 .setParameter(2, tab)
-                .addScalar("ROWVAL", StandardBasicTypes.STRING);
+                .addScalar("ROWVAL", StandardBasicTypes.STRING)
+                .addScalar("LNG", StandardBasicTypes.DOUBLE)
+                .addScalar("LAT", StandardBasicTypes.DOUBLE);
         for (Object o : colObj) {
             sq.addScalar((String) o, StandardBasicTypes.STRING);
         }
@@ -167,10 +172,26 @@ public class SurveyDaoImpl implements ISurveyDao {
             //计算获取的地址与数据库地址的距离
             //  Double aadistance=getDistance((Double) objects[0],(Double) objects[1]);
             jo.put("ROWVAL", (String) objects[0]);
-            for (int i = 0; i < colObj.size(); i++) {
-                jo.put((String) colObj.get(i), (String) objects[i + 1]);
+            Double lng = (Double) objects[1];
+            Double lat = (Double) objects[2];
+            System.out.println("flag="+flag);
+            if (flag) {
+                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
+                System.out.println("距离为："+aadistance);
+                if (aadistance <= dist) {
+                    for (int i = 0; i < colObj.size(); i++) {
+                        jo.put((String) colObj.get(i), (String) objects[i + 3]);
+                    }
+                    json.add(jo);
+                }
+            } else {
+
+                for (int i = 0; i < colObj.size(); i++) {
+                    System.out.println((String) colObj.get(i));
+                    System.out.println((String) objects[i + 3]);
+                    jo.put((String) colObj.get(i), (String) objects[i + 3]);
+                }
             }
-            json.add(jo);
         }
         session.close();
         return "{\"code\":0,\"msg\":\"\",\"count\":" + total + ",\"data\":" + json.toJSONString() + "}";
