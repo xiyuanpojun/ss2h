@@ -146,15 +146,7 @@ public class SurveyDaoImpl implements ISurveyDao {
                 + " AND LAT BETWEEN "+locaion[0]+" AND "+locaion[2]
                 + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
         SQLQuery sq = session.createSQLQuery(sql)
-//                .setParameter(0, orgid)
-//                .setParameter(1, tab)
-//                .setParameter(2, tab)
                 .setParameter(0, orgid)
-                //minLat, minLng, maxLat, maxLng;
-//                .setParameter(1, locaion[1])
-//                .setParameter(2, locaion[3])
-//                .setParameter(3, locaion[0])
-//                .setParameter(4, locaion[2])
                 .setParameter(1, tab)
                 .setParameter(2, tab)
                 .addScalar("ROWVAL", StandardBasicTypes.STRING);
