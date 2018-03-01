@@ -56,10 +56,14 @@ layui.use(['table','form','laydate'], function(){
             nowOptions={
                 elem: '#tab1'
                 ,id:'surveyList'
+                , height: 'full-410'
                 ,url: ctx + "/survey/survey_getInvitData"
                 ,page: true //开启分页
                 ,where:{
                     tab:sury_type
+                }
+                , done: function (res, curr, count) {
+                    showAddressMap();
                 }
                 ,cols: [eval('(' + col + ')')]
             };
@@ -67,6 +71,22 @@ layui.use(['table','form','laydate'], function(){
         });
         layer.closeAll('loading');
     });
+    function showAddressMap(){
+        var allData = table.cache.surveyList;
+        var dzArray = new Array()
+        $.each(allData, function (p1, p2) {
+            var dzObj=new Object();
+            dzObj.lat=p2.LAT;
+            dzObj.lng=p2.LNG;
+            if (typeof(p2.YJRDZ) != "undefined") {
+                dzObj.yddz = p2.YJRDZ;
+            } else if (typeof(p2.YDDZ) != "undefined") {
+                dzObj.yddz = p2.YDDZ;
+            }
+            dzArray[p1]=dzObj;
+        });
+        bdGEO(dzArray);
+    }
     $('.box').on('click','.layui-table-body tr',function(e){
         var evtTarget = e.target || e.srcElement;
         if (!$(evtTarget).is('i')) {
@@ -149,6 +169,9 @@ layui.use(['table','form','laydate'], function(){
                         tab:sury_type,
                         city:city,
                         custType:custType
+                    },
+                    done: function (res, curr, count) {
+                        showAddressMap();
                     }
                     ,cols: [eval('(' + col + ')')]
                 };
@@ -160,6 +183,9 @@ layui.use(['table','form','laydate'], function(){
                 ,page: {
                     curr: 1 //重新从第 1 页开始
                 }
+                , done: function (res, curr, count) {
+                    showAddressMap();
+                }
                 ,where: {
                     tab:sury_type,
                     city:city,
@@ -169,4 +195,43 @@ layui.use(['table','form','laydate'], function(){
         }
         return false;
     });
+
+// 百度地图API功能
+    var map = new BMap.Map("map");
+//以当前城市为中心打开地图
+    map.centerAndZoom("北京", 12);
+    map.enableScrollWheelZoom();
+    var index = 0;
+// 创建地址解析器实例
+    var myGeo = new BMap.Geocoder();
+
+    function bdGEO(adds) {
+        for (var i = 0; i < adds.length; i++) {
+            geocodeSearch(adds[i], i + 1);
+        }
+    }
+
+    function geocodeSearch(addObj, idx) {
+        var address = new BMap.Point(addObj.lng, addObj.lat);
+        if (idx == 1) {
+            map.panTo(new BMap.Point(addObj.lng, addObj.lat));
+        }
+        addMarker(address, new BMap.Label(idx), addObj.yddz);
+    }
+
+// 编写自定义函数,创建标注
+    function addMarker(point, label, addr) {
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        marker.setLabel(label);
+        var opts = {
+            width: 150,     // 信息窗口宽度
+            height: 60,     // 信息窗口高度
+            title: "详细信息"
+        }
+        var infoWindow = new BMap.InfoWindow("地址：" + addr, opts);  // 创建信息窗口对象
+        marker.addEventListener("click", function () {
+            map.openInfoWindow(infoWindow, point); //开启信息窗口
+        });
+    }
 });

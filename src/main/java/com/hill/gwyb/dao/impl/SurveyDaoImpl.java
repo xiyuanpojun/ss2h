@@ -211,7 +211,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             col.append((String) o);
             col.append(",");
         }
-        sql = "SELECT ROWVAL,SF_DIS,TOTAL," + col + "ROWXH FROM(SELECT A.ROWID ROWVAL,CASE WHEN F.DISTRI IS NULL OR F.DISTRI='2' THEN '未分配' ELSE (SELECT S_USER_NAME FROM T_SURVEY_USER WHERE S_USER_ID=F.DIS_RM) END SF_DIS,count(1) over() total," + col + "ROWNUM rowxh FROM " + tab + " A,T_SURVEY_INVITE F "
+        sql = "SELECT ROWVAL,SF_DIS,TOTAL,LNG,LAT," + col + "ROWXH FROM(SELECT A.ROWID ROWVAL,A.LNG,A.LAT,CASE WHEN F.DISTRI IS NULL OR F.DISTRI='2' THEN '未分配' ELSE (SELECT S_USER_NAME FROM T_SURVEY_USER WHERE S_USER_ID=F.DIS_RM) END SF_DIS,count(1) over() total," + col + "ROWNUM rowxh FROM " + tab + " A,T_SURVEY_INVITE F "
                 + "WHERE F.TAB=? AND F.USERID=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1 " + tick
                 + " ORDER BY " + orderCol + ") T WHERE T.ROWXH>" + start + " AND T.ROWXH <=" + end;
         SQLQuery sq = session.createSQLQuery(sql)
@@ -219,7 +219,9 @@ public class SurveyDaoImpl implements ISurveyDao {
                 .setParameter(1, userid)
                 .addScalar("ROWVAL", StandardBasicTypes.STRING)
                 .addScalar("SF_DIS", StandardBasicTypes.STRING)
-                .addScalar("TOTAL", StandardBasicTypes.INTEGER);
+                .addScalar("TOTAL", StandardBasicTypes.INTEGER)
+                .addScalar("LNG", StandardBasicTypes.DOUBLE)
+                .addScalar("LAT", StandardBasicTypes.DOUBLE);
         for (Object o : colObj) {
             sq.addScalar((String) o, StandardBasicTypes.STRING);
         }
@@ -230,11 +232,15 @@ public class SurveyDaoImpl implements ISurveyDao {
             Object[] objects = (Object[]) o;
             jo.put("ROWVAL", (String) objects[0]);
             jo.put("SF_DIS", (String) objects[1]);
+            Double lng = (Double) objects[3];
+            Double lat = (Double) objects[4];
+            jo.put("LNG", lng);
+            jo.put("LAT", lat);
             if (total == 0) {
                 total = (int) objects[2];
             }
             for (int i = 0; i < colObj.size(); i++) {
-                jo.put((String) colObj.get(i), (String) objects[i + 3]);
+                jo.put((String) colObj.get(i), (String) objects[i + 5]);
             }
             json.add(jo);
         }
