@@ -108,18 +108,20 @@ public class SurveyDaoImpl implements ISurveyDao {
         String orgname = getOrgname(orgid);
         //获取城市名称
         String cityname = getOrgname(city);
+        System.out.println("省份：" + orgname + "城市：" + cityname + "搜索地址：" + address + "搜索半径：" + dist);
         //声明ak
         String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
         if (!address.contains(cityname)) address = cityname + address;
         if (!address.contains(orgname)) address = orgname + address;
-        System.out.println(address);
+
         Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
         TCityLocationEntity2 cityentity = (TCityLocationEntity2) map1.get("entity");
-        System.out.println("经度"+cityentity.getLng()+"纬度"+cityentity.getLat());
         double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
-        for (int i = 0; i < locaion.length; i++) {
-            System.out.println("获取到四个数据为"+locaion[i]);
-        }
+
+        System.out.println("拼接后搜索地址：" + address);
+        //minLat, minLng, maxLat, maxLng;
+        System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
+
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
         String sql = "SELECT T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
@@ -156,7 +158,7 @@ public class SurveyDaoImpl implements ISurveyDao {
                 .setParameter(5, tab)
                 .setParameter(6, tab)
                 .addScalar("ROWVAL", StandardBasicTypes.STRING);
-        for (int i = 0; i < locaion.length ; i++) {
+        for (int i = 0; i < locaion.length; i++) {
             System.out.println(locaion[i]);
         }
         for (Object o : colObj) {
@@ -235,7 +237,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         String sql = "INSERT INTO T_SURVEY_INVITE(TAB, ROWVAL, USERID, IN_FLAG, FAULT_CODE) VALUES(?,?,?,?,?)";
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        NativeQuery  query = session.createSQLQuery(sql);
+        NativeQuery query = session.createSQLQuery(sql);
         for (int i = 0; i < rw.length; i++) {
             if ("".equals(rw[i])) {
                 break;
