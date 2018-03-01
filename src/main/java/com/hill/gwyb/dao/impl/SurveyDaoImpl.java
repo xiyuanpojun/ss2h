@@ -142,8 +142,8 @@ public class SurveyDaoImpl implements ISurveyDao {
                 + "SELECT A.ROWID ROWVAL," + col.toString() + "ROW_NUMBER() OVER(ORDER BY " + orderCol + ") RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                 + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                + "AND LNG BETWEEN ? AND ? "
-                + "AND LAT BETWEEN ? AND ?"
+                + " AND LNG BETWEEN "+locaion[1]+" AND "+locaion[3]
+                + " AND LAT BETWEEN "+locaion[0]+" AND "+locaion[2]
                 + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
         SQLQuery sq = session.createSQLQuery(sql)
 //                .setParameter(0, orgid)
@@ -151,12 +151,12 @@ public class SurveyDaoImpl implements ISurveyDao {
 //                .setParameter(2, tab)
                 .setParameter(0, orgid)
                 //minLat, minLng, maxLat, maxLng;
-                .setParameter(1, locaion[1])
-                .setParameter(2, locaion[3])
-                .setParameter(3, locaion[0])
-                .setParameter(4, locaion[2])
-                .setParameter(5, tab)
-                .setParameter(6, tab)
+//                .setParameter(1, locaion[1])
+//                .setParameter(2, locaion[3])
+//                .setParameter(3, locaion[0])
+//                .setParameter(4, locaion[2])
+                .setParameter(1, tab)
+                .setParameter(2, tab)
                 .addScalar("ROWVAL", StandardBasicTypes.STRING);
         for (int i = 0; i < locaion.length; i++) {
             System.out.println(locaion[i]);

@@ -175,6 +175,7 @@ public class SurveyController extends ActionSupport {
     }
 
     public String getData() throws IOException, SQLException {
+        System.out.println("半径为："+dist);
         PrintWriter pw = response.getWriter();
         String orgid = (String) request.getSession().getAttribute("uorg");
         StringBuilder sql = new StringBuilder();
