@@ -108,7 +108,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         String orgname = getOrgname(orgid);
         //获取城市名称
         String cityname = getOrgname(city);
-        System.out.println("省份：" + orgname + "城市：" + cityname + "搜索地址：" + address + "搜索半径：" + dist);
+        //System.out.println("省份：" + orgname + "城市：" + cityname + "搜索地址：" + address + "搜索半径：" + dist);
         String arsql = "";
         boolean flag = false;
         TCityLocationEntity2 cityentity = new TCityLocationEntity2();
@@ -116,7 +116,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             flag = true;
             //声明ak
             String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
-            if (!address.contains(cityname)) address = cityname + address;
+            if (!"".equals(cityname) && !address.contains(cityname)) address = cityname + address;
             if (!address.contains(orgname)) address = orgname + address;
 
             Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
@@ -124,11 +124,10 @@ public class SurveyDaoImpl implements ISurveyDao {
             double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
             System.out.println("拼接后搜索地址：" + address);
             //minLat, minLng, maxLat, maxLng;
-            System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
+            //System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
             arsql = " AND LNG BETWEEN " + locaion[1] + " AND " + locaion[3]
                     + " AND LAT BETWEEN " + locaion[0] + " AND " + locaion[2];
         }
-
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
         String sql = "SELECT T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
@@ -174,10 +173,8 @@ public class SurveyDaoImpl implements ISurveyDao {
             jo.put("ROWVAL", (String) objects[0]);
             Double lng = (Double) objects[1];
             Double lat = (Double) objects[2];
-            System.out.println("flag="+flag);
             if (flag) {
                 Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
-                System.out.println("距离为："+aadistance);
                 if (aadistance <= dist) {
                     for (int i = 0; i < colObj.size(); i++) {
                         jo.put((String) colObj.get(i), (String) objects[i + 3]);
@@ -185,12 +182,10 @@ public class SurveyDaoImpl implements ISurveyDao {
                     json.add(jo);
                 }
             } else {
-
                 for (int i = 0; i < colObj.size(); i++) {
-                    System.out.println((String) colObj.get(i));
-                    System.out.println((String) objects[i + 3]);
                     jo.put((String) colObj.get(i), (String) objects[i + 3]);
                 }
+                json.add(jo);
             }
         }
         session.close();
