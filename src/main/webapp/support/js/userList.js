@@ -58,13 +58,6 @@ $(function () {
     });
     layui.use('form', function () {
         var form = layui.form;
-        form.verify({
-            check_ts: function (value, item) {
-                if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
-                    return '不能有特殊字符';
-                }
-            }
-        });
         //增加
         form.on('submit(btn)', function (data) {
             add(data.field);
@@ -73,13 +66,6 @@ $(function () {
     });
     layui.use('form', function () {
         var form = layui.form;
-        form.verify({
-            check_ts: function (value, item) {
-                if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
-                    return '不能有特殊字符';
-                }
-            }
-        });
         //修改
         form.on('submit(uBtn)', function (data) {
             update(data.field);
