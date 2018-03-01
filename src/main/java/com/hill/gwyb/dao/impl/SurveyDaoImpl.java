@@ -108,7 +108,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         String orgname = getOrgname(orgid);
         //获取城市名称
         String cityname = getOrgname(city);
-        //System.out.println("省份：" + orgname + "城市：" + cityname + "搜索地址：" + address + "搜索半径：" + dist);
+//        System.out.println("省份：" + orgname + "城市：" + cityname + "搜索地址：" + address + "搜索半径：" + dist);
         String arsql = "";
         boolean flag = false;
         TCityLocationEntity2 cityentity = new TCityLocationEntity2();
@@ -121,8 +121,8 @@ public class SurveyDaoImpl implements ISurveyDao {
 
             Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
             cityentity = (TCityLocationEntity2) map1.get("entity");
-            double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
-            System.out.println("拼接后搜索地址：" + address);
+            double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);//获取地址附近坐标范围
+//            System.out.println("拼接后搜索地址：" + address);
             //minLat, minLng, maxLat, maxLng;
             //System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
             arsql = " AND LNG BETWEEN " + locaion[1] + " AND " + locaion[3]
@@ -173,9 +173,11 @@ public class SurveyDaoImpl implements ISurveyDao {
             jo.put("ROWVAL", (String) objects[0]);
             Double lng = (Double) objects[1];
             Double lat = (Double) objects[2];
+            jo.put("LNG", lng);
+            jo.put("LAT", lat);
             if (flag) {
-                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
-                if (aadistance <= dist) {
+                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());//获取拿出的数据与搜索的地址距离
+                if (aadistance <= dist) {//满足半径距离
                     for (int i = 0; i < colObj.size(); i++) {
                         jo.put((String) colObj.get(i), (String) objects[i + 3]);
                     }

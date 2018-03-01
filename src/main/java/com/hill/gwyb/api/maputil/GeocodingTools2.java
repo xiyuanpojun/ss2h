@@ -44,7 +44,7 @@ public class GeocodingTools2{
                 BufferedReader br = new BufferedReader(insr);
                 String data;
                 if ((data = br.readLine()) != null) {
-                    System.out.println("百度地图api返回数据："+data);
+//                    System.out.println("百度地图api返回数据："+data);
                     JSONObject object = JSON.parseObject(data);
                     entity = new TCityLocationEntity2();
                     map.put("status", object.getString("status"));

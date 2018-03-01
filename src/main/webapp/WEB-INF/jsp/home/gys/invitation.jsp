@@ -80,7 +80,7 @@
         </form>
     </div>
     <div class="layui-col-md9">
-        <div id="map" style="width:100%;height:250px"></div>
+        <div id="map" style="width:100%;height:260px"></div>
     </div>
 
 </div>

@@ -139,14 +139,19 @@ layui.use(['table', 'form', 'laydate'], function () {
                             $('#tab-total').text(allData.length);
                             var dzArray = new Array()
                             $.each(allData, function (p1, p2) {
+                                var dzObj=new Object();
+                                dzObj.lat=p2.LAT;
+                                dzObj.lng=p2.LNG;
                                 if (typeof(p2.YJRDZ) != "undefined") {
-                                    dzArray[p1] = p2.YJRDZ;
+                                    dzObj.yddz = p2.YJRDZ;
                                 } else if (typeof(p2.YDDZ) != "undefined") {
-                                    dzArray[p1] = p2.YDDZ;
+                                    dzObj.yddz = p2.YDDZ;
                                 }
+                                dzArray[p1]=dzObj;
                             });
                             bdGEO(dzArray);
                         }
+                        ,method:'post'
                         , where: {
                             tab: sury_type,
                             city: city,
@@ -161,6 +166,7 @@ layui.use(['table', 'form', 'laydate'], function () {
             } else {
                 table.reload('surveyList', {
                     url: ctx + "/survey/survey_getData"
+                    ,method:'post'
                     , where: {
                         tab: sury_type,
                         city: city,
@@ -169,7 +175,21 @@ layui.use(['table', 'form', 'laydate'], function () {
                         dist: dist
                     }
                     , done: function (res, curr, count) {
-                        $('#tab-total').text(table.cache.surveyList.length);
+                        var allData = table.cache.surveyList;
+                        $('#tab-total').text(allData.length);
+                        var dzArray = new Array()
+                        $.each(allData, function (p1, p2) {
+                            var dzObj=new Object();
+                            dzObj.lat=p2.LAT;
+                            dzObj.lng=p2.LNG;
+                            if (typeof(p2.YJRDZ) != "undefined") {
+                                dzObj.yddz = p2.YJRDZ;
+                            } else if (typeof(p2.YDDZ) != "undefined") {
+                                dzObj.yddz = p2.YDDZ;
+                            }
+                            dzArray[p1]=dzObj;
+                        });
+                        bdGEO(dzArray);
                     }
                 });
             }
@@ -192,8 +212,8 @@ layui.use(['table', 'form', 'laydate'], function () {
         }
     }
 
-    function geocodeSearch(add, idx) {
-        myGeo.getPoint(add, function (point) {
+    function geocodeSearch(addObj, idx) {
+        /*myGeo.getPoint(add, function (point) {
             if (point) {
                 //document.getElementById("result").innerHTML +=  idx+"、" +add +"</br>";
                 var address = new BMap.Point(point.lng, point.lat);
@@ -202,7 +222,12 @@ layui.use(['table', 'form', 'laydate'], function () {
                 }
                 addMarker(address, new BMap.Label(idx), add);
             }
-        }, "全国");
+        }, "全国");*/
+        var address = new BMap.Point(addObj.lng, addObj.lat);
+        if (idx == 1) {
+            map.panTo(new BMap.Point(addObj.lng, addObj.lat));
+        }
+        addMarker(address, new BMap.Label(idx), addObj.yddz);
     }
 
 // 编写自定义函数,创建标注
