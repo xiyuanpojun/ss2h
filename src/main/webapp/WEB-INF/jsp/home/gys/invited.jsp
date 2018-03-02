@@ -9,7 +9,7 @@
 <body>
 
 <form class="layui-form" action="">
-    <div class="demoTable" style="margin-top: 10px;margin-left: 10px;">
+    <div class="demoTable" style="margin-top: 2px;margin-left: 2px;margin-bottom: 2px;">
         调查类型:
         <div class="layui-inline">
             <select name="stype" id="stype">
@@ -63,7 +63,7 @@
         </form>
     </div>
     <div class="layui-col-md9">
-        <div id="map" style="width:100%;height:260px"></div>
+        <div id="map" style="width:100%;height:250px;"></div>
     </div>
 
 </div>

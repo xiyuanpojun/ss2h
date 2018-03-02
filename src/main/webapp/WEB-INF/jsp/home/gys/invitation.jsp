@@ -9,6 +9,7 @@
 </head>
 <body>
 <form class="layui-form" action="">
+    <div class="demoTable" style="margin-top: 2px;margin-left: 2px;">
     调查类型:
     <div class="layui-inline">
         <select name="stype" id="stype">
@@ -28,10 +29,9 @@
     </div>
 
     <br/>
-    <br/>
     地址搜索:
     <div class="layui-inline">
-        <input value="" name="address" class="layui-input" style="width: 438px;" type="text" placeholder="请输入地址搜索"
+        <input value="" name="address" class="layui-input" style="width: 472px;" type="text" placeholder="请输入地址搜索"
                autocomplete="off"
                lay-verify="title">
     </div>
@@ -47,6 +47,7 @@
     </div>
     <button class="layui-btn" lay-submit lay-filter="searchForm">搜索</button>
     共查询出样本信息<label id="tab-total">0</label>条
+    </div>
 </form>
 <div class="box" style="margin-top: 0px;">
     <table id="tab1" class="layui-table" lay-filter="surveyList" style="margin-top: 0px;"></table>

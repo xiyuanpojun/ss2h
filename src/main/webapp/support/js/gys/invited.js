@@ -8,32 +8,34 @@ layui.use(['table','form','laydate'], function(){
     $=layui.jquery;//使用jQuery对象
 
     layer.load();
-
+    //地市下拉框数据填充
     $.getJSON(ctx + "/survey/survey_getCity", function (data) {
         $.each(data.dataList, function (i, item) {
             $('#city').append('<option  value=' + item.ORGID + '>' + item.ORGNAME + "</option>");
         });
         form.render('select');
     });
-    $.getJSON(ctx + "/survey/survey_getFault", function (data) {
-        $.each(data.dataList, function (i, item) {
-            $("#faultRes").append('<option  value=' + item.PID + '>' + item.PNAME + "</option>");
-        });
-        form.render('select');
-    });
+    // $.getJSON(ctx + "/survey/survey_getFault", function (data) {
+    //     $.each(data.dataList, function (i, item) {
+    //         $("#faultRes").append('<option  value=' + item.PID + '>' + item.PNAME + "</option>");
+    //     });
+    //     form.render('select');
+    // });
+    //客户类型下拉框数据填充
     $.getJSON(ctx + "/survey/survey_getCustType", function (data) {
         $.each(data.dataList, function (i, item) {
             $('#custType').append('<option  value=' + item.PID + '>' + item.PNAME + "</option>");
         });
         form.render('select');
     });
+    //调查员下拉框数据填充
     $.getJSON(ctx + "/survey/survey_getSurveyUser", function (data) {
         $.each(data.dataList, function (i, item) {
             $('#diaocy').append('<option  value=' + item.S_USER_ID + '>' + item.S_USER_NAME + "</option>");
         });
         form.render('select');
     });
-
+    //调查专项类型下拉框数据填充
     $.getJSON(ctx + "/survey/survey_getStype", function (data) {
         $.each(data.dataList, function (i, item) {
             if(i==0){
@@ -56,7 +58,7 @@ layui.use(['table','form','laydate'], function(){
             nowOptions={
                 elem: '#tab1'
                 ,id:'surveyList'
-                , height: 'full-410'
+                , height: 'full-360'
                 ,url: ctx + "/survey/survey_getInvitData"
                 ,page: true //开启分页
                 ,where:{
@@ -71,6 +73,7 @@ layui.use(['table','form','laydate'], function(){
         });
         layer.closeAll('loading');
     });
+    //将表格中客户地址标记在百度地图上
     function showAddressMap(){
         var allData = table.cache.surveyList;
         var dzArray = new Array()
@@ -87,6 +90,7 @@ layui.use(['table','form','laydate'], function(){
         });
         bdGEO(dzArray);
     }
+    //表格行单击触发复选框点击事件
     $('.box').on('click','.layui-table-body tr',function(e){
         var evtTarget = e.target || e.srcElement;
         if (!$(evtTarget).is('i')) {
@@ -196,6 +200,21 @@ layui.use(['table','form','laydate'], function(){
         return false;
     });
 
+    table.on('checkbox(surveyList)',function(obj){  //surveyList为容器lay-filter设定的值
+        // 触发复选框后的回调函数
+        if(obj.checked){
+            //var addrIdx=obj.data.LAY_TABLE_INDEX;
+            var opts = {
+                width: 160,     // 信息窗口宽度
+                height: 60,     // 信息窗口高度
+                title: "详细信息"
+            };
+            var infoWindow = new BMap.InfoWindow("地址：" + obj.data.YDDZ, opts);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow, new BMap.Point(obj.data.LNG, obj.data.LAT)); //开启信息窗口
+            // var mark=map.getOverlays()[addrIdx];
+        }
+    });
+
 // 百度地图API功能
     var map = new BMap.Map("map");
 //以当前城市为中心打开地图
@@ -206,6 +225,7 @@ layui.use(['table','form','laydate'], function(){
     var myGeo = new BMap.Geocoder();
 
     function bdGEO(adds) {
+        map.clearOverlays();//清除所有标签
         for (var i = 0; i < adds.length; i++) {
             geocodeSearch(adds[i], i + 1);
         }
