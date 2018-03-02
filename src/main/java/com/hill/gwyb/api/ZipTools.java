@@ -23,7 +23,7 @@ public class ZipTools {
     }
 
     public static File compress(File[] files, String name) throws Exception {
-        File result = new File(WebContentHelper.getRootPath() + "/upload/" + name + ".zip");
+        File result = new File(WebContentHelper.getRealPath() + "/upload/" + name + ".zip");
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(result));
         BufferedInputStream bis;
         for (File file : files) {
@@ -44,7 +44,7 @@ public class ZipTools {
 
     private static void delete() {
         try {
-            File root = new File(WebContentHelper.getRootPath() + "/upload");
+            File root = new File(WebContentHelper.getRealPath() + "/upload");
             if (!root.exists() || !root.isDirectory() || Objects.requireNonNull(root.listFiles()).length <= 30) return;
             for (File file : Objects.requireNonNull(root.listFiles())) {
                 if (file.isDirectory()) continue;

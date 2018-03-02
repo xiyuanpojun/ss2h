@@ -47,7 +47,7 @@ public class GwUserController extends ActionSupport {
         String filePath = "";
         try {
             File file = null;
-            filePath = WebContentHelper.getRootPath() + File.separator;
+            filePath = WebContentHelper.getRealPath() + File.separator;
             file = new File(filePath + fileDir);
             if (!file.exists()) {
                 file.mkdirs();

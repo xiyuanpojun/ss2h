@@ -10,15 +10,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class GeocodingTools2{
-    public  static Map<String, Object> getLatAndLngByAddress(String addr, String ak) {
+public class GeocodingTools2 {
+    public static Map<String, Object> getLatAndLngByAddress(String addr, String ak) {
         Map<String, Object> map = new HashMap<>();
         TCityLocationEntity2 entity = null;
         String address = "";

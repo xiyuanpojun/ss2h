@@ -19,7 +19,7 @@ public class ExcelTools {
     }
 
     public static String createFile(Map<String, Object> map) throws Exception {
-        File file = new File(WebContentHelper.getRootPath() + "/upload/" + map.get("name") + ".xlsx");
+        File file = new File(WebContentHelper.getRealPath() + "/upload/" + map.get("name") + ".xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook();
         List head = (List) map.get("head");
         List body = (List) map.get("body");
