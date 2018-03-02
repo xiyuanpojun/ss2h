@@ -87,7 +87,7 @@ public class FileController extends ActionSupport {
 
     //下载文件调用的方法
     public String download() throws Exception {
-        file = new File(WebContentHelper.getRootPath() + "/upload/" + name);
+        file = new File(WebContentHelper.getRealPath() + "/upload/" + name);
         if (!file.exists()) {
             dataMap = new HashMap();
             dataMap.put("message", "该文件不存在或已被删除");
