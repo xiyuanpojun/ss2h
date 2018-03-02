@@ -125,14 +125,14 @@ $(function () {
             if (address === "YDDZ") {
                 if (fruits.indexOf(address) < 0) {
                     layer.alert("必须勾选用电地址");
+                    return false;
                 }
-                return false;
             }
             if (address === "YJRDZ") {
                 if (fruits.indexOf(address) < 0) {
                     layer.alert("必须勾选意见人地址");
+                    return false;
                 }
-                return false;
             }
             var msg = {
                 'configItemView.surveyType': $("#atypeId").find("option:selected").text(),
