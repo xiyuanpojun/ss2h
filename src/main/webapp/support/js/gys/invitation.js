@@ -106,9 +106,9 @@ layui.use(['table', 'form', 'laydate'], function () {
     form.on('submit(searchForm)', function (data) {
         checkLogin();
         var pgs = table.cache.surveyList;
-        if (typeof(pgs) != 'undefined' && pgs.length > 1) {
-            layer.msg('还有未提交预约结果数据！');
-        } else {
+        // if (typeof(pgs) != 'undefined' && pgs.length > 1) {
+        //     layer.msg('还有未提交预约结果数据！');
+        // } else {
             var stype = data.field.stype;
             var city = data.field.city;
             var custType = data.field.custType;
@@ -193,7 +193,7 @@ layui.use(['table', 'form', 'laydate'], function () {
                     }
                 });
             }
-        }
+        // }
         return false;
     });
 

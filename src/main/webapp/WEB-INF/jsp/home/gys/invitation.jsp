@@ -38,11 +38,11 @@
     距离范围:
     <div class="layui-inline">
         <select name="dist">
-            <option value="1000">1公里</option>
-            <option value="2000">2公里</option>
             <option value="3000">3公里</option>
-            <option value="4000">4公里</option>
             <option value="5000">5公里</option>
+            <option value="7000">7公里</option>
+            <option value="10000">10公里</option>
+            <option value="15000">15公里</option>
         </select>
     </div>
     <button class="layui-btn" lay-submit lay-filter="searchForm">搜索</button>
