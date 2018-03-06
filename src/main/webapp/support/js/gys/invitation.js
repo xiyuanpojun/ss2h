@@ -131,7 +131,7 @@ layui.use(['table', 'form', 'laydate'], function () {
                         elem: '#tab1'
                         , id: 'surveyList'
                         , height: 'full-410'
-                        //,size:'sm'
+                        ,size:'sm'
                         , url: ctx + "/survey/survey_getData"
                         , page: false
                         , done: function (res, curr, count) {
