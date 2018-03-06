@@ -137,16 +137,13 @@ public class SurveyDaoImpl implements ISurveyDao {
                 .addScalar("COL", StandardBasicTypes.STRING);
         List colObj = query.list();
         StringBuilder col = new StringBuilder();
-        String orderCol = "YDDZ";
-        if (tab.equals("USER_TSJB")) {
-            orderCol = "YJRDZ";
-        }
+
         for (Object o : colObj) {
             col.append((String) o);
             col.append(",");
         }
         sql = "SELECT ROWVAL,LNG,LAT," + col.toString() + "RANDOM_VAL FROM ("
-                + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY " + orderCol + ") RANDOM_VAL FROM " + tab + " A,T_ORG B "
+                + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                 + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                 + arsql
@@ -177,7 +174,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             jo.put("LAT", lat);
             if (flag) {
                 //获取拿出的数据与搜索的地址距离
-                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
+//                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
 //                System.out.println("距离是：" + aadistance);
                 //满足半径距离
                 //先排除计算圆半径距离
