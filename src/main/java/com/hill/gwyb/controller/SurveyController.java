@@ -1,8 +1,5 @@
 package com.hill.gwyb.controller;
 
-import com.hill.gwyb.api.maputil.GeocodingTools2;
-import com.hill.gwyb.api.maputil.MapUtil;
-import com.hill.gwyb.api.maputil.TCityLocationEntity2;
 import com.hill.gwyb.dao.ISurveyDao;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.ServletActionContext;
@@ -14,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.Map;
 
 public class SurveyController extends ActionSupport {
 
@@ -175,7 +171,6 @@ public class SurveyController extends ActionSupport {
     }
 
     public String getData() throws IOException, SQLException {
-        System.out.println("半径为："+dist);
         PrintWriter pw = response.getWriter();
         String orgid = (String) request.getSession().getAttribute("uorg");
         StringBuilder sql = new StringBuilder();

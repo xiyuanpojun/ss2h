@@ -121,10 +121,11 @@ public class SurveyDaoImpl implements ISurveyDao {
 
             Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
             cityentity = (TCityLocationEntity2) map1.get("entity");
-            double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);//获取地址附近坐标范围
+            //获取地址附近坐标范围
+            double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
 //            System.out.println("拼接后搜索地址：" + address);
             //minLat, minLng, maxLat, maxLng;
-            //System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
+//            System.out.println("距离范围，最小经度：" + locaion[1] + "，最大经度：" + locaion[3] + "，最小为纬度：" + locaion[0] + "，最大纬度：" + locaion[2]);
             arsql = " AND LNG BETWEEN " + locaion[1] + " AND " + locaion[3]
                     + " AND LAT BETWEEN " + locaion[0] + " AND " + locaion[2];
         }
@@ -169,20 +170,23 @@ public class SurveyDaoImpl implements ISurveyDao {
             JSONObject jo = new JSONObject();
             Object[] objects = (Object[]) o;
             //计算获取的地址与数据库地址的距离
-            //  Double aadistance=getDistance((Double) objects[0],(Double) objects[1]);
             jo.put("ROWVAL", (String) objects[0]);
             Double lng = (Double) objects[1];
             Double lat = (Double) objects[2];
             jo.put("LNG", lng);
             jo.put("LAT", lat);
             if (flag) {
-                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());//获取拿出的数据与搜索的地址距离
-                if (aadistance <= dist) {//满足半径距离
-                    for (int i = 0; i < colObj.size(); i++) {
-                        jo.put((String) colObj.get(i), (String) objects[i + 3]);
-                    }
-                    json.add(jo);
+                //获取拿出的数据与搜索的地址距离
+                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
+//                System.out.println("距离是：" + aadistance);
+                //满足半径距离
+                //先排除计算圆半径距离
+//                if (aadistance <= dist) {
+                for (int i = 0; i < colObj.size(); i++) {
+                    jo.put((String) colObj.get(i), (String) objects[i + 3]);
                 }
+                json.add(jo);
+//                }
             } else {
                 for (int i = 0; i < colObj.size(); i++) {
                     jo.put((String) colObj.get(i), (String) objects[i + 3]);

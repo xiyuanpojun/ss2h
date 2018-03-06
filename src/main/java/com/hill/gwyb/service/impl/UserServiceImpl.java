@@ -91,7 +91,7 @@ public class UserServiceImpl implements IUserService {
                 //清除用户信息
                 session.invalidate();
 //                session.setAttribute("userId", null);
-//                session.setAttribute("urole", null);
+//                session.setAttribute("urole", null);a
 //                session.setAttribute("uorg", null);
                 map.put("message", "成功退出");
                 //记录用户登陆信息
