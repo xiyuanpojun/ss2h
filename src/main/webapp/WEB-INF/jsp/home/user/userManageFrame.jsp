@@ -11,7 +11,7 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo"><img alt="hill" src="${ctx}/support/img/hill2.png" width="60" height="41.2"
+        <div class="layui-logo"><img alt="hill" src="${ctx}/support/img/hill2.png" width="300" height="30"
                                      style="margin-top: 6px"></div>
         <ul class="layui-nav layui-layout-left"></ul>
         <ul class="layui-nav layui-layout-right">
