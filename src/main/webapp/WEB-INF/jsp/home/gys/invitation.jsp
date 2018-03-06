@@ -42,6 +42,7 @@
             <option value="5000">5公里</option>
             <option value="7000">7公里</option>
             <option value="10000">10公里</option>
+            <option value="12000">12公里</option>
             <option value="15000">15公里</option>
         </select>
     </div>
