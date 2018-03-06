@@ -207,6 +207,7 @@ layui.use(['table', 'form', 'laydate'], function () {
     var myGeo = new BMap.Geocoder();
 
     function bdGEO(adds) {
+        map.clearOverlays();//清除所有标签
         for (var i = 0; i < adds.length; i++) {
             geocodeSearch(adds[i], i + 1);
         }
