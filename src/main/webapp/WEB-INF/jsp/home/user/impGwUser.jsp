@@ -10,16 +10,8 @@
 <form class="layui-form" action="">
     专项名称:
     <div class="layui-inline">
-        <select name="ZX" id="ZX">
-            <option value="1">供电质量</option>
-            <option value="2">营业厅服务</option>
-            <option value="3">抄表交费</option>
-            <option value="4">投诉举报</option>
-            <option value="5">故障报修</option>
-            <option value="6">业扩报装-低压</option>
-            <option value="7">业扩报装-高压</option>
-            <option value="100">电话调查结果</option>
-        </select>
+            <select name="ZX" id="ZX">
+            </select>
     </div>
     <div class="layui-inline">
         <button type="button" class="layui-btn" id="chooseFile">
@@ -33,6 +25,12 @@
         var layer = layui.layer;
         var form = layui.form;
         $ = layui.jquery;//使用jQuery对象
+        $.getJSON(ctx + "/survey/survey_getStype", function (data) {
+            $.each(data.dataList, function (i, item) {
+                $('#ZX').append('<option value=' + item.tab + '>' + item.survey_type + "</option>");
+            });
+            form.render('select');
+        });
         /*  $.getJSON("getProjects", function (data) {
             $.each(data.dataList, function (i, item) {
                 $('#pro_no').append('<option  value=' + item.PRO_NO + '>' + item.PRO_NAME + "</option>");

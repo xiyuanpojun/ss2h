@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public interface ISurveyDao {
     public String getCityList(String orgid) throws SQLException;
 
-    public String getSurveyType() throws SQLException;
+    public String getSurveyType(String rowv) throws SQLException;
 
     public String getCustType(String type) throws SQLException;
 

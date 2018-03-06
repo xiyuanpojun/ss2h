@@ -22,33 +22,41 @@ public class GwUserInsert {
         String[] sql = new String[]{"", ""};
         int zdCd = 0;
         switch (zxName) {
-            case "1":
+            case "USER_GDZL":
                 sql[0] = "INSERT INTO USER_GDZL(XH,PROV,CITY,ORG,YHBH,YHMC,YDDZ,LXR,TEL,PHONE,YDLB,HTRL,DYDJ,CXBZ)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 sql[1] = "14";
                 break;
-            case "2":
+            case "USER_YYTFW":
                 sql[0] = "INSERT INTO USER_YYTFW(XH,PROV,CITY,ORG,YHBH,YHMC,YDDZ,LXR,TEL,PHONE,YDLB,DYDJ)VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
                 sql[1] = "12";
                 break;
-            case "3":
+            case "USER_CBJF":
                 sql[0] = "INSERT INTO USER_CBJF(XH,PROV,CITY,ORG,YHBH,YHMC,HYFL,YDDZ,LXR,TEL,PHONE,YDLB,DYDJ,CXBZ)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 sql[1] = "14";
                 break;
-            case "4":
+            case "USER_TSJB":
                 sql[0] = "INSERT INTO USER_TSJB(XH,GDBH,FDSJ,JDSJ,GDZT,CITY,COUNTRY,PROV,CITY_ORG,ORG,SLGH,SLRY,YJRXM,YJRDZ,YJRDH,SLNR,YJJBLX,EJJBLX,CLNR,SFCS,BJSJ,HFMYD,HFSJ,HFZT,SFCDB,HBGDBH,SFTD,SFSS,SFGDGSZR,CXBZ,GLGDBH)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 sql[1] = "31";
                 break;
-            case "5":
+            case "USER_GZBX":
                 sql[0] = "INSERT INTO USER_GZBX(XH,GDBH,YHMC,YHBH,YDLB,YDDZ,LXR,TEL,CXBZ,PROV,CITY,COUNTRY,ORG,SLSJ,PFSJ,YJGZLX,EJGZLX,GZXX,GZBXJJD,SLNR,JDSJ,PDSJ,DDXCSJ,GZXFSJ,YJYY,EJYY,SBCQSX)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 sql[1] = "27";
                 break;
-            case "6":
+            case "USER_YKBZ_DY":
                 sql[0] = "INSERT INTO USER_YKBZ_DY(XH,PROV,CITY,ORG,YHBH,YHMC,HYFL,YDDZ,LXR,TEL,PHONE,YDLB,HTRL,DYDJ,CXBZ,YWLX,SLSJ,GDSJ,SDSJ)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 sql[1] = "19";
                 break;
-            case "100":
-                sql[0] = "INSERT INTO SURVEY_PHONE (CITY, COUNTRY, CUST_TYPE, PROV, SURVEY_RS, PHONE)VALUES(?,?,?,?,?,?)";
-                sql[1] = "6";
+            case "USER_RGFW":
+                sql[0] = "INSERT INTO USER_RGFW(YHBH,YHMC,TEL,PHONE,CITY,CXBZ,SEX,PROV,KHLB)VALUES(?,?,?,?,?,?,?,?,?)";
+                sql[1] = "9";
+                break;
+            case "USER_ZZYY":
+                sql[0] = "INSERT INTO USER_ZZYY(YHBH,YHMC,TEL,PHONE,PROV,CXBZ,SEX)VALUES(?,?,?,?,?,?,?)";
+                sql[1] = "7";
+                break;
+            case "USER_95598WZ":
+                sql[0] = "INSERT INTO USER_95598WZ(YHBH,YHMC,TEL,PHONE,YDDZ,CXBZ,SEX,PROV)VALUES(?,?,?,?,?,?,?,?)";
+                sql[1] = "8";
                 break;
             default:
                 sql[0] = "INSERT INTO USER_YKBZ_GY(XH,PROV,CITY,ORG,YHBH,YHMC,HYFL,YDDZ,LXR,TEL,PHONE,YDLB,HTRL,DYDJ,CXBZ,YWLX,SLSJ,GDSJ,GDFADFKSSJ,GDFADFWCSJ,SJTZSHKSSJ,SJTZSHWCSJ,ZJJCKSSJ,ZJJCWCSJ,JGYSKSSJ,JGYSWCSJ,ZBJDKSSJ,ZBJDWCSJ,SDSJ)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

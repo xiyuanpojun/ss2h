@@ -27,7 +27,7 @@ layui.use(['table', 'form', 'laydate'], function () {
         form.render('select');
     });
 
-    $.getJSON(ctx + "/survey/survey_getStype", function (data) {
+    $.getJSON(ctx + "/survey/survey_getStype?rowv=1", function (data) {
         $.each(data.dataList, function (i, item) {
             $('#stype').append('<option value=' + item.tab + '>' + item.survey_type + "</option>");
         });

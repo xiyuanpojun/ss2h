@@ -47,9 +47,14 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"dataList\":" + json.toJSONString() + "}";
     }
 
-    public String getSurveyType() throws SQLException {
+    public String getSurveyType(String rowv) throws SQLException {
         Session session = sessionFactory.openSession();
-        String sql = "SELECT t.survey_type,t.tab FROM T_SURVEY_TYPE t WHERE t.TAB != 'USER_TSJB'";
+        String sql=null;
+        if(null==rowv) {
+            sql = "SELECT t.survey_type,t.tab FROM T_SURVEY_TYPE t ";
+        }else{
+            sql = "SELECT t.survey_type,t.tab FROM T_SURVEY_TYPE t WHERE t.YB_XS='"+rowv+"'";
+        }
         Query query = session.createSQLQuery(sql)
                 .addScalar("survey_type", StandardBasicTypes.STRING)
                 .addScalar("tab", StandardBasicTypes.STRING);

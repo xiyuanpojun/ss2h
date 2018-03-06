@@ -36,7 +36,7 @@ layui.use(['table','form','laydate'], function(){
         form.render('select');
     });
     //调查专项类型下拉框数据填充
-    $.getJSON(ctx + "/survey/survey_getStype", function (data) {
+    $.getJSON(ctx + "/survey/survey_getStype?rowv=1", function (data) {
         $.each(data.dataList, function (i, item) {
             if(i==0){
                 sury_type=item.tab;

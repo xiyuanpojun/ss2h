@@ -196,7 +196,11 @@ public class SurveyController extends ActionSupport {
 
     public String getStype() throws IOException, SQLException {
         PrintWriter pw = response.getWriter();
-        pw.write(surveyDao.getSurveyType());
+        if(null==rowv||"".equals(rowv)){
+            pw.write(surveyDao.getSurveyType(null));
+        }else{
+            pw.write(surveyDao.getSurveyType(rowv));
+        }
         pw.close();
         return null;
     }
