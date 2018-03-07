@@ -1,7 +1,5 @@
 package com.hill.gwyb.dao;
 
-import org.codehaus.jettison.json.JSONException;
-
 import java.sql.SQLException;
 
 public interface ISurveyDao {

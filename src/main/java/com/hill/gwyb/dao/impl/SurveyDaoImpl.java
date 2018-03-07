@@ -48,6 +48,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"dataList\":" + json.toJSONString() + "}";
     }
 
+    @Override
     public String getSurveyType(String rowv) throws SQLException {
         Session session = sessionFactory.openSession();
         String sql = null;
@@ -71,6 +72,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"dataList\":" + json.toJSONString() + "}";
     }
 
+    @Override
     public String getCustType(String type) throws SQLException {
         Session session = sessionFactory.openSession();
         String sql = "SELECT PID,PNAME FROM T_P_CODE t WHERE T.PTYPE=?";
@@ -90,6 +92,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"dataList\":" + json.toJSONString() + "}";
     }
 
+    @Override
     public String getSurveyCol(String tab) throws SQLException {
         String sql = "SELECT COL,COL_NAME FROM T_SURVEY_COL t,T_SURVEY_TYPE S WHERE T.TYPE_ID=S.TYPE_ID AND S.TAB=?";
         Session session = sessionFactory.openSession();
@@ -109,6 +112,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"dataList\":" + json.toJSONString() + "}";
     }
 
+    @Override
     public String getSurveyData(String tab, String orgid, String tick, String city, String address, int dist) throws SQLException {
         //获取省份名称
         String orgname = getOrgname(orgid);
@@ -214,6 +218,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"code\":0,\"msg\":\"\",\"count\":" + total + ",\"data\":" + json.toJSONString() + "}";
     }
 
+    @Override
     public String getSurveyInvData(String tab, String tick, String userid, Integer start, Integer end) throws SQLException {
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
@@ -268,6 +273,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"code\":0,\"msg\":\"\",\"count\":" + total + ",\"data\":" + json.toJSONString() + "}";
     }
 
+    @Override
     public void saveInvit(String tab, String rowv, String invRes, String faultRes, String userid) throws SQLException {
         String[] rw = rowv.split(",");
         String sql = "INSERT INTO T_SURVEY_INVITE(TAB, ROWVAL, USERID, IN_FLAG, FAULT_CODE) VALUES(?,?,?,?,?)";
@@ -289,6 +295,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         session.close();
     }
 
+    @Override
     public void saveDist(String tab, String rowv, String distRes, String diaocy) throws SQLException {
         String[] rw = rowv.split(",");
         String sql = "UPDATE T_SURVEY_INVITE SET DISTRI=?,DIS_RM=? WHERE TAB=? AND ROWVAL=?";
@@ -309,6 +316,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         session.close();
     }
 
+    @Override
     public String getSurveyUser(String userid) throws SQLException {
         Session session = sessionFactory.openSession();
         String sql = "SELECT T.S_USER_ID,T.S_USER_NAME FROM T_SURVEY_USER T WHERE T.USERID=?";
