@@ -26,6 +26,7 @@ public class SurveyDaoImpl implements ISurveyDao {
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Override
     public String getCityList(String orgid) throws SQLException {
         Session session = sessionFactory.openSession();
         String sql = "SELECT ORGID,ORGNAME FROM T_ORG t WHERE P_ORGID =?";
@@ -49,11 +50,11 @@ public class SurveyDaoImpl implements ISurveyDao {
 
     public String getSurveyType(String rowv) throws SQLException {
         Session session = sessionFactory.openSession();
-        String sql=null;
-        if(null==rowv) {
+        String sql = null;
+        if (null == rowv) {
             sql = "SELECT t.survey_type,t.tab FROM T_SURVEY_TYPE t ";
-        }else{
-            sql = "SELECT t.survey_type,t.tab FROM T_SURVEY_TYPE t WHERE t.YB_XS='"+rowv+"'";
+        } else {
+            sql = "SELECT t.survey_type,t.tab FROM T_SURVEY_TYPE t WHERE t.YB_XS='" + rowv + "'";
         }
         Query query = session.createSQLQuery(sql)
                 .addScalar("survey_type", StandardBasicTypes.STRING)
@@ -136,6 +137,8 @@ public class SurveyDaoImpl implements ISurveyDao {
         }
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
+        String nsql = "SELECT S.SHOW_NUM From T_SURVEY_TYPE S WHERE S.TAB = " + tab;
+        // Query nquery=session.createQuery()
         String sql = "SELECT T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
         Query query = session.createSQLQuery(sql)
                 .setParameter(0, tab)
@@ -147,19 +150,21 @@ public class SurveyDaoImpl implements ISurveyDao {
             col.append((String) o);
             col.append(",");
         }
-        sql = "SELECT ROWVAL,LNG,LAT," + col.toString() + "RANDOM_VAL FROM ("
+        sql = "SELECT ROWVAL,LNG,LAT,S.SHOW_NUM" + col.toString() + "RANDOM_VAL FROM ("
                 + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                 + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                 + arsql
-                + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
+                + ") T,T_SURVEY_TYPE S WHERE S.TAB=?";
+//                + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
         SQLQuery sq = session.createSQLQuery(sql)
                 .setParameter(0, orgid)
                 .setParameter(1, tab)
                 .setParameter(2, tab)
                 .addScalar("ROWVAL", StandardBasicTypes.STRING)
                 .addScalar("LNG", StandardBasicTypes.DOUBLE)
-                .addScalar("LAT", StandardBasicTypes.DOUBLE);
+                .addScalar("LAT", StandardBasicTypes.DOUBLE)
+                .addScalar("SHOW_NUM", StandardBasicTypes.INTEGER);
         for (Object o : colObj) {
             sq.addScalar((String) o, StandardBasicTypes.STRING);
         }
@@ -167,6 +172,7 @@ public class SurveyDaoImpl implements ISurveyDao {
         sq.addScalar("RANDOM_VAL", StandardBasicTypes.INTEGER);
         int total = 100;
         int k = 0;
+        int showNumberIndex = 0;
         for (Object o : sq.list()) {
             k++;
             JSONObject jo = new JSONObject();
@@ -175,25 +181,33 @@ public class SurveyDaoImpl implements ISurveyDao {
             jo.put("ROWVAL", (String) objects[0]);
             Double lng = (Double) objects[1];
             Double lat = (Double) objects[2];
+
+            int showNumber = (int) objects[3];
+
             jo.put("LNG", lng);
             jo.put("LAT", lat);
             if (flag) {
                 //获取拿出的数据与搜索的地址距离
-//                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
-//                System.out.println("距离是：" + aadistance);
+                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
+                System.out.println("距离是：" + aadistance);
                 //满足半径距离
                 //先排除计算圆半径距离
-//                if (aadistance <= dist) {
-                for (int i = 0; i < colObj.size(); i++) {
-                    jo.put((String) colObj.get(i), (String) objects[i + 3]);
+                if (aadistance <= dist) {
+                    for (int i = 0; i < colObj.size(); i++) {
+                        jo.put((String) colObj.get(i), (String) objects[i + 4]);
+                    }
+                    json.add(jo);
+                    showNumberIndex++;
                 }
-                json.add(jo);
-//                }
             } else {
                 for (int i = 0; i < colObj.size(); i++) {
-                    jo.put((String) colObj.get(i), (String) objects[i + 3]);
+                    jo.put((String) colObj.get(i), (String) objects[i + 4]);
                 }
                 json.add(jo);
+                showNumberIndex++;
+            }
+            if(showNumberIndex==showNumber){
+                break;
             }
         }
         session.close();
