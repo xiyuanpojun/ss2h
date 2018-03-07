@@ -13,8 +13,6 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
-
 public class GeocodingTools2 {
     public static Map<String, Object> getLatAndLngByAddress(String addr, String ak) {
         Map<String, Object> map = new HashMap<>();
@@ -42,7 +40,7 @@ public class GeocodingTools2 {
                 BufferedReader br = new BufferedReader(insr);
                 String data;
                 if ((data = br.readLine()) != null) {
-                    System.out.println("百度地图api返回数据：" + data);
+//                    System.out.println("百度地图api返回数据：" + data);
                     JSONObject object = JSON.parseObject(data);
                     entity = new TCityLocationEntity2();
                     map.put("status", object.getString("status"));
