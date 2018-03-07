@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,14 +142,12 @@ public class SurveyDaoImpl implements ISurveyDao {
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
         String nsql = "SELECT S.SHOW_NUM From T_SURVEY_TYPE S WHERE S.TAB = " + tab;
-        // Query nquery=session.createQuery()
         String sql = "SELECT T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
         Query query = session.createSQLQuery(sql)
                 .setParameter(0, tab)
                 .addScalar("COL", StandardBasicTypes.STRING);
         List colObj = query.list();
         StringBuilder col = new StringBuilder();
-
         for (Object o : colObj) {
             col.append((String) o);
             col.append(",");
@@ -166,18 +163,14 @@ public class SurveyDaoImpl implements ISurveyDao {
                 .setParameter(1, tab)
                 .setParameter(2, tab);
         //获取坐标范围内的记录条
-        System.out.println(Arrays.toString(sq.list().toArray()));
-        int maxCount = (int) sq.list().get(0);
-
-
+//        System.out.println("坐标范围内的记录条：" + Arrays.toString(sq.list().toArray()));
+        int maxCount = Integer.parseInt(sq.list().get(0).toString());
         sql = "SELECT ROWVAL,LNG,LAT,S.SHOW_NUM," + col.toString() + "RANDOM_VAL FROM ("
                 + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                 + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                 + arsql
                 + ") T,T_SURVEY_TYPE S WHERE S.TAB=?";
-//                + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
-
 
         int total = 100;
         int k = 0;
@@ -233,8 +226,6 @@ public class SurveyDaoImpl implements ISurveyDao {
                 break;
             }
         }
-
-
         session.close();
         return "{\"code\":0,\"msg\":\"\",\"count\":" + total + ",\"data\":" + json.toJSONString() + "}";
     }
