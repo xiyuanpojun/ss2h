@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,6 +155,21 @@ public class SurveyDaoImpl implements ISurveyDao {
             col.append((String) o);
             col.append(",");
         }
+        sql = "SELECT COUNT (*) FROM ("
+                + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
+                + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
+                + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                + arsql
+                + ") T,T_SURVEY_TYPE S WHERE S.TAB=?";
+        SQLQuery sq = session.createSQLQuery(sql)
+                .setParameter(0, orgid)
+                .setParameter(1, tab)
+                .setParameter(2, tab);
+        //获取坐标范围内的记录条
+        System.out.println(Arrays.toString(sq.list().toArray()));
+        int maxCount = (int) sq.list().get(0);
+
+
         sql = "SELECT ROWVAL,LNG,LAT,S.SHOW_NUM," + col.toString() + "RANDOM_VAL FROM ("
                 + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
@@ -161,6 +177,69 @@ public class SurveyDaoImpl implements ISurveyDao {
                 + arsql
                 + ") T,T_SURVEY_TYPE S WHERE S.TAB=?";
 //                + ") T,T_SURVEY_TYPE S WHERE T.RANDOM_VAL<=S.SHOW_NUM AND S.TAB=?";
+
+
+        int total = 100;
+        int k = 0;
+        int showNumberIndex = 0;
+        int showNumber = 30;
+        maxCount = maxCount % showNumber;
+        if (maxCount % showNumber == 0) {
+            maxCount = maxCount / showNumber;
+        } else {
+            maxCount = maxCount / showNumber + 1;
+        }
+        for (int c = 0; c < maxCount; c++) {
+            int isEnd = -1;
+            List<Object> list = getObjectList(session, sql, orgid, tab, colObj, showNumber * c, showNumber * (c + 1));
+            for (Object o : list) {
+                k++;
+                JSONObject jo = new JSONObject();
+                Object[] objects = (Object[]) o;
+                //计算获取的地址与数据库地址的距离
+                jo.put("ROWVAL", (String) objects[0]);
+                Double lng = (Double) objects[1];
+                Double lat = (Double) objects[2];
+
+                showNumber = (int) objects[3];
+
+                jo.put("LNG", lng);
+                jo.put("LAT", lat);
+                if (flag) {
+                    //获取拿出的数据与搜索的地址距离
+                    Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
+//                System.out.println("距离是：" + aadistance);
+                    //满足半径距离
+                    if (aadistance <= dist) {
+                        for (int i = 0; i < colObj.size(); i++) {
+                            jo.put((String) colObj.get(i), (String) objects[i + 4]);
+                        }
+                        json.add(jo);
+                        showNumberIndex++;
+                    }
+                } else {
+                    for (int i = 0; i < colObj.size(); i++) {
+                        jo.put((String) colObj.get(i), (String) objects[i + 4]);
+                    }
+                    json.add(jo);
+                    showNumberIndex++;
+                }
+                if (showNumberIndex == showNumber) {
+                    isEnd = 1;
+                    break;
+                }
+            }
+            if (isEnd == 1) {
+                break;
+            }
+        }
+
+
+        session.close();
+        return "{\"code\":0,\"msg\":\"\",\"count\":" + total + ",\"data\":" + json.toJSONString() + "}";
+    }
+
+    private List<Object> getObjectList(Session session, String sql, String orgid, String tab, List colObj, int start, int end) {
         SQLQuery sq = session.createSQLQuery(sql)
                 .setParameter(0, orgid)
                 .setParameter(1, tab)
@@ -174,47 +253,9 @@ public class SurveyDaoImpl implements ISurveyDao {
         }
 
         sq.addScalar("RANDOM_VAL", StandardBasicTypes.INTEGER);
-        int total = 100;
-        int k = 0;
-        int showNumberIndex = 0;
-        for (Object o : sq.list()) {
-            k++;
-            JSONObject jo = new JSONObject();
-            Object[] objects = (Object[]) o;
-            //计算获取的地址与数据库地址的距离
-            jo.put("ROWVAL", (String) objects[0]);
-            Double lng = (Double) objects[1];
-            Double lat = (Double) objects[2];
-
-            int showNumber = (int) objects[3];
-
-            jo.put("LNG", lng);
-            jo.put("LAT", lat);
-            if (flag) {
-                //获取拿出的数据与搜索的地址距离
-                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
-//                System.out.println("距离是：" + aadistance);
-                //满足半径距离
-                if (aadistance <= dist) {
-                    for (int i = 0; i < colObj.size(); i++) {
-                        jo.put((String) colObj.get(i), (String) objects[i + 4]);
-                    }
-                    json.add(jo);
-                    showNumberIndex++;
-                }
-            } else {
-                for (int i = 0; i < colObj.size(); i++) {
-                    jo.put((String) colObj.get(i), (String) objects[i + 4]);
-                }
-                json.add(jo);
-                showNumberIndex++;
-            }
-            if (showNumberIndex == showNumber) {
-                break;
-            }
-        }
-        session.close();
-        return "{\"code\":0,\"msg\":\"\",\"count\":" + total + ",\"data\":" + json.toJSONString() + "}";
+        sq.setFirstResult(start);
+        sq.setMaxResults(end);
+        return sq.list();
     }
 
     @Override
