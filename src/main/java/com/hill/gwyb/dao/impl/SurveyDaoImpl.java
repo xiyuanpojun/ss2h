@@ -150,7 +150,7 @@ public class SurveyDaoImpl implements ISurveyDao {
             col.append((String) o);
             col.append(",");
         }
-        sql = "SELECT ROWVAL,LNG,LAT,S.SHOW_NUM" + col.toString() + "RANDOM_VAL FROM ("
+        sql = "SELECT ROWVAL,LNG,LAT,S.SHOW_NUM," + col.toString() + "RANDOM_VAL FROM ("
                 + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                 + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
@@ -206,7 +206,7 @@ public class SurveyDaoImpl implements ISurveyDao {
                 json.add(jo);
                 showNumberIndex++;
             }
-            if(showNumberIndex==showNumber){
+            if (showNumberIndex == showNumber) {
                 break;
             }
         }
