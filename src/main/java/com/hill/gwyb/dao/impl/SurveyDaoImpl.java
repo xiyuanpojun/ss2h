@@ -195,7 +195,6 @@ public class SurveyDaoImpl implements ISurveyDao {
                 Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
 //                System.out.println("距离是：" + aadistance);
                 //满足半径距离
-                //先排除计算圆半径距离
                 if (aadistance <= dist) {
                     for (int i = 0; i < colObj.size(); i++) {
                         jo.put((String) colObj.get(i), (String) objects[i + 4]);
