@@ -165,6 +165,10 @@ public class SurveyDaoImpl implements ISurveyDao {
         //获取坐标范围内的记录条
 //        System.out.println("坐标范围内的记录条：" + Arrays.toString(sq.list().toArray()));
         int maxCount = Integer.parseInt(sq.list().get(0).toString());
+        sql = "SELECT S.SHOW_NUM FROM T_SURVEY_TYPE S WHERE S.TAB = '" + tab+"'";
+        sq = session.createSQLQuery(sql).addScalar("SHOW_NUM", StandardBasicTypes.INTEGER);
+        int showNumber = Integer.parseInt(sq.list().get(0).toString());
+
         sql = "SELECT ROWVAL,LNG,LAT,S.SHOW_NUM," + col.toString() + "RANDOM_VAL FROM ("
                 + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
@@ -175,7 +179,6 @@ public class SurveyDaoImpl implements ISurveyDao {
         int total = 100;
         int k = 0;
         int showNumberIndex = 0;
-        int showNumber = 30;
         maxCount = maxCount % showNumber;
         if (maxCount % showNumber == 0) {
             maxCount = maxCount / showNumber;
@@ -193,9 +196,6 @@ public class SurveyDaoImpl implements ISurveyDao {
                 jo.put("ROWVAL", (String) objects[0]);
                 Double lng = (Double) objects[1];
                 Double lat = (Double) objects[2];
-
-                showNumber = (int) objects[3];
-
                 jo.put("LNG", lng);
                 jo.put("LAT", lat);
                 if (flag) {
