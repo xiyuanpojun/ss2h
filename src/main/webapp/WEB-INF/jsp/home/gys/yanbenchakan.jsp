@@ -17,7 +17,7 @@
         </div>
         省份:
         <div class="layui-inline ">
-            <select name="orgid" id="orgid"  lay-verify="required"
+            <select name="orgid" id="orgid"
                     lay-filter="searchChange" class="ogd">
                 <%--<option value="16">四川</option>--%>
             </select>

@@ -118,7 +118,7 @@ layui.use(['table', 'form', 'laydate'], function () {
             });
         } else {
             table.reload('surveyList', {
-                url: ctx +"/user/ybck"
+                url: ctx + "/user/ybck"
                 , method: 'post'
                 , where: {
                     tab: sury_type,
@@ -201,6 +201,7 @@ layui.use(['table', 'form', 'laydate'], function () {
         });
     }
 });
+
 //初始化省份
 function orginit() {
     layui.use("form", function () {
@@ -225,8 +226,9 @@ function orginit() {
         form.render();
     });
 }
-    //初始化地市
-function  init(porgid) {
+
+//初始化地市
+function init(porgid) {
     layui.use("form", function () {
         $(".city option").remove();
         var form = layui.form;
@@ -242,9 +244,9 @@ function  init(porgid) {
                 for (var i = 0; i < li.length; i++) {
                     var citylist = $("<option value=" + li[i].orgid + ">" + li[i].orgname + "</option>");
                     $(".city").append(citylist);
-                    form.render();
-                }
 
+                }
+                form.render();
             },
             error: function () {
                 layer.alert("连接服务器失败");

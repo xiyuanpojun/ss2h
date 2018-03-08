@@ -56,10 +56,13 @@ $(function () {
                 orginit();
                 $("#porgid2").attr("lay-verify", "required");
             } else {
+                orginit();
                 $("#porglist").hide();
                 $("#porgid2").val("");
                 $("#spOrg").val("");
                 $("#porgid2").removeAttr("lay-verify");
+                $("#gporg").val("");
+                //$(".pog option").remove();
             }
             reset();
             form.render();
@@ -252,6 +255,8 @@ $(function () {
     $("#addorg").click(function () {
         $('#orgform')[0].reset();
         $("#checkfId").html("");
+        $("#porglist").show();
+        form.render();
     });
     //点击重置
     $("#reset1").click(function () {
