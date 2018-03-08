@@ -4,7 +4,7 @@
     <%@include file="/WEB-INF/jsp/common.jsp" %>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=3.0&ak=cXvqMh90NDoHaYCCl4p3T5jIq7yv46cl"></script>
-    <script src="${ctx}/support/js/gys/invitation.js"></script>
+    <script src="${ctx}/support/js/gys/dczgy.js"></script>
 
 </head>
 <body>
@@ -15,10 +15,9 @@
             <select name="stype" id="stype">
             </select>
         </div>
-        地市:
+        省份:
         <div class="layui-inline">
             <select name="city" id="city">
-                <option value=""></option>
             </select>
         </div>
         客户类型:
