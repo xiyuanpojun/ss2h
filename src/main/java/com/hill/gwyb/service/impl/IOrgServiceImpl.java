@@ -49,14 +49,12 @@ public class IOrgServiceImpl implements IOrgService {
     //查找
     @Override
     public Map<String, Object> findOne(TOrgEntity orgentity) throws Exception {
-        // TODO Auto-generated method stub
         return null;
     }
 
     //修改
     @Override
     public Map<String, Object> update(TOrgEntity orgentity) throws Exception {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -58,7 +58,7 @@ $(function () {
             } else {
                 $("#porglist").hide();
                 $("#porgid2").val("");
-                $("#pOrg").val("");
+                $("#spOrg").val("");
                 $("#porgid2").removeAttr("lay-verify");
             }
             reset();
@@ -132,7 +132,7 @@ $(function () {
         var form = layui.form;
         //新增机构栏上级机构选择框
         form.on('select(searchChange1)', function (data) {
-            $("#pOrg").val($(data.elem).find("option:selected").text());
+            $("#gporg").val($(data.elem).find("option:selected").text());
             return false;
         });
     });

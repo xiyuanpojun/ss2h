@@ -27,7 +27,7 @@
                             <form class="layui-form" lay-filter="add">
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">上级机构</label>
-                                    <div class="layui-input-block" id="porg">
+                                    <div class="layui-input-block" id="sporg">
                                         <select name="porgid" id="porgid" lay-verify="required"
                                                 lay-filter="searchChange" class="pog">
                                             <option value="all">所有机构</option>
@@ -88,14 +88,14 @@
                         </div>
                         <div class="layui-form-item" id="porglist">
                             <label class="layui-form-label">上级机构</label>
-                            <div class="layui-input-block" id="porg">
+                            <div class="layui-input-block" id="aporg">
                                 <select name="orgentity.pOrgid" id="porgid2" class="pog" lay-verify="required"
                                         lay-filter="searchChange1">
                                     <c:forEach items="${porglist}" var="org">
                                         <option value="${org.orgid}">${org.orgname}</option>
                                     </c:forEach>
                                 </select>
-                                <input type="hidden" id="porg" name="orgentity.pOrg" value=""/>
+                                <input type="hidden" id="gporg" name="orgentity.pOrg" value=""/>
                             </div>
                         </div>
 

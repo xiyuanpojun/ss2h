@@ -131,18 +131,18 @@ public class SurveyDaoImpl implements ISurveyDao {
 
             Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
             cityentity = (TCityLocationEntity2) map1.get("entity");
-
-            String res = GeocodingTools2.getAddressByLocation(cityentity.getLng(), cityentity.getLat());
+            //判断输入地址是否在当前省范围内，如果不是则终止查询
+//            String res = GeocodingTools2.getAddressByLocation(cityentity.getLng(), cityentity.getLat());
 //            System.out.println("获得的地址为："+res);
-            com.alibaba.fastjson.JSONObject json = com.alibaba.fastjson.JSONObject.parseObject(res);
-            com.alibaba.fastjson.JSONArray jray = json.getJSONArray("addrList");
-            json = jray.getJSONObject(0);
-            if ("1".equals(json.getString("status"))) {
-                if (!json.getString("admName").split(",", 3)[0].contains(orgname)) {
-//                    System.out.println("该地区不在当前省范围内");
-                    return "{\"code\":0,\"msg\":\"\",\"count\":" + 100 + ",\"data\":[]}";
-                }
-            }
+//            com.alibaba.fastjson.JSONObject json = com.alibaba.fastjson.JSONObject.parseObject(res);
+//            com.alibaba.fastjson.JSONArray jray = json.getJSONArray("addrList");
+//            json = jray.getJSONObject(0);
+//            if ("1".equals(json.getString("status"))) {
+//                if (!json.getString("admName").split(",", 3)[0].contains(orgname)) {
+////                    System.out.println("该地区不在当前省范围内");
+//                    return "{\"code\":0,\"msg\":\"\",\"count\":" + 100 + ",\"data\":[]}";
+//                }
+//            }
 
             //获取地址附近坐标范围
             double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
