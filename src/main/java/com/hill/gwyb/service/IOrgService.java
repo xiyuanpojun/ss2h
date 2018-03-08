@@ -14,4 +14,5 @@ public Map<String, Object> delete(TOrgEntity orgentity) throws Exception;
 public Map<String, Object> add(TOrgEntity orgentity) throws Exception;
 public Map<String, Object> checkId(String oid);
 public Map<String, Object> showporglist() throws Exception;
+public Map<String,Object> showcitylist(String porgid);
 }

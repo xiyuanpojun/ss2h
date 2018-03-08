@@ -147,5 +147,13 @@ public class IOrgServiceImpl implements IOrgService {
         return map;
     }
 
+    @Override
+    public Map<String, Object> showcitylist(String porgid) {
+        Map<String, Object> map = new HashMap<>();
+        List<TOrgEntity> porglist = orgdao.showcitylist(porgid);
+        map.put("porglist", porglist);
+        return map;
+    }
+
 
 }

@@ -19,4 +19,6 @@ void delete(TOrgEntity orgEntity) throws Exception;
 //添加功能列表
 void add(TOrgEntity orgEntity) throws Exception;
 List<TOrgEntity> showporglist() throws Exception;
+//根据上级查询下级机构
+List<TOrgEntity> showcitylist(String porgid);
 }

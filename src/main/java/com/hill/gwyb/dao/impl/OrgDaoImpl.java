@@ -94,6 +94,18 @@ public class OrgDaoImpl implements IOrgDao {
     }
 
     @Override
+    public List<TOrgEntity> showcitylist(String porgid) {
+        Session session = sessionFactory.openSession();
+        String hql;
+        hql = "FROM TOrgEntity o  where o.pOrgid = ? order by TO_NUMBER(o.orgid) asc";
+        Query query = session.createQuery(hql);
+        query.setParameter(0,porgid);
+        List<TOrgEntity> list = query.list();
+        session.close();
+        return list;
+    }
+
+    @Override
     public boolean findOne(TOrgEntity orgentity) {
         Session session = sessionFactory.openSession();
         String hql;

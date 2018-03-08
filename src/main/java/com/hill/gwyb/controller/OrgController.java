@@ -117,6 +117,10 @@ public class OrgController extends ActionSupport {
         dataMap = orgService.showporglist();
         return ActionSupport.SUCCESS;
     }
-
+    //根据上级机构获得下级机构
+    public String showcitylist(){
+        dataMap=orgService.showcitylist(porgid);
+        return ActionSupport.SUCCESS;
+    }
 
 }

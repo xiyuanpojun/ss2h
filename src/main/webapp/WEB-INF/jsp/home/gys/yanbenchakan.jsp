@@ -4,7 +4,7 @@
     <%@include file="/WEB-INF/jsp/common.jsp" %>
     <script type="text/javascript"
             src="http://api.map.baidu.com/api?v=3.0&ak=cXvqMh90NDoHaYCCl4p3T5jIq7yv46cl"></script>
-    <script src="${ctx}/support/js/gys/dczgy.js"></script>
+    <script src="${ctx}/support/js/gys/yanbenchakan.js"></script>
 
 </head>
 <body>
@@ -16,8 +16,16 @@
             </select>
         </div>
         省份:
+        <div class="layui-inline ">
+            <select name="orgid" id="orgid"  lay-verify="required"
+                    lay-filter="searchChange" class="ogd">
+                <%--<option value="16">四川</option>--%>
+            </select>
+        </div>  地市:
         <div class="layui-inline">
-            <select name="city" id="city">
+            <select name="city" id="city" class="city">
+                <option value="">请选择地市</option>
+                <%--<option value="162">德阳</option>--%>
             </select>
         </div>
         客户类型:
