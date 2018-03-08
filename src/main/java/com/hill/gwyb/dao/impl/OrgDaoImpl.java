@@ -1,21 +1,17 @@
 package com.hill.gwyb.dao.impl;
 
-import java.util.List;
-
+import com.hill.gwyb.dao.IOrgDao;
+import com.hill.gwyb.po.TOrgEntity;
+import com.hill.gwyb.po.TUserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hill.gwyb.dao.IOrgDao;
-import com.hill.gwyb.po.TFuncEntity;
-import com.hill.gwyb.po.TOrgEntity;
-import com.hill.gwyb.po.TUserEntity;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -99,22 +95,21 @@ public class OrgDaoImpl implements IOrgDao {
 
     @Override
     public boolean findOne(TOrgEntity orgentity) {
-        boolean flag = false;
         Session session = sessionFactory.openSession();
         String hql;
-        hql = "FROM TOrgEntity o  where  o.orgname = ?";
+        if (!"".equals(orgentity.getpOrgid())) {
+            hql = "FROM TOrgEntity o  where  o.orgname = ? and pOrgid = ?";
+        } else {
+            hql = "FROM  TOrgEntity o where o.orgname = ?";
+        }
         Query query = session.createQuery(hql);
         query.setParameter(0, orgentity.getOrgname());
-        List<TOrgEntity> list = query.list();
-        System.out.println(list.size());
-        session.close();
-        if (list.size() > 0) {
-            flag = true;
-        } else {
-            flag = false;
+        if (!"".equals(orgentity.getpOrgid())) {
+            query.setParameter(1, orgentity.getpOrgid());
         }
-
-        return flag;
+        List<TOrgEntity> list = query.list();
+        session.close();
+        return list.size() > 0;
     }
 
 }

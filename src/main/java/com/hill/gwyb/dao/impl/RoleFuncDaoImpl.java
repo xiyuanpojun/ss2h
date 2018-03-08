@@ -107,7 +107,10 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
         String hql = "select max(rf.orderNum) from TRoleFuncEntity rf,TRoleEntity r where rf.roleid = r.roleid and rf.roleid = ?";
         Query query = session.createQuery(hql);
         query.setParameter(0, role);
-        int maxnum = (int) query.list().get(0);
+        int maxnum = 0;
+        if (query.list().get(0) != null) {
+            maxnum = (int) query.list().get(0);
+        }
         session.close();
         return maxnum;
     }

@@ -58,6 +58,12 @@
         <action name="showGwUserPage">
             <result>/WEB-INF/jsp/home/user/impGwUser.jsp</result>
         </action>
+
+        <!--调查跟踪员-->
+        <!--/user/dcgzyPage-->
+        <action name="dcgzyPage">
+            <result>/WEB-INF/jsp/home/gys/dczgy.jsp</result>
+        </action>
     </package>
 
     <!--专项配置操作-->

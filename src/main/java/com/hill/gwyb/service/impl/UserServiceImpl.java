@@ -130,8 +130,11 @@ public class UserServiceImpl implements IUserService {
                 && !"".equals(userEntity.getUpwd()) && !"".equals(userEntity.getUname())) {
             try {
                 TUserEntity result = userDao.userFindOne(userEntity.getUserid());
+                System.out.println(userEntity.getUrole());
+                System.out.println(userEntity.getUrole());
+                System.out.println(userEntity.getUrole());
                 if (result == null) {
-                    if ("1".equals(userEntity.getUrole())) {
+                    if ("1".equals(userEntity.getUrole()) || "3".equals(userEntity.getUrole())) {
                         userDao.userAdd(userEntity);
                         map.put("message", "添加成功");
                     } else if ("2".equals(userEntity.getUrole()) && !"".equals(userEntity.getOrgid())) {
@@ -142,7 +145,6 @@ public class UserServiceImpl implements IUserService {
                         error = 3;
                         map.put("message", "添加失败，省份未选择。");
                     }
-
                 } else {
                     //该账号已注册
                     error = 3;
@@ -173,7 +175,7 @@ public class UserServiceImpl implements IUserService {
         if (userEntity != null && userEntity.getUserid() != null && !"".equals(userEntity.getUserid())) {
             try {
                 TUserEntity result = userDao.userFindOne(userEntity.getUserid());
-                if ("2".equals(result.getUrole())) {
+                if ("2".equals(result.getUrole()) || "3".equals(result.getUrole())) {
                     userDao.userDelete(result);
                     map.put("message", "删除成功");
                 } else {
@@ -211,7 +213,7 @@ public class UserServiceImpl implements IUserService {
                 if (result != null) {
                     result.setUname(userEntity.getUname());
                     result.setUpwd(userEntity.getUpwd());
-                    if (result.getUrole().equals("1")) {
+                    if (result.getUrole().equals("1") || "3".equals(result.getUrole())) {
                         result.setOrgid(userEntity.getOrgid());
                         userDao.userUpdate(result);
                         map.put("message", "修改成功");
@@ -259,8 +261,10 @@ public class UserServiceImpl implements IUserService {
                     TUserEntity userEntity = users.get(i);
                     if ("1".equals(userEntity.getUrole())) {
                         userEntity.setUrole("管理员");
-                    } else {
+                    } else if ("2".equals(userEntity.getUrole())) {
                         userEntity.setUrole("供应商");
+                    } else {
+                        userEntity.setUrole("调查跟踪员");
                     }
                     if (null == userEntity.getOrgid()) {
                         userEntity.setOrgid("");
