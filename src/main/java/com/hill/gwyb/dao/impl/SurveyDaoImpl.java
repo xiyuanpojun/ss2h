@@ -131,18 +131,6 @@ public class SurveyDaoImpl implements ISurveyDao {
 
             Map<String, Object> map1 = GeocodingTools2.getLatAndLngByAddress(address, ak);
             cityentity = (TCityLocationEntity2) map1.get("entity");
-            //判断输入地址是否在当前省范围内，如果不是则终止查询
-//            String res = GeocodingTools2.getAddressByLocation(cityentity.getLng(), cityentity.getLat());
-//            System.out.println("获得的地址为："+res);
-//            com.alibaba.fastjson.JSONObject json = com.alibaba.fastjson.JSONObject.parseObject(res);
-//            com.alibaba.fastjson.JSONArray jray = json.getJSONArray("addrList");
-//            json = jray.getJSONObject(0);
-//            if ("1".equals(json.getString("status"))) {
-//                if (!json.getString("admName").split(",", 3)[0].contains(orgname)) {
-////                    System.out.println("该地区不在当前省范围内");
-//                    return "{\"code\":0,\"msg\":\"\",\"count\":" + 100 + ",\"data\":[]}";
-//                }
-//            }
 
             //获取地址附近坐标范围
             double[] locaion = MapUtil.GetAround(cityentity.getLat(), cityentity.getLng(), dist);
@@ -167,79 +155,69 @@ public class SurveyDaoImpl implements ISurveyDao {
             if(showNumber==0) {
                 showNumber = Integer.parseInt(objects[0].toString());
             }
-            col.append((String) objects[1]);
             col.append(",");
+            col.append((String) objects[1]);
         }
-        sql = "SELECT count(1) FROM " + tab + " A,T_ORG B "
-                + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
-                + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                + arsql;
-        SQLQuery sq = session.createSQLQuery(sql)
-                .setParameter(0, orgid)
-                .setParameter(1, tab)
-                .setParameter(2, tab);
-        //获取坐标范围内的记录条
-//        System.out.println("坐标范围内的记录条：" + Arrays.toString(sq.list().toArray()));
-        int maxCount = Integer.parseInt(sq.list().get(0).toString());
-
-        sql = "SELECT ROWVAL,LNG,LAT,S.SHOW_NUM," + col.toString() + "RANDOM_VAL FROM ("
-                + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
-                + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
-                + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                + arsql
-                + ") T,T_SURVEY_TYPE S WHERE S.TAB=?";
-
-        int total = 100;
-        int k = 0;
-        int showNumberIndex = 0;
-        if (maxCount % showNumber == 0) {
-            maxCount = maxCount / showNumber;
-        } else {
-            maxCount = (maxCount / showNumber) + 1;
+        SQLQuery sq=null;
+        if("".equals(orgid)){
+            sql =     "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A "
+                    + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                    + tick
+                    + arsql +" ORDER BY DBMS_RANDOM.RANDOM";
+            sq= session.createSQLQuery(sql)
+                    .setParameter(0, tab);
+        }else{
+            sql =     "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A,T_ORG B "
+                    + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
+                    + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                    + arsql +" ORDER BY DBMS_RANDOM.RANDOM";
+            sq= session.createSQLQuery(sql)
+                    .setParameter(0, orgid)
+                    .setParameter(1, tab);
         }
-        for (int c = 0; c < maxCount; c++) {
-            int isEnd = -1;
-            List<Object> list = getObjectList(session, sql, orgid, tab, colObj, showNumber * c, showNumber * (c + 1));
-            for (Object o : list) {
-                k++;
-                JSONObject jo = new JSONObject();
-                Object[] objects = (Object[]) o;
-                //计算获取的地址与数据库地址的距离
-                jo.put("ROWVAL", (String) objects[0]);
-                Double lng = (Double) objects[1];
-                Double lat = (Double) objects[2];
-                jo.put("LNG", lng);
-                jo.put("LAT", lat);
-                if (flag) {
-                    //获取拿出的数据与搜索的地址距离
-                    Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
-//                System.out.println("距离是：" + aadistance);
-                    //满足半径距离
-                    if (aadistance <= dist) {
-                        for (int i = 0; i < colObj.size(); i++) {
-                            jo.put((String) colObj.get(i), (String) objects[i + 4]);
-                        }
-                        json.add(jo);
-                        showNumberIndex++;
-                    }
-                } else {
+        sq.addScalar("ROWVAL", StandardBasicTypes.STRING)
+                .addScalar("LNG", StandardBasicTypes.DOUBLE)
+                .addScalar("LAT", StandardBasicTypes.DOUBLE);
+        for (Object o : colObj) {
+            Object[] objects = (Object[]) o;
+            sq.addScalar((String) objects[1], StandardBasicTypes.STRING);
+        }
+        List<Object> list =sq.list();
+        int k=0;
+        for (Object o : list) {
+            JSONObject jo = new JSONObject();
+            Object[] objects = (Object[]) o;
+            jo.put("ROWVAL", (String) objects[0]);
+            Double lng = (Double) objects[1];
+            Double lat = (Double) objects[2];
+            jo.put("LNG", lng);
+            jo.put("LAT", lat);
+            if (flag) {
+                //获取拿出的数据与搜索的地址距离
+                Double aadistance = MapUtil.getDistance(lng, lat, cityentity.getLng(), cityentity.getLat());
+                //满足半径距离
+                if (aadistance <= dist) {
                     for (int i = 0; i < colObj.size(); i++) {
-                        jo.put((String) colObj.get(i), (String) objects[i + 4]);
+                        Object[] colO = (Object[]) colObj.get(i);
+                        jo.put((String) colO[1], (String) objects[i + 3]);
                     }
                     json.add(jo);
-                    showNumberIndex++;
+                    k++;
                 }
-                if (showNumberIndex == showNumber) {
-                    isEnd = 1;
-                    break;
+            } else {
+                for (int i = 0; i < colObj.size(); i++) {
+                    Object[] colO = (Object[]) colObj.get(i);
+                    jo.put((String) colO[1], (String) objects[i + 3]);
                 }
+                json.add(jo);
+                k++;
             }
-            if (isEnd == 1) {
+            if(k>showNumber){
                 break;
             }
         }
         session.close();
-        return "{\"code\":0,\"msg\":\"\",\"count\":" + total + ",\"data\":" + json.toJSONString() + "}";
+        return "{\"code\":0,\"msg\":\"\",\"count\":100,\"data\":" + json.toJSONString() + "}";
     }
 
     private List<Object> getObjectList(Session session, String sql, String orgid, String tab, List colObj, int start, int end) {
