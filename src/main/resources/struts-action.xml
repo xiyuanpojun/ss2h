@@ -59,9 +59,9 @@
             <result>/WEB-INF/jsp/home/user/impGwUser.jsp</result>
         </action>
 
-        <!--调查跟踪员-->
-        <!--/user/dcgzyPage-->
-        <action name="dcgzyPage">
+        <!--样本查看员-->
+        <!--/user/ybckPage-->
+        <action name="ybckPage">
             <result>/WEB-INF/jsp/home/gys/yanbenchakan.jsp</result>
         </action>
 

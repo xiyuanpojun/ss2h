@@ -264,7 +264,7 @@ public class UserServiceImpl implements IUserService {
                     } else if ("2".equals(userEntity.getUrole())) {
                         userEntity.setUrole("供应商");
                     } else {
-                        userEntity.setUrole("调查跟踪员");
+                        userEntity.setUrole("样本查看人员");
                     }
                     if (null == userEntity.getOrgid()) {
                         userEntity.setOrgid("");
