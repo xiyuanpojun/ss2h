@@ -49,6 +49,7 @@ layui.use(['table', 'form', 'laydate'], function () {
     });
     //每次点搜索，得看表格是否还有未提交数据
     form.on('submit(searchForm)', function (data) {
+        $("#searchForm").attr('disabled', "true");
         checkLogin();
         var pgs = table.cache.surveyList;
 
@@ -94,6 +95,7 @@ layui.use(['table', 'form', 'laydate'], function () {
                             dzArray[p1] = dzObj;
                         });
                         bdGEO(dzArray);
+                        $("#searchForm").removeAttr("disabled");
                     }
                     , method: 'post'
                     , where: {
@@ -136,6 +138,7 @@ layui.use(['table', 'form', 'laydate'], function () {
                         dzArray[p1] = dzObj;
                     });
                     bdGEO(dzArray);
+                    $("#searchForm").removeAttr("disabled");
                 }
             });
         }
@@ -202,17 +205,17 @@ function orginit() {
             type: "POST",
             success: function (data) {
                 var li = data.porglist;
-                $("#orgid").append($('<option value="">选择省份</option>'));
+                // $("#orgid").append($('<option value="">选择省份</option>'));
                 for (var i = 0; i < li.length; i++) {
                     var porglist = $("<option value=" + li[i].orgid + ">" + li[i].orgname + "</option>");
                     $(".ogd").append(porglist);
                     form.render();
                 }
-
+                init(li[0].orgid);
             },
             error: function () {
                 layer.alert("连接服务器失败");
-            },
+            }
         });
         form.render();
     });

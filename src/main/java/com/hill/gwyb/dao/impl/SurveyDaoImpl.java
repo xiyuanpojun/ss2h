@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,6 +115,7 @@ public class SurveyDaoImpl implements ISurveyDao {
 
     @Override
     public String getSurveyData(String tab, String orgid, String tick, String city, String address, int dist) throws SQLException {
+        System.out.println(new Date());
         //获取省份名称
         String orgname = getOrgname(orgid);
         //获取城市名称
@@ -152,26 +154,26 @@ public class SurveyDaoImpl implements ISurveyDao {
         int showNumber = 0;
         for (Object o : colObj) {
             Object[] objects = (Object[]) o;
-            if(showNumber==0) {
+            if (showNumber == 0) {
                 showNumber = Integer.parseInt(objects[0].toString());
             }
             col.append(",");
             col.append((String) objects[1]);
         }
-        SQLQuery sq=null;
-        if("".equals(orgid)){
-            sql =     "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A "
+        SQLQuery sq = null;
+        if ("".equals(orgid)) {
+            sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A "
                     + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                     + tick
-                    + arsql +" ORDER BY DBMS_RANDOM.RANDOM";
-            sq= session.createSQLQuery(sql)
+                    + arsql + " ORDER BY DBMS_RANDOM.RANDOM";
+            sq = session.createSQLQuery(sql)
                     .setParameter(0, tab);
-        }else{
-            sql =     "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A,T_ORG B "
+        } else {
+            sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A,T_ORG B "
                     + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                     + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                    + arsql +" ORDER BY DBMS_RANDOM.RANDOM";
-            sq= session.createSQLQuery(sql)
+                    + arsql + " ORDER BY DBMS_RANDOM.RANDOM";
+            sq = session.createSQLQuery(sql)
                     .setParameter(0, orgid)
                     .setParameter(1, tab);
         }
@@ -182,8 +184,8 @@ public class SurveyDaoImpl implements ISurveyDao {
             Object[] objects = (Object[]) o;
             sq.addScalar((String) objects[1], StandardBasicTypes.STRING);
         }
-        List<Object> list =sq.list();
-        int k=0;
+        List<Object> list = sq.list();
+        int k = 0;
         for (Object o : list) {
             JSONObject jo = new JSONObject();
             Object[] objects = (Object[]) o;
@@ -212,11 +214,12 @@ public class SurveyDaoImpl implements ISurveyDao {
                 json.add(jo);
                 k++;
             }
-            if(k>showNumber){
+            if (k >= showNumber) {
                 break;
             }
         }
         session.close();
+        System.out.println(new Date());
         return "{\"code\":0,\"msg\":\"\",\"count\":100,\"data\":" + json.toJSONString() + "}";
     }
 
