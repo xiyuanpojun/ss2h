@@ -26,12 +26,6 @@ layui.use(['table', 'form', 'laydate'], function () {
         });
         form.render('select');
     });
-    $.getJSON(ctx + "/survey/survey_getFault", function (data) {
-        $.each(data.dataList, function (i, item) {
-            $("#faultRes").append('<option  value=' + item.PID + '>' + item.PNAME + "</option>");
-        });
-        form.render('select');
-    });
     $.getJSON(ctx + "/survey/survey_getCustType", function (data) {
         $.each(data.dataList, function (i, item) {
             $('#custType').append('<option  value=' + item.PID + '>' + item.PNAME + "</option>");
@@ -57,9 +51,7 @@ layui.use(['table', 'form', 'laydate'], function () {
     form.on('submit(searchForm)', function (data) {
         checkLogin();
         var pgs = table.cache.surveyList;
-        // if (typeof(pgs) != 'undefined' && pgs.length > 1) {
-        //     layer.msg('还有未提交预约结果数据！');
-        // } else {
+
         var stype = data.field.stype;
         var city = data.field.city;
         var custType = data.field.custType;
@@ -147,7 +139,6 @@ layui.use(['table', 'form', 'laydate'], function () {
                 }
             });
         }
-        // }
         return false;
     });
 

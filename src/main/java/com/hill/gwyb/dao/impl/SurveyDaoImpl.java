@@ -154,23 +154,26 @@ public class SurveyDaoImpl implements ISurveyDao {
         }
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
-        String nsql = "SELECT S.SHOW_NUM From T_SURVEY_TYPE S WHERE S.TAB = " + tab;
-        String sql = "SELECT T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
+        String sql = "SELECT S.SHOW_NUM,T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
         Query query = session.createSQLQuery(sql)
                 .setParameter(0, tab)
+                .addScalar("SHOW_NUM", StandardBasicTypes.INTEGER)
                 .addScalar("COL", StandardBasicTypes.STRING);
         List colObj = query.list();
         StringBuilder col = new StringBuilder();
+        int showNumber = 0;
         for (Object o : colObj) {
-            col.append((String) o);
+            Object[] objects = (Object[]) o;
+            if(showNumber==0) {
+                showNumber = Integer.parseInt(objects[0].toString());
+            }
+            col.append((String) objects[1]);
             col.append(",");
         }
-        sql = "SELECT COUNT (*) FROM ("
-                + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
+        sql = "SELECT count(1) FROM " + tab + " A,T_ORG B "
                 + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
                 + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                + arsql
-                + ") T,T_SURVEY_TYPE S WHERE S.TAB=?";
+                + arsql;
         SQLQuery sq = session.createSQLQuery(sql)
                 .setParameter(0, orgid)
                 .setParameter(1, tab)
@@ -178,9 +181,6 @@ public class SurveyDaoImpl implements ISurveyDao {
         //获取坐标范围内的记录条
 //        System.out.println("坐标范围内的记录条：" + Arrays.toString(sq.list().toArray()));
         int maxCount = Integer.parseInt(sq.list().get(0).toString());
-        sql = "SELECT S.SHOW_NUM FROM T_SURVEY_TYPE S WHERE S.TAB = '" + tab + "'";
-        sq = session.createSQLQuery(sql).addScalar("SHOW_NUM", StandardBasicTypes.INTEGER);
-        int showNumber = Integer.parseInt(sq.list().get(0).toString());
 
         sql = "SELECT ROWVAL,LNG,LAT,S.SHOW_NUM," + col.toString() + "RANDOM_VAL FROM ("
                 + "SELECT A.ROWID ROWVAL,LNG,LAT," + col.toString() + "ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RANDOM_VAL FROM " + tab + " A,T_ORG B "
