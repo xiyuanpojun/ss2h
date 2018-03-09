@@ -86,7 +86,7 @@
                                 <input type="radio" name="userEntity.urole" lay-filter="said" value="1" title="管理员">
                                 <input type="radio" name="userEntity.urole" lay-filter="said" value="2" title="供应商"
                                        checked>
-                                <input type="radio" name="userEntity.urole" lay-filter="said" value="3" title="调查跟踪员">
+                                <input type="radio" name="userEntity.urole" lay-filter="said" value="3" title="样本查看员">
                             </div>
                         </div>
                         <div class="layui-form-item">

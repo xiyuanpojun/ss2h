@@ -29,7 +29,7 @@
                                             </c:if>
                                                 <option value="1">管理员</option>
                                                 <option value="2">供应商</option>
-                                                <option value="3">调查跟踪员</option>
+                                                <option value="3">样本查看员</option>
                                         </select>
 
                                     </div>
@@ -62,7 +62,7 @@
                             <div class="layui-input-block">
                                 <input type="radio" class="roleid" name="roleid" value="1" title="管理员" checked lay-filter="radio1">
                                 <input type="radio"  class="roleid" name="roleid" value="2" title="供应商"  lay-filter="radio1">
-                                <input type="radio"  class="roleid" name="roleid" value="3" title="调查跟踪员"  lay-filter="radio1">
+                                <input type="radio"  class="roleid" name="roleid" value="3" title="样本查看员"  lay-filter="radio1">
                             </div>
                         </div>
                         </div>
