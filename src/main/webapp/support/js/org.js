@@ -1,4 +1,5 @@
 $(function () {
+    orginit();
     layui.use("element", function () {
         var element = layui.element;
     });
@@ -36,7 +37,6 @@ $(function () {
 
                     }
                 });
-
             }
             else {
                 $("#checkId").html("请输入数字");
@@ -143,6 +143,33 @@ $(function () {
         layer.closeAll();
     });
 
+    //上级机构数据初始化
+    function orginit() {
+        layui.use("form", function () {
+            var form = layui.form;
+            $.ajax({
+                url: ctx + "/org/org_showporglist",
+                type: "POST",
+                success: function (data) {
+                    $(".pog option").remove();
+                    var li = data.porglist;
+                    $("#porgid").append($('<option value="all">所有机构</option>'));
+                    $("#porgid2").append($('<option value="">选择上级机构</option>'));
+                    for (var i = 0; i < li.length; i++) {
+                        var porglist = $("<option value=" + li[i].orgid + ">" + li[i].orgname + "</option>");
+                        $(".pog").append(porglist);
+                    }
+                    form.render();
+                    //打开页面时加载一次数据
+                    init($("#porgid").val());
+                },
+                error: function () {
+                    layer.alert("连接服务器失败");
+                }
+            });
+        });
+    }
+
 //初始化方法
     function init(porgid) {
         layui.use('table', function () {
@@ -181,7 +208,6 @@ $(function () {
                         },
                         dataType: "json",
                         success: function (data) {
-                            layer.msg(data.message);
                             var error = parseInt(data.error);
                             if (error === 0) {
                                 obj.del();
@@ -201,35 +227,6 @@ $(function () {
                 }
             });
         });
-    }
-
-    //上级机构数据初始化
-    function orginit() {
-        layui.use("form", function () {
-            var form = layui.form;
-
-            $.ajax({
-                url: ctx + "/org/org_showporglist",
-                type: "POST",
-                success: function (data) {
-                    $(".pog option").remove();
-                    var li = data.porglist;
-                    $("#porgid").append($('<option value="all">所有机构</option>'));
-                    $("#porgid2").append($('<option value="">选择上级机构</option>'));
-                    for (var i = 0; i < li.length; i++) {
-                        var porglist = $("<option value=" + li[i].orgid + ">" + li[i].orgname + "</option>");
-                        $(".pog").append(porglist);
-
-                    }
-
-                },
-                error: function () {
-                    layer.alert("连接服务器失败");
-                },
-            });
-            form.render();
-        });
-
     }
 
     //检查orgid是否为空
@@ -266,7 +263,4 @@ $(function () {
             form.render();
         });
     });
-    //打开页面时加载一次数据
-    init($("#porgid").val());
-
 });

@@ -30,10 +30,10 @@
                                     <div class="layui-input-block" id="sporg">
                                         <select name="porgid" id="porgid" lay-verify="required"
                                                 lay-filter="searchChange" class="pog">
-                                            <option value="all">所有机构</option>
-                                            <c:forEach items="${sessionScope.porglist}" var="org">
-                                                <option value="${org.orgid}">${org.orgname}</option>
-                                            </c:forEach>
+                                            <%--<option value="all">所有机构</option>--%>
+                                                <%--<c:forEach items="${sessionScope.porglist}" var="org">--%>
+                                                <%--<option value="${org.orgid}">${org.orgname}</option>--%>
+                                                <%--</c:forEach>--%>
                                         </select>
                                     </div>
                                 </div>
@@ -91,9 +91,6 @@
                             <div class="layui-input-block" id="aporg">
                                 <select name="orgentity.pOrgid" id="porgid2" class="pog" lay-verify="required"
                                         lay-filter="searchChange1">
-                                    <c:forEach items="${porglist}" var="org">
-                                        <option value="${org.orgid}">${org.orgname}</option>
-                                    </c:forEach>
                                 </select>
                                 <input type="hidden" id="gporg" name="orgentity.pOrg" value=""/>
                             </div>
