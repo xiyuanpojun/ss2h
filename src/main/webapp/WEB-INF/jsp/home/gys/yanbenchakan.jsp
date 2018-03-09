@@ -38,7 +38,7 @@
         <br/>
         地址搜索:
         <div class="layui-inline">
-            <input value="" name="address" class="layui-input" style="width: 500px;" type="text" placeholder="请输入地址搜索"
+            <input value="" name="address" class="layui-input" style="width: 438px;" type="text" placeholder="请输入地址搜索"
                    autocomplete="off"
                    lay-verify="title">
         </div>

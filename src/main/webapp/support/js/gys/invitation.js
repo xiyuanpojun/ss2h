@@ -104,6 +104,7 @@ layui.use(['table', 'form', 'laydate'], function () {
     });
     //每次点搜索，得看表格是否还有未提交数据
     form.on('submit(searchForm)', function (data) {
+        $("#searchForm").attr('disabled', "true");
         checkLogin();
         var pgs = table.cache.surveyList;
         // if (typeof(pgs) != 'undefined' && pgs.length > 1) {
@@ -150,6 +151,7 @@ layui.use(['table', 'form', 'laydate'], function () {
                                 dzArray[p1]=dzObj;
                             });
                             bdGEO(dzArray);
+                            $("#searchForm").removeAttr("disabled");
                         }
                         ,method:'post'
                         , where: {
@@ -190,6 +192,7 @@ layui.use(['table', 'form', 'laydate'], function () {
                             dzArray[p1]=dzObj;
                         });
                         bdGEO(dzArray);
+                        $("#searchForm").removeAttr("disabled");
                     }
                 });
             }

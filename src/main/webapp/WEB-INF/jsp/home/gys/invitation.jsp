@@ -31,7 +31,7 @@
     <br/>
     地址搜索:
     <div class="layui-inline">
-        <input value="" name="address" class="layui-input" style="width: 472px;" type="text" placeholder="请输入地址搜索"
+        <input value="" name="address" class="layui-input" style="width: 437px;" type="text" placeholder="请输入地址搜索"
                autocomplete="off"
                lay-verify="title">
     </div>
@@ -46,7 +46,7 @@
             <option value="15000">15公里</option>
         </select>
     </div>
-    <button class="layui-btn" lay-submit lay-filter="searchForm">搜索</button>
+    <button class="layui-btn" lay-submit lay-filter="searchForm" id="searchForm">搜索</button>
     共查询出样本信息<label id="tab-total">0</label>条
     </div>
 </form>
