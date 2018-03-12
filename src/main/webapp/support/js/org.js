@@ -18,20 +18,20 @@ $(function () {
                         'oid': $("#orgid").val()
                     },
                     success: function (data) {
-                        if (data.message == "1") {
-                            $("#checkId").html("机构id可用");
-                            $("#checkId").attr("style", "color:green");
-                            flag = 1;
+                        if ($("#orgid").val() == null || $("#orgid").val() == "") {
+                            $("#checkId").html("");
+                            flag = 3;
                         }
-                        else if (data.message = "0") {
-                            if ($("#orgid").val() == null || $("#orgid").val() == "") {
-                                $("#checkId").html("");
-                                flag = 3;
+                        else {
+                            if (data.message == "1") {
+                                $("#checkId").html("机构id可用");
+                                $("#checkId").attr("style", "color:green");
+                                flag = 1;
                             }
-                            else {
+                            else if (data.message = "0") {
                                 $("#checkId").html("机构id不可用");
-                                flag = 2;
                                 $("#checkId").attr("style", "color:red");
+                                flag = 2;
                             }
                         }
 

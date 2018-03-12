@@ -17,23 +17,22 @@ var flag=0;
 		    			'fId':$("#afId").val()
 		    		},
 		    	   success:function(data){
-		    		   if(data.message=="1"){
-		    			  $("#checkfId").html("功能id可用");
-				          $("#checkfId").attr("style", "color:green");
-				          flag=1;
-			    		 	    		   }
-		    		   else if(data.message="0"){
-		    			   if($("#afId").val()==null||$("#afId").val()==""){
-		    				   $("#checkfId").html("");
-		    				   flag=3;
-		    			   }
-		    			   else{
-		    			      $("#checkfId").html("功能id不可用");
-		    			      flag=2;
-		    			      $("#checkfId").attr("style", "color:red");
-		    			   }
-			    		  
-		    		   }
+                       if($("#afId").val()==null||$("#afId").val()==""){
+                           $("#checkfId").html("");
+                           flag=3;
+                       }
+                       else {
+                           if (data.message == "1") {
+                               $("#checkfId").html("功能id可用");
+                               $("#checkfId").attr("style", "color:green");
+                               flag = 1;
+                           }
+                           else if (data.message = "0") {
+                               $("#checkfId").html("功能id不可用");
+                               $("#checkfId").attr("style", "color:red");
+                               flag = 2;
+                           }
+                       }
 		    	    }
 		    	});
 	    		 
