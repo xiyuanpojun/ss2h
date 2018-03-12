@@ -117,7 +117,7 @@ public class IOrgServiceImpl implements IOrgService {
     @Override
     public Map<String, Object> checkId(String oid) {
         Map<String, Object> map = new HashMap<>();
-        if (oid != null && !"".equals(oid)) {
+        if (!"".equals(oid)) {
             try {
                 TOrgEntity result = orgdao.findOneById(oid);
                 if (result == null) {
@@ -126,7 +126,7 @@ public class IOrgServiceImpl implements IOrgService {
                     map.put("message", "0");
                 }
             } catch (Exception e) {
-                map.put("message", "查询异常");
+                map.put("message", "2");
                 e.printStackTrace();
             }
         } else {

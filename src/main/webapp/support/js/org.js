@@ -86,8 +86,6 @@ $(function () {
                     success: function (data) {
                         if (data.message == "0") {
                             layer.msg("添加成功 ");
-                            orginit();
-                            form.render();
                         }
                         else if (data.message == "1") {
                             layer.msg("该机构已存在请 重新添加 ");
@@ -100,6 +98,8 @@ $(function () {
                         }
                         $("#checkfId").html("");
                         reset();
+                        orginit();
+                        form.render();
 
                     },
                     error: function () {
@@ -214,7 +214,7 @@ $(function () {
                                 layer.msg(data.message);
                                 init($("#porgid").val());
                             }
-
+                            orginit();
                         },
                         error: function () {
                             layer.msg("连接服务器失败");
