@@ -161,21 +161,38 @@ public class SurveyDaoImpl implements ISurveyDao {
             col.append((String) objects[1]);
         }
         SQLQuery sq = null;
-        if ("".equals(orgid)) {
-            sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A "
-                    + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                    + tick
-                    + arsql + " ORDER BY DBMS_RANDOM.RANDOM";
-            sq = session.createSQLQuery(sql)
-                    .setParameter(0, tab);
-        } else {
-            sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A,T_ORG B "
-                    + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
-                    + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                    + arsql + " ORDER BY DBMS_RANDOM.RANDOM";
-            sq = session.createSQLQuery(sql)
-                    .setParameter(0, orgid)
-                    .setParameter(1, tab);
+        if ("".equals(address)) {
+            if ("".equals(orgid)) {
+                sql = "SELECT ROWVAL,LNG,LAT" + col.toString() + " FROM (SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + ",ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RN FROM " + tab + " A "
+                        + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                        + tick+ " ) Q WHERE Q.RN<="+showNumber;
+                sq = session.createSQLQuery(sql)
+                        .setParameter(0, tab);
+            } else {
+                sql = "SELECT ROWVAL,LNG,LAT"+ col.toString() +" FROM(SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + ",ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RN FROM " + tab + " A,T_ORG B "
+                        + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
+                        + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1) ) Q WHERE Q.RN<="+showNumber;
+                sq = session.createSQLQuery(sql)
+                        .setParameter(0, orgid)
+                        .setParameter(1, tab);
+            }
+        }else {
+            if ("".equals(orgid)) {
+                sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A "
+                        + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                        + tick
+                        + arsql + " ORDER BY DBMS_RANDOM.RANDOM";
+                sq = session.createSQLQuery(sql)
+                        .setParameter(0, tab);
+            } else {
+                sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A,T_ORG B "
+                        + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
+                        + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                        + arsql + " ORDER BY DBMS_RANDOM.RANDOM";
+                sq = session.createSQLQuery(sql)
+                        .setParameter(0, orgid)
+                        .setParameter(1, tab);
+            }
         }
         sq.addScalar("ROWVAL", StandardBasicTypes.STRING)
                 .addScalar("LNG", StandardBasicTypes.DOUBLE)

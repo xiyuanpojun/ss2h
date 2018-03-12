@@ -205,7 +205,7 @@ function orginit() {
             type: "POST",
             success: function (data) {
                 var li = data.porglist;
-                // $("#orgid").append($('<option value="">选择省份</option>'));
+                $("#orgid").append($('<option value="">选择省份</option>'));
                 for (var i = 0; i < li.length; i++) {
                     var porglist = $("<option value=" + li[i].orgid + ">" + li[i].orgname + "</option>");
                     $(".ogd").append(porglist);
