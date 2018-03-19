@@ -1,6 +1,5 @@
 package com.hill.gwyb.controller;
 
-import com.hill.gwyb.api.WebContentHelper;
 import com.hill.gwyb.service.impl.ReadExcelGw;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.ServletActionContext;
@@ -47,14 +46,15 @@ public class GwUserController extends ActionSupport {
         String filePath = "";
         try {
             File file = null;
-            filePath = WebContentHelper.getRealPath() + File.separator;
+            filePath = ServletActionContext.getServletContext().getRealPath("/");
             file = new File(filePath + fileDir);
             if (!file.exists()) {
                 file.mkdirs();
             }
+            filePath = filePath + fileDir + "\\";
             fileName = getFileFileName();
             BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(getFile()));
-            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(file.getAbsolutePath() + "/" + fileName)));
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(filePath + fileName)));
             byte[] bytes = new byte[1024];
             int index;
             while ((index = inputStream.read(bytes)) != -1) {
@@ -64,7 +64,7 @@ public class GwUserController extends ActionSupport {
             outputStream.close();
             inputStream.close();
             survyName = getSurvyName();
-            result = ReadExcelGw.main(new String[]{file.getAbsolutePath() + "/" + fileName, survyName}, request);
+            result = ReadExcelGw.main(new String[]{filePath + fileName, survyName}, request);
         } catch (Exception e) {
             e.printStackTrace();
             result = e.getMessage();
