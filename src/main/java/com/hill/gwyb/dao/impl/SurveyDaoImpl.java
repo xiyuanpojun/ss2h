@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +114,6 @@ public class SurveyDaoImpl implements ISurveyDao {
 
     @Override
     public String getSurveyData(String tab, String orgid, String tick, String city, String address, int dist) throws SQLException {
-        System.out.println(new Date());
         //获取省份名称
         String orgname = getOrgname(orgid);
         //获取城市名称
@@ -165,18 +163,18 @@ public class SurveyDaoImpl implements ISurveyDao {
             if ("".equals(orgid)) {
                 sql = "SELECT ROWVAL,LNG,LAT" + col.toString() + " FROM (SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + ",ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RN FROM " + tab + " A "
                         + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
-                        + tick+ " ) Q WHERE Q.RN<="+showNumber;
+                        + tick + " ) Q WHERE Q.RN<=" + showNumber;
                 sq = session.createSQLQuery(sql)
                         .setParameter(0, tab);
             } else {
-                sql = "SELECT ROWVAL,LNG,LAT"+ col.toString() +" FROM(SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + ",ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RN FROM " + tab + " A,T_ORG B "
+                sql = "SELECT ROWVAL,LNG,LAT" + col.toString() + " FROM(SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + ",ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RN FROM " + tab + " A,T_ORG B "
                         + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
-                        + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1) ) Q WHERE Q.RN<="+showNumber;
+                        + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1) ) Q WHERE Q.RN<=" + showNumber;
                 sq = session.createSQLQuery(sql)
                         .setParameter(0, orgid)
                         .setParameter(1, tab);
             }
-        }else {
+        } else {
             if ("".equals(orgid)) {
                 sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A "
                         + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
@@ -236,7 +234,6 @@ public class SurveyDaoImpl implements ISurveyDao {
             }
         }
         session.close();
-        System.out.println(new Date());
         return "{\"code\":0,\"msg\":\"\",\"count\":100,\"data\":" + json.toJSONString() + "}";
     }
 

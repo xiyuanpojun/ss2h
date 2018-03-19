@@ -111,7 +111,6 @@ public class ReadExcelGw {
             threads.add(td);
             td.start();
         }
-        System.out.println("开始:" + new Date());
         for (Thread ithd : threads) {
             try {
                 ithd.join();// 等待线程执行结束
@@ -119,6 +118,5 @@ public class ReadExcelGw {
                 e.printStackTrace();
             }
         }
-        System.out.println("结束:" + new Date());
     }
 }
