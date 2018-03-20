@@ -8,9 +8,9 @@
         </console>
     </appenders>
     <loggers>
-        <logger name="org.springframework" level="INFO"/>
-        <logger name="org.hibernate" level="INFO"/>
-        <logger name="com.mchange" level="INFO"/>
+        <logger name="org.springframework" level="ERROR"/>
+        <logger name="org.hibernate" level="ERROR"/>
+        <logger name="com.mchange" level="ERROR"/>
         <root level="INFO">
             <appender-ref ref="Console"/>
         </root>
