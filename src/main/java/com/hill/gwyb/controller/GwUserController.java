@@ -51,7 +51,7 @@ public class GwUserController extends ActionSupport {
             if (!file.exists()) {
                 file.mkdirs();
             }
-            filePath = filePath + fileDir + "\\";
+            filePath = filePath + fileDir + File.separator;
             fileName = getFileFileName();
             BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(getFile()));
             BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(new File(filePath + fileName)));
