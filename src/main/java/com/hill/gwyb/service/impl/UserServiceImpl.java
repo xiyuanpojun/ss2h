@@ -130,9 +130,6 @@ public class UserServiceImpl implements IUserService {
                 && !"".equals(userEntity.getUpwd()) && !"".equals(userEntity.getUname())) {
             try {
                 TUserEntity result = userDao.userFindOne(userEntity.getUserid());
-                System.out.println(userEntity.getUrole());
-                System.out.println(userEntity.getUrole());
-                System.out.println(userEntity.getUrole());
                 if (result == null) {
                     if ("1".equals(userEntity.getUrole()) || "3".equals(userEntity.getUrole())) {
                         userDao.userAdd(userEntity);

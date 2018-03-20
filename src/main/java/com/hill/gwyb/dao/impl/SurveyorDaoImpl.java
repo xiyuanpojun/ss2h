@@ -35,9 +35,9 @@ public class SurveyorDaoImpl implements ISurveyorDao {
     public List<TOrgEntity> getVisibleProvince(String orgid) throws Exception {
         Session session = sessionFactory.openSession();
         //1 代表管理员 2 代表供应商
-        String hql = "FROM TOrgEntity WHERE pOrgid = ?";
+        String hql = "FROM TOrgEntity WHERE pOrgid = ?1";
         Query query = session.createQuery(hql);
-        query.setParameter(0, orgid);
+        query.setParameter("1", orgid);
         List<TOrgEntity> list = query.list();
         session.close();
         return list;
@@ -48,14 +48,14 @@ public class SurveyorDaoImpl implements ISurveyorDao {
         Session session = sessionFactory.openSession();
         String hql;
         if (Integer.parseInt(province) < 1) {
-            hql = "FROM TSurveyUserEntity WHERE userid = ?";
+            hql = "FROM TSurveyUserEntity WHERE userid = ?1";
         } else {
-            hql = "FROM TSurveyUserEntity WHERE userid = ? AND orgid = ?";
+            hql = "FROM TSurveyUserEntity WHERE userid = ?1 AND orgid = ?2";
         }
         Query query = session.createQuery(hql);
-        query.setParameter(0, userId);
+        query.setParameter("1", userId);
         if (Integer.parseInt(province) >= 1) {
-            query.setParameter(1, province);
+            query.setParameter("2", province);
         }
         query.setFirstResult(currentotal * (current - 1));
         query.setMaxResults(currentotal);
@@ -69,14 +69,14 @@ public class SurveyorDaoImpl implements ISurveyorDao {
         Session session = sessionFactory.openSession();
         String hql;
         if (Integer.parseInt(province) < 1) {
-            hql = "FROM TSurveyUserEntity WHERE userid = ?";
+            hql = "FROM TSurveyUserEntity WHERE userid = ?1";
         } else {
-            hql = "FROM TSurveyUserEntity WHERE userid = ? AND orgid = ?";
+            hql = "FROM TSurveyUserEntity WHERE userid = ?1 AND orgid = ?2";
         }
         Query query = session.createQuery(hql);
-        query.setParameter(0, userId);
+        query.setParameter("1", userId);
         if (Integer.parseInt(province) >= 1) {
-            query.setParameter(1, province);
+            query.setParameter("2", province);
         }
         List<TSurveyUserEntity> list = query.list();
         session.close();
@@ -106,8 +106,8 @@ public class SurveyorDaoImpl implements ISurveyorDao {
     @Override
     public Integer getDisrmNumber(TSurveyUserEntity entity) throws Exception {
         Session session = sessionFactory.openSession();
-        NativeQuery sqlQuery = session.createSQLQuery("SELECT COUNT(DIS_RM) FROM T_SURVEY_INVITE WHERE DIS_RM = ?");
-        sqlQuery.setParameter(0, entity.getsUserId());
+        NativeQuery sqlQuery = session.createSQLQuery("SELECT COUNT(DIS_RM) FROM T_SURVEY_INVITE WHERE DIS_RM = ?1");
+        sqlQuery.setParameter("1", entity.getsUserId());
         String data = Arrays.toString(sqlQuery.list().toArray());
         if (!"[]".equals(data)) {
             data = data.replace("[", "");

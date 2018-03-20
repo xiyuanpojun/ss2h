@@ -42,11 +42,11 @@ public class SConfigDaoImpl implements ISConfigDao {
         if ("".equals(typeId)) {
             hql = "FROM TPCodeEntity";
         } else {
-            hql = "FROM TPCodeEntity WHERE ptype = ?";
+            hql = "FROM TPCodeEntity WHERE ptype = ?1";
         }
         Query query = session.createQuery(hql);
         if (!"".equals(typeId)) {
-            query.setParameter(0, typeId);
+            query.setParameter("1", typeId);
         }
         query.setFirstResult(currentTotal * (current - 1));
         query.setMaxResults(currentTotal);
@@ -62,11 +62,11 @@ public class SConfigDaoImpl implements ISConfigDao {
         if ("".equals(typeId)) {
             hql = "FROM TPCodeEntity";
         } else {
-            hql = "FROM TPCodeEntity WHERE ptype  = ?";
+            hql = "FROM TPCodeEntity WHERE ptype  = ?1";
         }
         Query query = session.createQuery(hql);
         if (!"".equals(typeId)) {
-            query.setParameter(0, typeId);
+            query.setParameter("1", typeId);
         }
         List<TPCodeEntity> list = query.list();
         session.close();
@@ -75,11 +75,11 @@ public class SConfigDaoImpl implements ISConfigDao {
 
     @Override
     public TPCodeEntity configFindOne(TPCodeEntity tpCodeEntity) throws Exception {
-        String sql = "SELECT PID,PNAME,PTYPE FROM T_P_CODE WHERE PNAME = ? AND PTYPE = ?";
+        String sql = "SELECT PID,PNAME,PTYPE FROM T_P_CODE WHERE PNAME = ?1 AND PTYPE = ?2";
         Session session = sessionFactory.openSession();
         NativeQuery sq = session.createSQLQuery(sql);
-        sq.setParameter(0, tpCodeEntity.getPname());
-        sq.setParameter(1, tpCodeEntity.getPtype());
+        sq.setParameter("1", tpCodeEntity.getPname());
+        sq.setParameter("2", tpCodeEntity.getPtype());
         sq.addScalar("PID", StandardBasicTypes.STRING);
         sq.addScalar("PNAME", StandardBasicTypes.STRING);
         sq.addScalar("PTYPE", StandardBasicTypes.STRING);

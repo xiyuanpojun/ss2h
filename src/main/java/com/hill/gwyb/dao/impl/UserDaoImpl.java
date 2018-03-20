@@ -1,6 +1,5 @@
 package com.hill.gwyb.dao.impl;
 
-import com.hill.gwyb.api.LoggerTools;
 import com.hill.gwyb.common.SessionContext;
 import com.hill.gwyb.dao.IUserDao;
 import com.hill.gwyb.po.TFuncEntity;
@@ -43,15 +42,15 @@ public class UserDaoImpl implements IUserDao {
         Transaction transaction = session.beginTransaction();
         if (isend) {
             //退出
-            String sql = "UPDATE T_USER_LOGIN SET OUT_TIME = SYSDATE WHERE OUT_TIME IS NULL AND SESSION_ID = ?";
+            String sql = "UPDATE T_USER_LOGIN SET OUT_TIME = SYSDATE WHERE OUT_TIME IS NULL AND SESSION_ID = ?1";
             NativeQuery sqlQuery = session.createSQLQuery(sql)
-                    .setParameter(0, userLoginEntity.getSessionId());
+                    .setParameter("1", userLoginEntity.getSessionId());
             sqlQuery.executeUpdate();
         } else {
             //登陆
-            Query query = session.createSQLQuery("INSERT INTO T_USER_LOGIN(USERID, LOG_TIME,SESSION_ID) VALUES (?,SYSDATE,?)")
-                    .setParameter(0, userLoginEntity.getUserid())
-                    .setParameter(1, userLoginEntity.getSessionId());
+            Query query = session.createSQLQuery("INSERT INTO T_USER_LOGIN(USERID, LOG_TIME,SESSION_ID) VALUES (?1,SYSDATE,?2)")
+                    .setParameter("1", userLoginEntity.getUserid())
+                    .setParameter("2", userLoginEntity.getSessionId());
             query.executeUpdate();
         }
         transaction.commit();
@@ -62,9 +61,9 @@ public class UserDaoImpl implements IUserDao {
     public Integer userLoginInfoCheck(TUserLoginEntity userLoginEntity) throws Exception {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "SELECT LOG_TIME,SESSION_ID FROM (SELECT LOG_TIME,SESSION_ID FROM T_USER_LOGIN WHERE USERID = ? AND OUT_TIME IS NULL ORDER BY LOG_TIME DESC) WHERE ROWNUM = 1";
+        String sql = "SELECT LOG_TIME,SESSION_ID FROM (SELECT LOG_TIME,SESSION_ID FROM T_USER_LOGIN WHERE USERID = ?1 AND OUT_TIME IS NULL ORDER BY LOG_TIME DESC) WHERE ROWNUM = 1";
         NativeQuery sqlQuery = session.createSQLQuery(sql)
-                .setParameter(0, userLoginEntity.getUserid())
+                .setParameter("1", userLoginEntity.getUserid())
                 .addScalar("LOG_TIME", StandardBasicTypes.TIMESTAMP)
                 .addScalar("SESSION_ID", StandardBasicTypes.STRING);
         //没有查到数据说明是未登录状态，反之就已经登陆。
@@ -130,11 +129,11 @@ public class UserDaoImpl implements IUserDao {
         if (Integer.parseInt(province) < 1) {
             hql = "FROM TUserEntity";
         } else {
-            hql = "FROM TUserEntity WHERE orgid = ?";
+            hql = "FROM TUserEntity WHERE orgid = ?1";
         }
         Query query = session.createQuery(hql);
         if (Integer.parseInt(province) >= 1) {
-            query.setParameter(0, province);
+            query.setParameter("1", province);
         }
         query.setFirstResult(currentotal * (current - 1));
         query.setMaxResults(currentotal);
@@ -150,11 +149,11 @@ public class UserDaoImpl implements IUserDao {
         if (Integer.parseInt(province) < 1) {
             hql = "FROM TUserEntity";
         } else {
-            hql = "FROM TUserEntity WHERE orgid = ?";
+            hql = "FROM TUserEntity WHERE orgid = ?1";
         }
         Query query = session.createQuery(hql);
         if (Integer.parseInt(province) >= 1) {
-            query.setParameter(0, province);
+            query.setParameter("1", province);
         }
         List<TUserEntity> list = query.list();
         session.close();
@@ -164,15 +163,15 @@ public class UserDaoImpl implements IUserDao {
     @Override
     public List<TFuncEntity> userFunction(String urole) throws Exception {
         Session session = sessionFactory.openSession();
-        Query query1 = session.createSQLQuery("SELECT FUNC_ID FROM T_ROLE_FUNC WHERE ROLEID = ? ORDER BY ORDER_NUM ASC")
-                .setParameter(0, urole)
+        Query query1 = session.createSQLQuery("SELECT FUNC_ID FROM T_ROLE_FUNC WHERE ROLEID = ?1 ORDER BY ORDER_NUM ASC")
+                .setParameter("1", urole)
                 .addScalar("FUNC_ID", StandardBasicTypes.STRING);
 
         List<TFuncEntity> list = new ArrayList<>();
         for (Object fId : query1.list()) {
             //把FUNC_ID找到以后，取出相关url。
-            Query query2 = session.createSQLQuery("SELECT F_NAME,F_URL FROM T_FUNC WHERE F_ID = ?")
-                    .setParameter(0, fId)
+            Query query2 = session.createSQLQuery("SELECT F_NAME,F_URL FROM T_FUNC WHERE F_ID = ?1")
+                    .setParameter("1", fId)
                     .addScalar("F_NAME", StandardBasicTypes.STRING)
                     .addScalar("F_URL", StandardBasicTypes.STRING);
             for (Object o : query2.list()) {

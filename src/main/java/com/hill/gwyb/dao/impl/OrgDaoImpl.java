@@ -29,11 +29,11 @@ public class OrgDaoImpl implements IOrgDao {
         if ("all".equals(porgid)) {
             hql = "FROM TOrgEntity o  order by TO_NUMBER(o.orgid) asc";
         } else {
-            hql = "FROM TOrgEntity o where o.pOrgid = ? order by TO_NUMBER(o.orgid) asc";
+            hql = "FROM TOrgEntity o where o.pOrgid = ?1 order by TO_NUMBER(o.orgid) asc";
         }
         Query query = session.createQuery(hql);
         if (!"all".equals(porgid)) {
-            query.setParameter(0, porgid);
+            query.setParameter("1", porgid);
         }
         query.setFirstResult(currentTotal * (current - 1));
         query.setMaxResults(currentTotal);
@@ -51,11 +51,11 @@ public class OrgDaoImpl implements IOrgDao {
             hql = "From TOrgEntity";
 
         } else {
-            hql = "From TOrgEntity o where  o.pOrgid = ?";
+            hql = "From TOrgEntity o where  o.pOrgid = ?1";
         }
         Query query = session.createQuery(hql);
         if (porgid != "all" && !"all".equals(porgid)) {
-            query.setParameter(0, porgid);
+            query.setParameter("1", porgid);
         }
         List<TUserEntity> list = query.list();
         session.close();
@@ -97,9 +97,9 @@ public class OrgDaoImpl implements IOrgDao {
     public List<TOrgEntity> showcitylist(String porgid) {
         Session session = sessionFactory.openSession();
         String hql;
-        hql = "FROM TOrgEntity o  where o.pOrgid = ? order by TO_NUMBER(o.orgid) asc";
+        hql = "FROM TOrgEntity o  where o.pOrgid = ?1 order by TO_NUMBER(o.orgid) asc";
         Query query = session.createQuery(hql);
-        query.setParameter(0,porgid);
+        query.setParameter("1", porgid);
         List<TOrgEntity> list = query.list();
         session.close();
         return list;
@@ -110,14 +110,14 @@ public class OrgDaoImpl implements IOrgDao {
         Session session = sessionFactory.openSession();
         String hql;
         if (!"".equals(orgentity.getpOrgid())) {
-            hql = "FROM TOrgEntity o  where  o.orgname = ? and pOrgid = ?";
+            hql = "FROM TOrgEntity o  where  o.orgname = ?1 and pOrgid = ?2";
         } else {
-            hql = "FROM  TOrgEntity o where o.orgname = ?";
+            hql = "FROM  TOrgEntity o where o.orgname = ?1";
         }
         Query query = session.createQuery(hql);
-        query.setParameter(0, orgentity.getOrgname());
+        query.setParameter("1", orgentity.getOrgname());
         if (!"".equals(orgentity.getpOrgid())) {
-            query.setParameter(1, orgentity.getpOrgid());
+            query.setParameter("2", orgentity.getpOrgid());
         }
         List<TOrgEntity> list = query.list();
         session.close();

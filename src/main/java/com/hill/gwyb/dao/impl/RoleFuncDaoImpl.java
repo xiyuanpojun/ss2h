@@ -33,12 +33,12 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
             hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf ,TRoleEntity r ,TFuncEntity f  where rf.roleid = r.roleid and  rf.funcId = f.fId";
 
         } else {
-            hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?";
+            hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?1";
 
         }
         Query query = session.createQuery(hql);
         if (!role.equals("0")) {
-            query.setParameter(0, role);
+            query.setParameter("1", role);
         }
         query.setFirstResult(currentTotal * (current - 1));
         query.setMaxResults(currentTotal);
@@ -58,11 +58,11 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
             hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf ,TRoleEntity r ,TFuncEntity f  where rf.roleid = r.roleid and  rf.funcId = f.fId order by TO_NUMBER(rf.roleid) asc";
 
         } else {
-            hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?  order by TO_NUMBER(rf.roleid) asc";
+            hql = "select new com.hill.gwyb.vo.RoleFuncItemView(rf.roleid,r.rname,rf.orderNum,rf.funcId,f.fName) from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?1  order by TO_NUMBER(rf.roleid) asc";
         }
         Query query = session.createQuery(hql);
         if (!role.equals("0")) {
-            query.setParameter(0, role);
+            query.setParameter("1", role);
         }
         List<RoleFuncItemView> list = query.list();
         session.close();
@@ -74,11 +74,11 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
         Session session = sessionFactory.openSession();
         Transaction tran = session.beginTransaction();
 
-        String hql = "delete from TRoleFuncEntity r where r.roleid = ? and r.orderNum = ? and r.funcId = ?";
+        String hql = "delete from TRoleFuncEntity r where r.roleid = ?1 and r.orderNum = ?2 and r.funcId = ?3";
         Query query = session.createQuery(hql);
-        query.setString(0, tRoleFuncEntity.getRoleid());
-        query.setLong(1, tRoleFuncEntity.getOrderNum());
-        query.setString(2, tRoleFuncEntity.getFuncId());
+        query.setString("1", tRoleFuncEntity.getRoleid());
+        query.setLong("2", tRoleFuncEntity.getOrderNum());
+        query.setString("3", tRoleFuncEntity.getFuncId());
 
         query.executeUpdate();
         tran.commit();
@@ -93,9 +93,9 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
     @Override
     public List<TFuncEntity> findnofuncbyrole(String role) {
         Session session = sessionFactory.openSession();
-        String hql = "from TFuncEntity fc where fc.fId not in (select rf.funcId from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?)";
+        String hql = "from TFuncEntity fc where fc.fId not in (select rf.funcId from TRoleFuncEntity rf,TRoleEntity r,TFuncEntity f where rf.roleid = r.roleid and rf.funcId = f.fId and rf.roleid = ?1)";
         Query query = session.createQuery(hql);
-        query.setParameter(0, role);
+        query.setParameter("1", role);
         List<TFuncEntity> list = query.list();
         session.close();
         return list;
@@ -104,9 +104,9 @@ public class RoleFuncDaoImpl implements IRoleFuncDao {
     @Override
     public int findMaxOrderNUM(String role) {
         Session session = sessionFactory.openSession();
-        String hql = "select max(rf.orderNum) from TRoleFuncEntity rf,TRoleEntity r where rf.roleid = r.roleid and rf.roleid = ?";
+        String hql = "select max(rf.orderNum) from TRoleFuncEntity rf,TRoleEntity r where rf.roleid = r.roleid and rf.roleid = ?1";
         Query query = session.createQuery(hql);
-        query.setParameter(0, role);
+        query.setParameter("1", role);
         int maxnum = 0;
         if (query.list().get(0) != null) {
             maxnum = (int) query.list().get(0);

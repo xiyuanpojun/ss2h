@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +28,9 @@ public class SurveyDaoImpl implements ISurveyDao {
     @Override
     public String getCityList(String orgid) throws SQLException {
         Session session = sessionFactory.openSession();
-        String sql = "SELECT ORGID,ORGNAME FROM T_ORG t WHERE P_ORGID =?";
+        String sql = "SELECT ORGID,ORGNAME FROM T_ORG t WHERE P_ORGID =?1";
         Query query = session.createSQLQuery(sql)
-                .setParameter(0, orgid)
+                .setParameter("1", orgid)
                 .addScalar("ORGID", StandardBasicTypes.STRING)
                 .addScalar("ORGNAME", StandardBasicTypes.STRING);
         JSONArray json = new JSONArray();
@@ -75,9 +74,9 @@ public class SurveyDaoImpl implements ISurveyDao {
     @Override
     public String getCustType(String type) throws SQLException {
         Session session = sessionFactory.openSession();
-        String sql = "SELECT PID,PNAME FROM T_P_CODE t WHERE T.PTYPE=?";
+        String sql = "SELECT PID,PNAME FROM T_P_CODE t WHERE T.PTYPE=?1";
         Query query = session.createSQLQuery(sql)
-                .setParameter(0, type)
+                .setParameter("1", type)
                 .addScalar("PID", StandardBasicTypes.STRING)
                 .addScalar("PNAME", StandardBasicTypes.STRING);
         JSONArray json = new JSONArray();
@@ -94,10 +93,10 @@ public class SurveyDaoImpl implements ISurveyDao {
 
     @Override
     public String getSurveyCol(String tab) throws SQLException {
-        String sql = "SELECT COL,COL_NAME FROM T_SURVEY_COL t,T_SURVEY_TYPE S WHERE T.TYPE_ID=S.TYPE_ID AND S.TAB=?";
+        String sql = "SELECT COL,COL_NAME FROM T_SURVEY_COL t,T_SURVEY_TYPE S WHERE T.TYPE_ID=S.TYPE_ID AND S.TAB=?1";
         Session session = sessionFactory.openSession();
         Query query = session.createSQLQuery(sql)
-                .setParameter(0, tab)
+                .setParameter("1", tab)
                 .addScalar("COL", StandardBasicTypes.STRING)
                 .addScalar("COL_NAME", StandardBasicTypes.STRING);
         JSONArray json = new JSONArray();
@@ -142,9 +141,9 @@ public class SurveyDaoImpl implements ISurveyDao {
         }
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
-        String sql = "SELECT S.SHOW_NUM,T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
+        String sql = "SELECT S.SHOW_NUM,T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?1";
         Query query = session.createSQLQuery(sql)
-                .setParameter(0, tab)
+                .setParameter("1", tab)
                 .addScalar("SHOW_NUM", StandardBasicTypes.INTEGER)
                 .addScalar("COL", StandardBasicTypes.STRING);
         List colObj = query.list();
@@ -162,34 +161,34 @@ public class SurveyDaoImpl implements ISurveyDao {
         if ("".equals(address)) {
             if ("".equals(orgid)) {
                 sql = "SELECT ROWVAL,LNG,LAT" + col.toString() + " FROM (SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + ",ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RN FROM " + tab + " A "
-                        + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                        + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=?1 AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                         + tick + " ) Q WHERE Q.RN<=" + showNumber;
                 sq = session.createSQLQuery(sql)
-                        .setParameter(0, tab);
+                        .setParameter("1", tab);
             } else {
                 sql = "SELECT ROWVAL,LNG,LAT" + col.toString() + " FROM(SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + ",ROW_NUMBER() OVER(ORDER BY DBMS_RANDOM.RANDOM) RN FROM " + tab + " A,T_ORG B "
-                        + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
-                        + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1) ) Q WHERE Q.RN<=" + showNumber;
+                        + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?1"
+                        + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=?2 AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1) ) Q WHERE Q.RN<=" + showNumber;
                 sq = session.createSQLQuery(sql)
-                        .setParameter(0, orgid)
-                        .setParameter(1, tab);
+                        .setParameter("1", orgid)
+                        .setParameter("2", tab);
             }
         } else {
             if ("".equals(orgid)) {
                 sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A "
-                        + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                        + "WHERE NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=?1 AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                         + tick
                         + arsql + " ORDER BY DBMS_RANDOM.RANDOM";
                 sq = session.createSQLQuery(sql)
-                        .setParameter(0, tab);
+                        .setParameter("1", tab);
             } else {
                 sql = "SELECT A.ROWID ROWVAL,LNG,LAT" + col.toString() + " FROM " + tab + " A,T_ORG B "
-                        + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?"
-                        + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
+                        + "WHERE PROV LIKE '%'||B.ORGNAME||'%'" + tick + " AND B.ORGID=?1"
+                        + " AND NOT EXISTS(SELECT 1 FROM T_SURVEY_INVITE F WHERE F.TAB=?2 AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1)"
                         + arsql + " ORDER BY DBMS_RANDOM.RANDOM";
                 sq = session.createSQLQuery(sql)
-                        .setParameter(0, orgid)
-                        .setParameter(1, tab);
+                        .setParameter("1", orgid)
+                        .setParameter("2", tab);
             }
         }
         sq.addScalar("ROWVAL", StandardBasicTypes.STRING)
@@ -237,32 +236,13 @@ public class SurveyDaoImpl implements ISurveyDao {
         return "{\"code\":0,\"msg\":\"\",\"count\":100,\"data\":" + json.toJSONString() + "}";
     }
 
-    private List<Object> getObjectList(Session session, String sql, String orgid, String tab, List colObj, int start, int end) {
-        SQLQuery sq = session.createSQLQuery(sql)
-                .setParameter(0, orgid)
-                .setParameter(1, tab)
-                .setParameter(2, tab)
-                .addScalar("ROWVAL", StandardBasicTypes.STRING)
-                .addScalar("LNG", StandardBasicTypes.DOUBLE)
-                .addScalar("LAT", StandardBasicTypes.DOUBLE)
-                .addScalar("SHOW_NUM", StandardBasicTypes.INTEGER);
-        for (Object o : colObj) {
-            sq.addScalar((String) o, StandardBasicTypes.STRING);
-        }
-
-        sq.addScalar("RANDOM_VAL", StandardBasicTypes.INTEGER);
-        sq.setFirstResult(start);
-        sq.setMaxResults(end);
-        return sq.list();
-    }
-
     @Override
     public String getSurveyInvData(String tab, String tick, String userid, Integer start, Integer end) throws SQLException {
         JSONArray json = new JSONArray();
         Session session = sessionFactory.openSession();
-        String sql = "SELECT T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?";
+        String sql = "SELECT T.COL FROM T_SURVEY_TYPE S,T_SURVEY_COL t WHERE S.TYPE_ID=T.TYPE_ID AND S.TAB=?1";
         Query query = session.createSQLQuery(sql)
-                .setParameter(0, tab)
+                .setParameter("1", tab)
                 .addScalar("COL", StandardBasicTypes.STRING);
         List colObj = query.list();
         StringBuilder col = new StringBuilder();
@@ -275,11 +255,11 @@ public class SurveyDaoImpl implements ISurveyDao {
             col.append(",");
         }
         sql = "SELECT ROWVAL,SF_DIS,TOTAL,LNG,LAT," + col + "ROWXH FROM(SELECT A.ROWID ROWVAL,A.LNG,A.LAT,CASE WHEN F.DISTRI IS NULL OR F.DISTRI='2' THEN '未分配' ELSE (SELECT S_USER_NAME FROM T_SURVEY_USER WHERE S_USER_ID=F.DIS_RM) END SF_DIS,count(1) over() total," + col + "ROWNUM rowxh FROM " + tab + " A,T_SURVEY_INVITE F "
-                + "WHERE F.TAB=? AND F.USERID=? AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1 " + tick
+                + "WHERE F.TAB=?1 AND F.USERID=?2 AND F.ROWVAL=A.ROWID AND F.IN_FLAG=1 " + tick
                 + " ORDER BY " + orderCol + ") T WHERE T.ROWXH>" + start + " AND T.ROWXH <=" + end;
         SQLQuery sq = session.createSQLQuery(sql)
-                .setParameter(0, tab)
-                .setParameter(1, userid)
+                .setParameter("1", tab)
+                .setParameter("2", userid)
                 .addScalar("ROWVAL", StandardBasicTypes.STRING)
                 .addScalar("SF_DIS", StandardBasicTypes.STRING)
                 .addScalar("TOTAL", StandardBasicTypes.INTEGER)
@@ -314,7 +294,7 @@ public class SurveyDaoImpl implements ISurveyDao {
     @Override
     public void saveInvit(String tab, String rowv, String invRes, String faultRes, String userid) throws SQLException {
         String[] rw = rowv.split(",");
-        String sql = "INSERT INTO T_SURVEY_INVITE(TAB, ROWVAL, USERID, IN_FLAG, FAULT_CODE) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO T_SURVEY_INVITE(TAB, ROWVAL, USERID, IN_FLAG, FAULT_CODE) VALUES(?1,?2,?3,?4,?5)";
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         NativeQuery query = session.createSQLQuery(sql);
@@ -322,11 +302,11 @@ public class SurveyDaoImpl implements ISurveyDao {
             if ("".equals(rw[i])) {
                 break;
             }
-            query.setParameter(0, tab);
-            query.setParameter(1, rw[i]);
-            query.setParameter(2, userid);
-            query.setParameter(3, invRes);
-            query.setParameter(4, faultRes);
+            query.setParameter("1", tab);
+            query.setParameter("2", rw[i]);
+            query.setParameter("3", userid);
+            query.setParameter("4", invRes);
+            query.setParameter("5", faultRes);
             query.executeUpdate();
         }
         transaction.commit();
@@ -336,7 +316,7 @@ public class SurveyDaoImpl implements ISurveyDao {
     @Override
     public void saveDist(String tab, String rowv, String distRes, String diaocy) throws SQLException {
         String[] rw = rowv.split(",");
-        String sql = "UPDATE T_SURVEY_INVITE SET DISTRI=?,DIS_RM=? WHERE TAB=? AND ROWVAL=?";
+        String sql = "UPDATE T_SURVEY_INVITE SET DISTRI=?1,DIS_RM=?2 WHERE TAB=?3 AND ROWVAL=?4";
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         NativeQuery query = session.createSQLQuery(sql);
@@ -344,10 +324,10 @@ public class SurveyDaoImpl implements ISurveyDao {
             if ("".equals(rw[i])) {
                 break;
             }
-            query.setParameter(0, distRes);
-            query.setParameter(1, diaocy);
-            query.setParameter(2, tab);
-            query.setParameter(3, rw[i]);
+            query.setParameter("1", distRes);
+            query.setParameter("2", diaocy);
+            query.setParameter("3", tab);
+            query.setParameter("4", rw[i]);
             query.executeUpdate();
         }
         transaction.commit();
@@ -357,9 +337,9 @@ public class SurveyDaoImpl implements ISurveyDao {
     @Override
     public String getSurveyUser(String userid) throws SQLException {
         Session session = sessionFactory.openSession();
-        String sql = "SELECT T.S_USER_ID,T.S_USER_NAME FROM T_SURVEY_USER T WHERE T.USERID=?";
+        String sql = "SELECT T.S_USER_ID,T.S_USER_NAME FROM T_SURVEY_USER T WHERE T.USERID=?1";
         Query query = session.createSQLQuery(sql)
-                .setParameter(0, userid)
+                .setParameter("1", userid)
                 .addScalar("S_USER_ID", StandardBasicTypes.STRING)
                 .addScalar("S_USER_NAME", StandardBasicTypes.STRING);
         JSONArray json = new JSONArray();
@@ -377,10 +357,10 @@ public class SurveyDaoImpl implements ISurveyDao {
     @Override
     public String getOrgname(String orgid) {
         String orgname = "";
-        String sql = "SELECT ORGNAME FROM T_ORG  O WHERE O.ORGID = ?";
+        String sql = "SELECT ORGNAME FROM T_ORG  O WHERE O.ORGID = ?1";
         Session session = sessionFactory.openSession();
         Query query = session.createSQLQuery(sql)
-                .setParameter(0, orgid)
+                .setParameter("1", orgid)
                 .addScalar("ORGNAME", StandardBasicTypes.STRING);
         JSONArray json = new JSONArray();
         for (Object o : query.list()) {
@@ -388,28 +368,5 @@ public class SurveyDaoImpl implements ISurveyDao {
         }
         session.close();
         return orgname;
-    }
-
-    public Map<String, Object> getDistance(String city, String addr) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        Double distance = null;
-        String ak = "xh2XppvAc5uB36HDZHKTOMnV3gSUULTb";
-        Map<String, Object> map1;
-        Map<String, Object> map2;
-        map1 = GeocodingTools2.getLatAndLngByAddress(city, ak);
-        map2 = GeocodingTools2.getLatAndLngByAddress(addr, ak);
-        TCityLocationEntity2 cityentity = (TCityLocationEntity2) map1.get("entity");
-        TCityLocationEntity2 addrentity = (TCityLocationEntity2) map2.get("entity");
-        if (cityentity.getCode().equals("0") || addrentity.getCode().equals("0")) {
-            System.out.println("获取地址坐标失败请重新输入");
-        } else if (map1.get("status").equals("302") || map2.get("status").equals("302")) {
-            System.out.println("请求配额已用完");
-        } else {
-            distance = MapUtil.getDistance(addrentity.getLng(), addrentity.getLat(), cityentity.getLng(), cityentity.getLat());
-        }
-//        System.out.println("此次距离"+addrentity.getLng()+addrentity.getLat()+"-"+cityentity.getLng()+cityentity.getLat()+distance);
-        map.put("entity", addrentity);
-        map.put("distance", distance);
-        return map;
     }
 }
