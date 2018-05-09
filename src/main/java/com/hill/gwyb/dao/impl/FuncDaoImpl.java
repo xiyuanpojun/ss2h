@@ -47,7 +47,7 @@ public class FuncDaoImpl implements IFuncDao {
 
 	@Override
 	public TFuncEntity findOne(String fId) {
-	
+
 		 return hibernateTemplate.get(TFuncEntity.class,fId);
 	}
 
@@ -77,7 +77,7 @@ public class FuncDaoImpl implements IFuncDao {
 	       List<TFuncEntity> list = query.list();
 	       session.close();
 	       if(list.size()>0){
-	    	  flag=true; 
+	    	  flag=true;
 	       }
 	       else {
 	    	  flag=false;

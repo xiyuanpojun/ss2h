@@ -65,7 +65,6 @@ public class SConfigServiceImpl implements ISConfigService {
                 && !"".equals(tpCodeEntity.getPname()) && !"".equals(tpCodeEntity.getPtype())) {
             TPCodeEntity result = isConfigDao.configFindOne(tpCodeEntity);
             if (result == null) {
-                System.out.println(tpCodeEntity.toString());
                 tpCodeEntity.setPid(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
                 isConfigDao.configAdd(tpCodeEntity);
                 map.put("message", "添加成功");
